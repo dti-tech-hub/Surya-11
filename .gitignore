@@ -21,12 +21,20 @@ data/partitions/*
 !data/**/README.md
 
 # Experiment outputs (regenerate with main.py)
+# Raw per-run directories and checkpoints stay local. Curated final evidence
+# (summary, report, tables, figures) is committed so the README is verifiable.
 results/raw/*
 results/metrics/*
 results/figures/*
 results/tables/*
 results/reports/*
 !results/**/README.md
+!results/metrics/summary.json
+!results/metrics/dataset_statistics.json
+!results/figures/*.png
+!results/tables/*.csv
+!results/tables/*.md
+!results/reports/final_experiment_report.md
 
 # Model checkpoints
 models/checkpoints/*

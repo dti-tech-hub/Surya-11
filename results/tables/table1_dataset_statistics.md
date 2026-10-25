@@ -1,0 +1,21 @@
+# Table1 Dataset Statistics
+
+| statistic                 | value                                                   |
+|:--------------------------|:--------------------------------------------------------|
+| dataset_source            | SYNTHETIC DEMO DATA                                     |
+| synthetic_demo_data       | True                                                    |
+| consumers_total           | 240                                                     |
+| consumers_train           | 156                                                     |
+| consumers_validation      | 36                                                      |
+| consumers_test            | 48                                                      |
+| raw_rows                  | 2073600                                                 |
+| raw_missing_values        | 4244                                                    |
+| raw_duplicate_rows        | 0                                                       |
+| window_samples_train      | 8736                                                    |
+| window_samples_validation | 2016                                                    |
+| window_samples_test       | 2688                                                    |
+| feature_count             | 133                                                     |
+| theft_ratio_train_windows | 0.08081501831501832                                     |
+| theft_ratio_test_windows  | 0.060267857142857144                                    |
+| split_unit                | consumer                                                |
+| label_rule                | window-level labels respect theft_start_day (synthetic) |

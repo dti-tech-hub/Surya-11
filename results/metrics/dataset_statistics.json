@@ -1,0 +1,504 @@
+{
+  "source": "SYNTHETIC DEMO DATA",
+  "is_synthetic": true,
+  "stats": {
+    "n_consumers": 240,
+    "n_rows": 2073600,
+    "normal_samples": 204,
+    "theft_samples": 36,
+    "class_ratio_theft": 0.15,
+    "missing_values": 4244,
+    "duplicate_rows": 0,
+    "mean_consumption": 1.1633569723287183,
+    "std_consumption": 0.7105045221058944,
+    "source": "SYNTHETIC DEMO DATA",
+    "days": 180,
+    "interval_minutes": 30,
+    "readings_per_day": 48,
+    "seed": 42,
+    "label_note": "label=1 iff consumer has a theft episode; window labels respect theft_start_day"
+  },
+  "summary": {
+    "source": "SYNTHETIC DEMO DATA",
+    "is_synthetic": true,
+    "n_consumers": {
+      "train": 156,
+      "val": 36,
+      "test": 48
+    },
+    "n_windows": {
+      "train": 8736,
+      "val": 2016,
+      "test": 2688
+    },
+    "theft_ratio": {
+      "train": 0.08081501831501832,
+      "val": 0.0873015873015873,
+      "test": 0.060267857142857144
+    },
+    "n_features": 133,
+    "n_engineered": 21,
+    "imbalance": {
+      "report": {
+        "strategy": "class_weight",
+        "distribution": {
+          "normal_samples": 8030,
+          "theft_samples": 706,
+          "total": 8736,
+          "theft_ratio": 0.08081501831501832,
+          "imbalance_ratio": 11.373937677053824
+        },
+        "focal_gamma": 2.0,
+        "weights": {
+          "0": 0.5439601494396015,
+          "1": 6.186968838526912
+        }
+      },
+      "splits": {
+        "train": {
+          "normal_samples": 8030,
+          "theft_samples": 706,
+          "total": 8736,
+          "theft_ratio": 0.08081501831501832,
+          "imbalance_ratio": 11.373937677053824
+        },
+        "val": {
+          "normal_samples": 1840,
+          "theft_samples": 176,
+          "total": 2016,
+          "theft_ratio": 0.0873015873015873,
+          "imbalance_ratio": 10.454545454545455
+        },
+        "test": {
+          "normal_samples": 2526,
+          "theft_samples": 162,
+          "total": 2688,
+          "theft_ratio": 0.060267857142857144,
+          "imbalance_ratio": 15.592592592592593
+        }
+      }
+    },
+    "outlier_bounds": {
+      "method": "iqr",
+      "lower": 0.0,
+      "upper": 4.1696828454732895,
+      "train_mean": 1.1592169424043597,
+      "train_std": 0.5775933201940423
+    }
+  },
+  "cleaning": {
+    "duplicates_dropped": 0,
+    "negative_values": 0,
+    "infinite_values": 0,
+    "noise": {
+      "enabled": true,
+      "window": 3,
+      "spike_threshold": 6.0,
+      "min_deviation_frac": 0.5,
+      "values_replaced": 2034
+    },
+    "missing": {
+      "missing_before": 4244,
+      "strategy": "interpolate",
+      "missing_after": 0,
+      "interpolated_or_filled": 4244
+    },
+    "global_median_source": "train consumers only",
+    "rows_after_cleaning": 2073600
+  },
+  "preprocessing": {
+    "split": {
+      "train": 156,
+      "val": 36,
+      "test": 48
+    },
+    "split_unit": "consumer",
+    "outliers": {
+      "method": "iqr",
+      "lower": 0.0,
+      "upper": 4.1696828454732895,
+      "train_mean": 1.1592169424043597,
+      "train_std": 0.5775933201940423
+    },
+    "outlier_clip_fraction_train": 1.558048433048433e-05,
+    "value_scaler": {
+      "method": "standard",
+      "center": 1.1592169424043597,
+      "scale": 0.5775933201940423,
+      "minimum": 0.0
+    },
+    "cleaning": {
+      "duplicates_dropped": 0,
+      "negative_values": 0,
+      "infinite_values": 0,
+      "noise": {
+        "enabled": true,
+        "window": 3,
+        "spike_threshold": 6.0,
+        "min_deviation_frac": 0.5,
+        "values_replaced": 2034
+      },
+      "missing": {
+        "missing_before": 4244,
+        "strategy": "interpolate",
+        "missing_after": 0,
+        "interpolated_or_filled": 4244
+      },
+      "global_median_source": "train consumers only",
+      "rows_after_cleaning": 2073600
+    },
+    "label_rule": "window-level labels respect theft_start_day (synthetic)"
+  },
+  "imbalance": {
+    "report": {
+      "strategy": "class_weight",
+      "distribution": {
+        "normal_samples": 8030,
+        "theft_samples": 706,
+        "total": 8736,
+        "theft_ratio": 0.08081501831501832,
+        "imbalance_ratio": 11.373937677053824
+      },
+      "focal_gamma": 2.0,
+      "weights": {
+        "0": 0.5439601494396015,
+        "1": 6.186968838526912
+      }
+    },
+    "splits": {
+      "train": {
+        "normal_samples": 8030,
+        "theft_samples": 706,
+        "total": 8736,
+        "theft_ratio": 0.08081501831501832,
+        "imbalance_ratio": 11.373937677053824
+      },
+      "val": {
+        "normal_samples": 1840,
+        "theft_samples": 176,
+        "total": 2016,
+        "theft_ratio": 0.0873015873015873,
+        "imbalance_ratio": 10.454545454545455
+      },
+      "test": {
+        "normal_samples": 2526,
+        "theft_samples": 162,
+        "total": 2688,
+        "theft_ratio": 0.060267857142857144,
+        "imbalance_ratio": 15.592592592592593
+      }
+    }
+  },
+  "labels": [
+    1,
+    0,
+    1,
+    1,
+    1,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    1,
+    1,
+    1,
+    1,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    1,
+    1,
+    0,
+    0,
+    0,
+    1,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    1
+  ],
+  "table": [
+    {
+      "statistic": "dataset_source",
+      "value": "SYNTHETIC DEMO DATA"
+    },
+    {
+      "statistic": "synthetic_demo_data",
+      "value": "True"
+    },
+    {
+      "statistic": "consumers_total",
+      "value": 240
+    },
+    {
+      "statistic": "consumers_train",
+      "value": 156
+    },
+    {
+      "statistic": "consumers_validation",
+      "value": 36
+    },
+    {
+      "statistic": "consumers_test",
+      "value": 48
+    },
+    {
+      "statistic": "raw_rows",
+      "value": 2073600
+    },
+    {
+      "statistic": "raw_missing_values",
+      "value": 4244
+    },
+    {
+      "statistic": "raw_duplicate_rows",
+      "value": 0
+    },
+    {
+      "statistic": "window_samples_train",
+      "value": 8736
+    },
+    {
+      "statistic": "window_samples_validation",
+      "value": 2016
+    },
+    {
+      "statistic": "window_samples_test",
+      "value": 2688
+    },
+    {
+      "statistic": "feature_count",
+      "value": 133
+    },
+    {
+      "statistic": "theft_ratio_train_windows",
+      "value": 0.08081501831501832
+    },
+    {
+      "statistic": "theft_ratio_test_windows",
+      "value": 0.060267857142857144
+    },
+    {
+      "statistic": "split_unit",
+      "value": "consumer"
+    },
+    {
+      "statistic": "label_rule",
+      "value": "window-level labels respect theft_start_day (synthetic)"
+    }
+  ]
+}
