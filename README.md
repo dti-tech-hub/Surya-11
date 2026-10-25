@@ -81,6 +81,10 @@ The implementation covers the complete research pipeline: synthetic/real-data lo
 
 **Measured communication reduction: 73.87%** — from actual serialized payloads, including headers and quantization metadata. These are single-seed synthetic results; the F1 difference is descriptive, not statistically significant.
 
+![Detection F1 comparison from the final quick suite](results/figures/f1_comparison.png)
+
+*Figure: F1 comparison generated from the final quick suite (synthetic data).*
+
 ---
 
 ## What we use and why
@@ -235,6 +239,10 @@ No real dataset is bundled or downloaded. If it is absent, the project reports `
 | **PowerShield-FL** | 5 | 8 | **1.0000** | **0.9938** | **0.9969** | **0.9969** | **15.97** | **902,449** |
 
 **Communication reduction: 73.87%**.
+
+![Measured communication comparison](results/figures/communication_comparison.png)
+
+*Figure: measured serialized bytes for FedAvg vs PowerShield-FL.*
 
 ### Privacy / utility sweep (4 rounds)
 
