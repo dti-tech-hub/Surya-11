@@ -1,0 +1,22 @@
+# Simulated federated client configuration.
+clients:
+  num_clients: 5
+  partition_strategy: non_iid   # iid | non_iid
+  dirichlet_alpha: 0.5
+  quantity_skew: 0.6            # 0 = equal sizes, 1 = strong size skew
+  min_samples_per_client: 2
+  local_val_fraction: 0.15
+  seed_offset: 0
+
+federated:
+  rounds: 8
+  local_epochs: 2
+  batch_size: 128
+  learning_rate: 0.001
+  weight_decay: 0.0001
+  optimizer: adam
+  participation_rate: 1.0
+  eval_each_round: true
+  best_checkpoint_metric: f1
+  shuffle: true
+  num_workers: 0

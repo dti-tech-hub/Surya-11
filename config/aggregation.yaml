@@ -1,0 +1,11 @@
+# Adaptive aggregation configuration (PowerShield-FL only).
+aggregation:
+  method: adaptive              # fedavg | adaptive
+  alpha: 1.0                    # sample-count exponent
+  beta: 0.5                     # local validation-quality exponent
+  quality_floor: 0.1            # never let one client's quality collapse to ~0
+  reliability_power: 0.5        # update-reliability exponent
+  balance_lambda: 0.2           # class-balance factor strength
+  min_weight: 0.01
+  normalize: true
+  robust_clip: true             # clip client weight at 3x the mean weight

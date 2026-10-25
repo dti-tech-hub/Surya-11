@@ -1,0 +1,50 @@
+# PowerShield-FL — ignore rules
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+.venv/
+venv/
+env/
+
+# Secrets
+.env
+*.key
+*.pem
+
+# Large data (keep directory placeholders via README)
+data/raw/*
+data/processed/*
+data/partitions/*
+!data/**/README.md
+
+# Experiment outputs (regenerate with main.py)
+results/raw/*
+results/metrics/*
+results/figures/*
+results/tables/*
+results/reports/*
+!results/**/README.md
+
+# Model checkpoints
+models/checkpoints/*
+!models/checkpoints/.gitkeep
+
+# Jupyter checkpoints
+.ipynb_checkpoints/
+
+# Local command logs (run artifacts live under results/raw/<run_id>/logs.txt)
+*.log
+
+# Test / tooling caches
+.pytest_cache/
+.coverage
+htmlcov/
+.mypy_cache/
+.ruff_cache/
+
+# OS noise
+.DS_Store
+Thumbs.db

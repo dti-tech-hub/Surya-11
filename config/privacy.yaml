@@ -1,0 +1,14 @@
+# Privacy layer configuration.
+privacy:
+  enabled: true
+  mechanism: dp                 # dp | none
+  clipping_norm: 1.0
+  # Standard per-coordinate Gaussian noise is σ·C on a ~10k-parameter update,
+  # so σ must be small for the noise not to swamp the signal. Measured update
+  # norms are ~0.5–1.2, hence C=1.0. This is a *client-level* perturbation
+  # demonstration, not a formally accounted end-to-end DP deployment.
+  noise_multiplier: 0.001
+  delta: 1.0e-5
+  secure_aggregation: false     # simulated masking layer (NOT production crypto)
+  secure_aggregation_seed: 2026
+  report_epsilon: true

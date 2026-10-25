@@ -1,0 +1,22 @@
+# Experiment sweep definitions. All values are executed by scripts/run_experiments.py.
+experiments:
+  seeds: [42]
+  central_models: [logistic_regression, random_forest, mlp]
+  cnn_lstm_enabled: true
+  run_centralized: true
+  run_fedavg: true
+  run_proposed: true
+  run_privacy_sweep: true
+  run_communication_sweep: true
+  run_scalability: true
+  privacy_sweep: [0.0, 0.001, 0.003, 0.006]
+  privacy_sweep_rounds: 4
+  communication_sweep:
+    - {name: none, compression: false, method: none}
+    - {name: quantize_8bit, compression: true, method: quantize}
+    - {name: topk_20pct, compression: true, method: topk}
+    - {name: topk_quantize, compression: true, method: topk_quantize}
+  communication_sweep_rounds: 4
+  scalability_clients: [2, 5, 10]
+  scalability_rounds: 4
+  statistical_alpha: 0.05

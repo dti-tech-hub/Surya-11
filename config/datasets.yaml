@@ -1,0 +1,66 @@
+# Dataset configuration.
+# `source: auto` uses a real dataset in data/raw when present, otherwise the
+# clearly-labelled synthetic demo generator.
+data:
+  source: auto               # auto | synthetic | sgcc | long_csv
+  raw_dir: data/raw
+  synthetic:
+    consumers: 240
+    days: 180
+    interval_minutes: 30
+    theft_rate: 0.15
+    theft_start_frac_min: 0.25
+    theft_scale_min: 0.35
+    theft_scale_max: 0.85
+    theft_intermittent_prob: 0.25
+    noise_sigma: 0.04
+    missing_rate: 0.002
+    spike_rate: 0.001
+    base_load_min: 0.25
+    base_load_max: 1.80
+    seasonal_amplitude: 0.22
+    weekend_factor: 1.08
+  sgcc:
+    consumption_file: data.csv
+    label_file: label.csv
+    timestamp_column: CONS_NO
+  long_csv:
+    filename: readings.csv
+    timestamp_col: timestamp
+    consumer_col: consumer_id
+    consumption_col: consumption
+
+split:
+  test_size: 0.20
+  val_size: 0.15              # fraction of all consumers used as server validation
+  stratify: true
+
+preprocessing:
+  missing:
+    strategy: interpolate     # interpolate | median | drop
+    max_interpolate_gap: 6
+  duplicates: drop
+  noise:
+    enabled: true
+    rolling_window: 3
+    spike_threshold: 6.0      # Hampel-style robust z threshold
+    min_deviation_frac: 0.5   # absolute floor: deviation must exceed 50% of typical load
+  outliers:
+    enabled: true
+    method: iqr              # iqr | zscore | none
+    iqr_multiplier: 3.0
+    zscore_threshold: 5.0
+    action: clip             # clip (never delete theft anomalies)
+  scaling:
+    method: standard         # standard | minmax
+  features:
+    window_days: 14
+    stride_days: 3
+    peak_hours: [17, 22]
+    night_hours: [0, 6]
+    include_calendar: true
+    trend_lag_days: 7
+  class_imbalance:
+    strategy: class_weight   # class_weight | focal | none
+    focal_gamma: 2.0
+    report: true
