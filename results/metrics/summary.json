@@ -1,13 +1,13 @@
 {
-  "suite_id": "experiment_20261025_014623_793809_suite_s42",
-  "generated_at": "2026-10-25T01:46:23.794390+00:00",
+  "suite_id": "experiment_20261028_130606_218899_suite_s42",
+  "generated_at": "2026-10-28T13:06:06.219341+00:00",
   "mode": "quick",
-  "demo": false,
+  "demo": true,
   "seeds": [
     42
   ],
   "environment": {
-    "timestamp_utc": "2026-10-25T01:46:23.867455+00:00",
+    "timestamp_utc": "2026-10-28T13:06:06.224773+00:00",
     "python": "3.14.5",
     "python_executable": "C:\\Python314\\python.exe",
     "os": "Windows-11-10.0.26200-SP0",
@@ -16,7 +16,7 @@
     "physical_cores": 10,
     "logical_cores": 12,
     "ram_gb": 15.72,
-    "disk_free_gb": 77.74,
+    "disk_free_gb": 77.59,
     "gpu": "CPU only",
     "packages": {
       "numpy": "2.4.4",
@@ -61,7 +61,8 @@
         "epochs": 6,
         "batch_size": 128,
         "learning_rate": 0.001
-      }
+      },
+      "central_mlp_epochs": 5
     },
     "communication": {
       "compression": true,
@@ -71,12 +72,12 @@
       "compress_broadcast": true
     },
     "explainability": {
-      "shap_samples": 40,
-      "shap_background": 30,
-      "shap_nsamples": 100,
-      "permutation_repeats": 5,
-      "permutation_max_rows": 1500,
-      "local_explanations": 10
+      "shap_samples": 15,
+      "shap_background": 15,
+      "shap_nsamples": 50,
+      "permutation_repeats": 3,
+      "permutation_max_rows": 400,
+      "local_explanations": 6
     },
     "detection": {
       "uncertain_margin": 0.15,
@@ -140,10 +141,10 @@
       "source": "auto",
       "raw_dir": "data/raw",
       "synthetic": {
-        "consumers": 240,
-        "days": 180,
+        "consumers": 180,
+        "days": 120,
         "interval_minutes": 30,
-        "theft_rate": 0.15,
+        "theft_rate": 0.16,
         "theft_start_frac_min": 0.25,
         "theft_scale_min": 0.35,
         "theft_scale_max": 0.85,
@@ -216,7 +217,7 @@
       }
     },
     "clients": {
-      "num_clients": 5,
+      "num_clients": 4,
       "partition_strategy": "non_iid",
       "dirichlet_alpha": 0.5,
       "quantity_skew": 0.6,
@@ -225,7 +226,7 @@
       "seed_offset": 0
     },
     "federated": {
-      "rounds": 8,
+      "rounds": 3,
       "local_epochs": 2,
       "batch_size": 128,
       "learning_rate": 0.001,
@@ -264,16 +265,15 @@
       ],
       "central_models": [
         "logistic_regression",
-        "random_forest",
         "mlp"
       ],
-      "cnn_lstm_enabled": true,
+      "cnn_lstm_enabled": false,
       "run_centralized": true,
       "run_fedavg": true,
       "run_proposed": true,
-      "run_privacy_sweep": true,
-      "run_communication_sweep": true,
-      "run_scalability": true,
+      "run_privacy_sweep": false,
+      "run_communication_sweep": false,
+      "run_scalability": false,
       "privacy_sweep": [
         0.0,
         0.001,
@@ -327,47 +327,35 @@
     },
     "partitions": {
       "status": "PASS",
-      "clients": 5
+      "clients": 4
     },
     "centralized_s42": {
       "status": "PASS",
-      "run_id": "experiment_20261025_014647_389087_centralized_s42",
-      "rows": 5
+      "run_id": "experiment_20261028_130612_681686_centralized_s42",
+      "rows": 3
     },
     "fedavg_s42": {
       "status": "PASS",
-      "run_id": "experiment_20261025_014756_354071_fedavg_s42",
-      "f1": 0.9937888198757764,
-      "total_bytes": 3453520
+      "run_id": "experiment_20261028_130620_629588_fedavg_s42",
+      "f1": 0.623574144486692,
+      "total_bytes": 1036056
     },
     "proposed_s42": {
       "status": "PASS",
-      "run_id": "experiment_20261025_014812_413345_powershield_s42",
-      "f1": 0.9969040247678018,
-      "total_bytes": 902449
+      "run_id": "experiment_20261028_130624_543696_powershield_s42",
+      "f1": 0.5714285714285714,
+      "total_bytes": 270742
     },
     "explainability_s42": {
       "status": "PASS"
     },
-    "privacy_sweep": {
-      "status": "PASS",
-      "runs": 5
-    },
-    "communication_sweep": {
-      "status": "PASS",
-      "runs": 4
-    },
-    "scalability": {
-      "status": "PASS",
-      "runs": 3
-    },
     "tables": {
       "status": "PASS",
-      "count": 5
+      "count": 3
     },
     "figures": {
       "status": "PASS",
-      "count": 13
+      "count": 10
     },
     "report": {
       "status": "PASS",
@@ -379,122 +367,73 @@
       {
         "method": "centralized_logistic_regression",
         "kind": "centralized",
-        "accuracy": 0.9992559523809523,
-        "precision": 0.9938271604938271,
-        "recall": 0.9938271604938271,
-        "f1": 0.9938271604938271,
-        "roc_auc": 0.9986315161823212,
-        "pr_auc": 0.9952122020450737,
-        "threshold": 0.2,
-        "train_time_s": 0.5045273998985067,
+        "accuracy": 0.9868827160493827,
+        "precision": 1.0,
+        "recall": 0.860655737704918,
+        "f1": 0.9251101321585903,
+        "roc_auc": 0.9912377468092831,
+        "pr_auc": 0.9664852285595227,
+        "threshold": 0.45,
+        "train_time_s": 0.17069830000400543,
         "n_params": 134,
         "model_size_kb": 1.046875,
-        "inference_per_sample_ms": 0.003214257731087855,
-        "inference_peak_memory_mb": 0.5329475402832031,
-        "rounds": 0,
-        "clients": 0,
-        "total_bytes": 0,
-        "seed": 42,
-        "tuned_threshold": 0.2,
-        "run_id": "experiment_20261025_014647_389087_centralized_s42",
-        "rss_delta_mb": 121.02734375,
-        "memory_note": "centralized-stage RSS delta (all models), machine-specific"
-      },
-      {
-        "method": "centralized_random_forest",
-        "kind": "centralized",
-        "accuracy": 0.9996279761904762,
-        "precision": 1.0,
-        "recall": 0.9938271604938271,
-        "f1": 0.9969040247678018,
-        "roc_auc": 0.9949549377828606,
-        "pr_auc": 0.9942059483726149,
-        "threshold": 0.35000000000000003,
-        "train_time_s": 5.171157000004314,
-        "n_params": 21862,
-        "model_size_kb": 170.796875,
-        "inference_per_sample_ms": 0.5187343749639695,
-        "inference_peak_memory_mb": 0.32573604583740234,
-        "rounds": 0,
-        "clients": 0,
-        "total_bytes": 0,
-        "seed": 42,
-        "tuned_threshold": 0.35000000000000003,
-        "run_id": "experiment_20261025_014647_389087_centralized_s42",
-        "rss_delta_mb": 121.02734375,
-        "memory_note": "centralized-stage RSS delta (all models), machine-specific"
-      },
-      {
-        "method": "centralized_mlp",
-        "kind": "centralized",
-        "accuracy": 0.9828869047619048,
-        "precision": 0.7815533980582524,
-        "recall": 0.9938271604938271,
-        "f1": 0.875,
-        "roc_auc": 0.9995552427592544,
-        "pr_auc": 0.9967341372380132,
-        "threshold": 0.25,
-        "train_time_s": 15.446740399929695,
-        "n_params": 25473,
-        "model_size_kb": 99.50390625,
-        "inference_per_sample_ms": 0.005814453061248059,
-        "inference_peak_memory_mb": 0.0050201416015625,
-        "rounds": 0,
-        "clients": 0,
-        "total_bytes": 0,
-        "seed": 42,
-        "tuned_threshold": 0.25,
-        "run_id": "experiment_20261025_014647_389087_centralized_s42",
-        "rss_delta_mb": 121.02734375,
-        "memory_note": "centralized-stage RSS delta (all models), machine-specific"
-      },
-      {
-        "method": "centralized_lightweight_mlp",
-        "kind": "centralized",
-        "accuracy": 0.9933035714285714,
-        "precision": 0.9044943820224719,
-        "recall": 0.9938271604938271,
-        "f1": 0.9470588235294117,
-        "roc_auc": 0.9991300352873328,
-        "pr_auc": 0.9957576624243291,
-        "threshold": 0.25,
-        "train_time_s": 7.517579299979843,
-        "n_params": 10689,
-        "model_size_kb": 41.75390625,
-        "inference_per_sample_ms": 0.00417812498199055,
-        "inference_peak_memory_mb": 0.0050201416015625,
-        "rounds": 0,
-        "clients": 0,
-        "total_bytes": 0,
-        "seed": 42,
-        "tuned_threshold": 0.25,
-        "run_id": "experiment_20261025_014647_389087_centralized_s42",
-        "rss_delta_mb": 121.02734375,
-        "memory_note": "centralized-stage RSS delta (all models), machine-specific"
-      },
-      {
-        "method": "cnn_lstm_baseline",
-        "kind": "centralized",
-        "accuracy": 0.9769345238095238,
-        "precision": 1.0,
-        "recall": 0.6172839506172839,
-        "f1": 0.7633587786259542,
-        "roc_auc": 0.9444224509545174,
-        "pr_auc": 0.7796932673478365,
-        "threshold": 0.45,
-        "train_time_s": 36.16216579999309,
-        "n_params": 21617,
-        "model_size_kb": 84.44140625,
-        "inference_per_sample_ms": 0.15874609380261973,
-        "inference_peak_memory_mb": 0.0043792724609375,
+        "inference_per_sample_ms": 0.0017263669178646524,
+        "inference_peak_memory_mb": 0.5329036712646484,
         "rounds": 0,
         "clients": 0,
         "total_bytes": 0,
         "seed": 42,
         "tuned_threshold": 0.45,
-        "epochs": 6,
-        "run_id": "experiment_20261025_014647_389087_centralized_s42",
-        "rss_delta_mb": 121.02734375,
+        "run_id": "experiment_20261028_130612_681686_centralized_s42",
+        "rss_delta_mb": 80.40625,
+        "memory_note": "centralized-stage RSS delta (all models), machine-specific"
+      },
+      {
+        "method": "centralized_mlp",
+        "kind": "centralized",
+        "accuracy": 0.9969135802469136,
+        "precision": 1.0,
+        "recall": 0.9672131147540983,
+        "f1": 0.9833333333333333,
+        "roc_auc": 0.994246934956852,
+        "pr_auc": 0.9818790900477893,
+        "threshold": 0.1,
+        "train_time_s": 5.807413999922574,
+        "n_params": 25473,
+        "model_size_kb": 99.50390625,
+        "inference_per_sample_ms": 0.0013808594303554855,
+        "inference_peak_memory_mb": 0.0050201416015625,
+        "rounds": 0,
+        "clients": 0,
+        "total_bytes": 0,
+        "seed": 42,
+        "tuned_threshold": 0.1,
+        "run_id": "experiment_20261028_130612_681686_centralized_s42",
+        "rss_delta_mb": 80.40625,
+        "memory_note": "centralized-stage RSS delta (all models), machine-specific"
+      },
+      {
+        "method": "centralized_lightweight_mlp",
+        "kind": "centralized",
+        "accuracy": 0.9930555555555556,
+        "precision": 0.991304347826087,
+        "recall": 0.9344262295081968,
+        "f1": 0.9620253164556962,
+        "roc_auc": 0.9922082274415616,
+        "pr_auc": 0.972284003105801,
+        "threshold": 0.1,
+        "train_time_s": 1.3901917999610305,
+        "n_params": 10689,
+        "model_size_kb": 41.75390625,
+        "inference_per_sample_ms": 0.0024107421268126927,
+        "inference_peak_memory_mb": 0.0050201416015625,
+        "rounds": 0,
+        "clients": 0,
+        "total_bytes": 0,
+        "seed": 42,
+        "tuned_threshold": 0.1,
+        "run_id": "experiment_20261028_130612_681686_centralized_s42",
+        "rss_delta_mb": 80.40625,
         "memory_note": "centralized-stage RSS delta (all models), machine-specific"
       }
     ],
@@ -502,28 +441,28 @@
       {
         "method": "fedavg_baseline",
         "kind": "federated",
-        "accuracy": 0.9992559523809523,
-        "precision": 1.0,
-        "recall": 0.9876543209876543,
-        "f1": 0.9937888198757764,
-        "roc_auc": 0.9972850258545692,
-        "pr_auc": 0.9926831064220955,
-        "threshold": 0.05,
-        "train_time_s": 15.509063599980436,
-        "wall_time_s": 15.509063599980436,
+        "accuracy": 0.9236111111111112,
+        "precision": 0.5815602836879432,
+        "recall": 0.6721311475409836,
+        "f1": 0.623574144486692,
+        "roc_auc": 0.8858533247688999,
+        "pr_auc": 0.7482022558085386,
+        "threshold": 0.5,
+        "train_time_s": 3.5329930000007153,
+        "wall_time_s": 3.5329930000007153,
         "n_params": 10689,
         "model_size_kb": 41.75390625,
-        "inference_per_sample_ms": 0.0048281249291903805,
+        "inference_per_sample_ms": 0.00292929689749144,
         "inference_peak_memory_mb": 0.00490570068359375,
-        "rss_delta_mb": -4.57421875,
-        "rounds": 8,
-        "clients": 5,
-        "total_bytes": 3453520,
-        "bytes_per_round": 431690.0,
-        "best_val_f1": 0.9826589595375722,
-        "best_round": 7,
+        "rss_delta_mb": 4.171875,
+        "rounds": 3,
+        "clients": 4,
+        "total_bytes": 1036056,
+        "bytes_per_round": 345352.0,
+        "best_val_f1": 0.9516129032258065,
+        "best_round": 3,
         "seed": 42,
-        "run_id": "experiment_20261025_014756_354071_fedavg_s42",
+        "run_id": "experiment_20261028_130620_629588_fedavg_s42",
         "aggregation": "fedavg",
         "compression": "none",
         "privacy": "none",
@@ -532,48 +471,48 @@
         "is_synthetic": true,
         "per_consumer": {
           "threshold": 0.5,
-          "accuracy": 0.875,
-          "precision": 1.0,
-          "recall": 0.14285714285714285,
-          "f1": 0.25,
-          "tp": 1,
-          "fp": 0,
-          "tn": 41,
-          "fn": 6,
-          "specificity": 1.0,
-          "roc_auc": 1.0,
-          "pr_auc": 1.0,
-          "n_samples": 48,
-          "positive_rate": 0.14583333333333334,
+          "accuracy": 0.8611111111111112,
+          "precision": 0.6,
+          "recall": 0.5,
+          "f1": 0.5454545454545454,
+          "tp": 3,
+          "fp": 2,
+          "tn": 28,
+          "fn": 3,
+          "specificity": 0.9333333333333333,
+          "roc_auc": 0.8999999999999999,
+          "pr_auc": 0.7376623376623376,
+          "n_samples": 36,
+          "positive_rate": 0.16666666666666666,
           "rule": "consumer flagged if >= ratio of its windows exceed the window threshold",
-          "n_consumers": 48
+          "n_consumers": 36
         }
       },
       {
         "method": "powershield_fl",
         "kind": "federated",
-        "accuracy": 0.9996279761904762,
-        "precision": 1.0,
-        "recall": 0.9938271604938271,
-        "f1": 0.9969040247678018,
-        "roc_auc": 0.9968573746615446,
-        "pr_auc": 0.9945177682286338,
-        "threshold": 0.1,
-        "train_time_s": 15.965171199990436,
-        "wall_time_s": 15.965171199990436,
+        "accuracy": 0.9074074074074074,
+        "precision": 0.5063291139240507,
+        "recall": 0.6557377049180327,
+        "f1": 0.5714285714285714,
+        "roc_auc": 0.8377621694082164,
+        "pr_auc": 0.7211544777480675,
+        "threshold": 0.5,
+        "train_time_s": 2.8758723000064492,
+        "wall_time_s": 2.8758723000064492,
         "n_params": 10689,
         "model_size_kb": 41.75390625,
-        "inference_per_sample_ms": 0.003953125087718945,
+        "inference_per_sample_ms": 0.0025341796572320163,
         "inference_peak_memory_mb": 0.00490570068359375,
-        "rss_delta_mb": 4.5234375,
-        "rounds": 8,
-        "clients": 5,
-        "total_bytes": 902449,
-        "bytes_per_round": 112806.125,
-        "best_val_f1": 0.9942857142857143,
-        "best_round": 8,
+        "rss_delta_mb": 0.92578125,
+        "rounds": 3,
+        "clients": 4,
+        "total_bytes": 270742,
+        "bytes_per_round": 90247.33333333333,
+        "best_val_f1": 0.912,
+        "best_round": 3,
         "seed": 42,
-        "run_id": "experiment_20261025_014812_413345_powershield_s42",
+        "run_id": "experiment_20261028_130624_543696_powershield_s42",
         "aggregation": "adaptive",
         "compression": "quantize",
         "privacy": "gaussian_clip_noise",
@@ -582,21 +521,21 @@
         "is_synthetic": true,
         "per_consumer": {
           "threshold": 0.5,
-          "accuracy": 0.875,
-          "precision": 1.0,
-          "recall": 0.14285714285714285,
-          "f1": 0.25,
-          "tp": 1,
-          "fp": 0,
-          "tn": 41,
-          "fn": 6,
-          "specificity": 1.0,
-          "roc_auc": 1.0,
-          "pr_auc": 1.0,
-          "n_samples": 48,
-          "positive_rate": 0.14583333333333334,
+          "accuracy": 0.8611111111111112,
+          "precision": 0.6,
+          "recall": 0.5,
+          "f1": 0.5454545454545454,
+          "tp": 3,
+          "fp": 2,
+          "tn": 28,
+          "fn": 3,
+          "specificity": 0.9333333333333333,
+          "roc_auc": 0.8444444444444444,
+          "pr_auc": 0.7028189202102245,
+          "n_samples": 36,
+          "positive_rate": 0.16666666666666666,
           "rule": "consumer flagged if >= ratio of its windows exceed the window threshold",
-          "n_consumers": 48
+          "n_consumers": 36
         }
       }
     ],
@@ -604,28 +543,28 @@
       {
         "method": "fedavg_baseline",
         "kind": "federated",
-        "accuracy": 0.9992559523809523,
-        "precision": 1.0,
-        "recall": 0.9876543209876543,
-        "f1": 0.9937888198757764,
-        "roc_auc": 0.9972850258545692,
-        "pr_auc": 0.9926831064220955,
-        "threshold": 0.05,
-        "train_time_s": 15.509063599980436,
-        "wall_time_s": 15.509063599980436,
+        "accuracy": 0.9236111111111112,
+        "precision": 0.5815602836879432,
+        "recall": 0.6721311475409836,
+        "f1": 0.623574144486692,
+        "roc_auc": 0.8858533247688999,
+        "pr_auc": 0.7482022558085386,
+        "threshold": 0.5,
+        "train_time_s": 3.5329930000007153,
+        "wall_time_s": 3.5329930000007153,
         "n_params": 10689,
         "model_size_kb": 41.75390625,
-        "inference_per_sample_ms": 0.0048281249291903805,
+        "inference_per_sample_ms": 0.00292929689749144,
         "inference_peak_memory_mb": 0.00490570068359375,
-        "rss_delta_mb": -4.57421875,
-        "rounds": 8,
-        "clients": 5,
-        "total_bytes": 3453520,
-        "bytes_per_round": 431690.0,
-        "best_val_f1": 0.9826589595375722,
-        "best_round": 7,
+        "rss_delta_mb": 4.171875,
+        "rounds": 3,
+        "clients": 4,
+        "total_bytes": 1036056,
+        "bytes_per_round": 345352.0,
+        "best_val_f1": 0.9516129032258065,
+        "best_round": 3,
         "seed": 42,
-        "run_id": "experiment_20261025_014756_354071_fedavg_s42",
+        "run_id": "experiment_20261028_130620_629588_fedavg_s42",
         "aggregation": "fedavg",
         "compression": "none",
         "privacy": "none",
@@ -634,21 +573,21 @@
         "is_synthetic": true,
         "per_consumer": {
           "threshold": 0.5,
-          "accuracy": 0.875,
-          "precision": 1.0,
-          "recall": 0.14285714285714285,
-          "f1": 0.25,
-          "tp": 1,
-          "fp": 0,
-          "tn": 41,
-          "fn": 6,
-          "specificity": 1.0,
-          "roc_auc": 1.0,
-          "pr_auc": 1.0,
-          "n_samples": 48,
-          "positive_rate": 0.14583333333333334,
+          "accuracy": 0.8611111111111112,
+          "precision": 0.6,
+          "recall": 0.5,
+          "f1": 0.5454545454545454,
+          "tp": 3,
+          "fp": 2,
+          "tn": 28,
+          "fn": 3,
+          "specificity": 0.9333333333333333,
+          "roc_auc": 0.8999999999999999,
+          "pr_auc": 0.7376623376623376,
+          "n_samples": 36,
+          "positive_rate": 0.16666666666666666,
           "rule": "consumer flagged if >= ratio of its windows exceed the window threshold",
-          "n_consumers": 48
+          "n_consumers": 36
         }
       }
     ],
@@ -656,28 +595,28 @@
       {
         "method": "powershield_fl",
         "kind": "federated",
-        "accuracy": 0.9996279761904762,
-        "precision": 1.0,
-        "recall": 0.9938271604938271,
-        "f1": 0.9969040247678018,
-        "roc_auc": 0.9968573746615446,
-        "pr_auc": 0.9945177682286338,
-        "threshold": 0.1,
-        "train_time_s": 15.965171199990436,
-        "wall_time_s": 15.965171199990436,
+        "accuracy": 0.9074074074074074,
+        "precision": 0.5063291139240507,
+        "recall": 0.6557377049180327,
+        "f1": 0.5714285714285714,
+        "roc_auc": 0.8377621694082164,
+        "pr_auc": 0.7211544777480675,
+        "threshold": 0.5,
+        "train_time_s": 2.8758723000064492,
+        "wall_time_s": 2.8758723000064492,
         "n_params": 10689,
         "model_size_kb": 41.75390625,
-        "inference_per_sample_ms": 0.003953125087718945,
+        "inference_per_sample_ms": 0.0025341796572320163,
         "inference_peak_memory_mb": 0.00490570068359375,
-        "rss_delta_mb": 4.5234375,
-        "rounds": 8,
-        "clients": 5,
-        "total_bytes": 902449,
-        "bytes_per_round": 112806.125,
-        "best_val_f1": 0.9942857142857143,
-        "best_round": 8,
+        "rss_delta_mb": 0.92578125,
+        "rounds": 3,
+        "clients": 4,
+        "total_bytes": 270742,
+        "bytes_per_round": 90247.33333333333,
+        "best_val_f1": 0.912,
+        "best_round": 3,
         "seed": 42,
-        "run_id": "experiment_20261025_014812_413345_powershield_s42",
+        "run_id": "experiment_20261028_130624_543696_powershield_s42",
         "aggregation": "adaptive",
         "compression": "quantize",
         "privacy": "gaussian_clip_noise",
@@ -686,1517 +625,651 @@
         "is_synthetic": true,
         "per_consumer": {
           "threshold": 0.5,
-          "accuracy": 0.875,
-          "precision": 1.0,
-          "recall": 0.14285714285714285,
-          "f1": 0.25,
-          "tp": 1,
-          "fp": 0,
-          "tn": 41,
-          "fn": 6,
-          "specificity": 1.0,
-          "roc_auc": 1.0,
-          "pr_auc": 1.0,
-          "n_samples": 48,
-          "positive_rate": 0.14583333333333334,
+          "accuracy": 0.8611111111111112,
+          "precision": 0.6,
+          "recall": 0.5,
+          "f1": 0.5454545454545454,
+          "tp": 3,
+          "fp": 2,
+          "tn": 28,
+          "fn": 3,
+          "specificity": 0.9333333333333333,
+          "roc_auc": 0.8444444444444444,
+          "pr_auc": 0.7028189202102245,
+          "n_samples": 36,
+          "positive_rate": 0.16666666666666666,
           "rule": "consumer flagged if >= ratio of its windows exceed the window threshold",
-          "n_consumers": 48
+          "n_consumers": 36
         }
       }
     ],
     "communication_comparison": {
-      "fedavg_mean_total_bytes": 3453520.0,
-      "proposed_mean_total_bytes": 902449.0,
-      "reduction_pct": 73.86871945145822,
+      "fedavg_mean_total_bytes": 1036056.0,
+      "proposed_mean_total_bytes": 270742.0,
+      "reduction_pct": 73.86801485633981,
       "measured": true
     }
   },
   "privacy_sweep": {
-    "rows": [
-      {
-        "method": "powershield_fl",
-        "kind": "federated",
-        "accuracy": 0.9988839285714286,
-        "precision": 0.9937888198757764,
-        "recall": 0.9876543209876543,
-        "f1": 0.9907120743034056,
-        "roc_auc": 0.9974340928418521,
-        "pr_auc": 0.9915003636559209,
-        "threshold": 0.15000000000000002,
-        "train_time_s": 7.3283151999348775,
-        "wall_time_s": 7.3283151999348775,
-        "n_params": 10689,
-        "model_size_kb": 41.75390625,
-        "inference_per_sample_ms": 0.004936327968607657,
-        "inference_peak_memory_mb": 0.00490570068359375,
-        "rss_delta_mb": 4.23046875,
-        "rounds": 4,
-        "clients": 5,
-        "total_bytes": 451241,
-        "bytes_per_round": 112810.25,
-        "best_val_f1": 0.9914040114613181,
-        "best_round": 4,
-        "seed": 42,
-        "run_id": "experiment_20261025_014840_961852_privacy_off_s42",
-        "aggregation": "adaptive",
-        "compression": "quantize",
-        "privacy": "none",
-        "noise_multiplier": 0.0,
-        "dataset_source": "SYNTHETIC DEMO DATA",
-        "is_synthetic": true,
-        "per_consumer": {
-          "threshold": 0.5,
-          "accuracy": 0.875,
-          "precision": 1.0,
-          "recall": 0.14285714285714285,
-          "f1": 0.25,
-          "tp": 1,
-          "fp": 0,
-          "tn": 41,
-          "fn": 6,
-          "specificity": 1.0,
-          "roc_auc": 1.0,
-          "pr_auc": 1.0,
-          "n_samples": 48,
-          "positive_rate": 0.14583333333333334,
-          "rule": "consumer flagged if >= ratio of its windows exceed the window threshold",
-          "n_consumers": 48
-        },
-        "privacy_level": "off",
-        "privacy_off": true,
-        "epsilon_estimate": null
-      },
-      {
-        "method": "powershield_fl",
-        "kind": "federated",
-        "accuracy": 0.9977678571428571,
-        "precision": 0.9875,
-        "recall": 0.9753086419753086,
-        "f1": 0.9813664596273292,
-        "roc_auc": 0.9970064416488275,
-        "pr_auc": 0.9902122932043448,
-        "threshold": 0.2,
-        "train_time_s": 7.576487899990752,
-        "wall_time_s": 7.576487899990752,
-        "n_params": 10689,
-        "model_size_kb": 41.75390625,
-        "inference_per_sample_ms": 0.003333007725814241,
-        "inference_peak_memory_mb": 0.00490570068359375,
-        "rss_delta_mb": 4.06640625,
-        "rounds": 4,
-        "clients": 5,
-        "total_bytes": 451235,
-        "bytes_per_round": 112808.75,
-        "best_val_f1": 0.9885057471264368,
-        "best_round": 4,
-        "seed": 42,
-        "run_id": "experiment_20261025_014848_801026_privacy_noise_0_s42",
-        "aggregation": "adaptive",
-        "compression": "quantize",
-        "privacy": "gaussian_clip_noise",
-        "noise_multiplier": 0.0,
-        "dataset_source": "SYNTHETIC DEMO DATA",
-        "is_synthetic": true,
-        "per_consumer": {
-          "threshold": 0.5,
-          "accuracy": 0.875,
-          "precision": 1.0,
-          "recall": 0.14285714285714285,
-          "f1": 0.25,
-          "tp": 1,
-          "fp": 0,
-          "tn": 41,
-          "fn": 6,
-          "specificity": 1.0,
-          "roc_auc": 1.0,
-          "pr_auc": 1.0,
-          "n_samples": 48,
-          "positive_rate": 0.14583333333333334,
-          "rule": "consumer flagged if >= ratio of its windows exceed the window threshold",
-          "n_consumers": 48
-        },
-        "privacy_level": "noise_0",
-        "privacy_off": false,
-        "epsilon_estimate": null,
-        "f1_change_vs_privacy_off": -0.00934561467607642
-      },
-      {
-        "method": "powershield_fl",
-        "kind": "federated",
-        "accuracy": 0.9977678571428571,
-        "precision": 0.9875,
-        "recall": 0.9753086419753086,
-        "f1": 0.9813664596273292,
-        "roc_auc": 0.9970357663020635,
-        "pr_auc": 0.9901978567766682,
-        "threshold": 0.2,
-        "train_time_s": 7.427117500104941,
-        "wall_time_s": 7.427117500104941,
-        "n_params": 10689,
-        "model_size_kb": 41.75390625,
-        "inference_per_sample_ms": 0.0039828125864005415,
-        "inference_peak_memory_mb": 0.00490570068359375,
-        "rss_delta_mb": 5.4609375,
-        "rounds": 4,
-        "clients": 5,
-        "total_bytes": 451222,
-        "bytes_per_round": 112805.5,
-        "best_val_f1": 0.9885057471264368,
-        "best_round": 4,
-        "seed": 42,
-        "run_id": "experiment_20261025_014856_794141_privacy_noise_0_001_s42",
-        "aggregation": "adaptive",
-        "compression": "quantize",
-        "privacy": "gaussian_clip_noise",
-        "noise_multiplier": 0.001,
-        "dataset_source": "SYNTHETIC DEMO DATA",
-        "is_synthetic": true,
-        "per_consumer": {
-          "threshold": 0.5,
-          "accuracy": 0.875,
-          "precision": 1.0,
-          "recall": 0.14285714285714285,
-          "f1": 0.25,
-          "tp": 1,
-          "fp": 0,
-          "tn": 41,
-          "fn": 6,
-          "specificity": 1.0,
-          "roc_auc": 1.0,
-          "pr_auc": 1.0,
-          "n_samples": 48,
-          "positive_rate": 0.14583333333333334,
-          "rule": "consumer flagged if >= ratio of its windows exceed the window threshold",
-          "n_consumers": 48
-        },
-        "privacy_level": "noise_0.001",
-        "privacy_off": false,
-        "epsilon_estimate": 4844.805262605389,
-        "f1_change_vs_privacy_off": -0.00934561467607642
-      },
-      {
-        "method": "powershield_fl",
-        "kind": "federated",
-        "accuracy": 0.9977678571428571,
-        "precision": 0.9875,
-        "recall": 0.9753086419753086,
-        "f1": 0.9813664596273292,
-        "roc_auc": 0.9969575672267676,
-        "pr_auc": 0.9901215939007176,
-        "threshold": 0.2,
-        "train_time_s": 7.401655800058506,
-        "wall_time_s": 7.401655800058506,
-        "n_params": 10689,
-        "model_size_kb": 41.75390625,
-        "inference_per_sample_ms": 0.0044408204757928615,
-        "inference_peak_memory_mb": 0.00490570068359375,
-        "rss_delta_mb": 5.96484375,
-        "rounds": 4,
-        "clients": 5,
-        "total_bytes": 451243,
-        "bytes_per_round": 112810.75,
-        "best_val_f1": 0.9885057471264368,
-        "best_round": 4,
-        "seed": 42,
-        "run_id": "experiment_20261025_014904_676831_privacy_noise_0_003_s42",
-        "aggregation": "adaptive",
-        "compression": "quantize",
-        "privacy": "gaussian_clip_noise",
-        "noise_multiplier": 0.003,
-        "dataset_source": "SYNTHETIC DEMO DATA",
-        "is_synthetic": true,
-        "per_consumer": {
-          "threshold": 0.5,
-          "accuracy": 0.875,
-          "precision": 1.0,
-          "recall": 0.14285714285714285,
-          "f1": 0.25,
-          "tp": 1,
-          "fp": 0,
-          "tn": 41,
-          "fn": 6,
-          "specificity": 1.0,
-          "roc_auc": 1.0,
-          "pr_auc": 1.0,
-          "n_samples": 48,
-          "positive_rate": 0.14583333333333334,
-          "rule": "consumer flagged if >= ratio of its windows exceed the window threshold",
-          "n_consumers": 48
-        },
-        "privacy_level": "noise_0.003",
-        "privacy_off": false,
-        "epsilon_estimate": 1614.9350875351297,
-        "f1_change_vs_privacy_off": -0.00934561467607642
-      },
-      {
-        "method": "powershield_fl",
-        "kind": "federated",
-        "accuracy": 0.9977678571428571,
-        "precision": 0.9875,
-        "recall": 0.9753086419753086,
-        "f1": 0.9813664596273292,
-        "roc_auc": 0.9969209114102225,
-        "pr_auc": 0.9901019792843917,
-        "threshold": 0.2,
-        "train_time_s": 7.836047599907033,
-        "wall_time_s": 7.836047599907033,
-        "n_params": 10689,
-        "model_size_kb": 41.75390625,
-        "inference_per_sample_ms": 0.0023822265120543307,
-        "inference_peak_memory_mb": 0.00490570068359375,
-        "rss_delta_mb": 3.72265625,
-        "rounds": 4,
-        "clients": 5,
-        "total_bytes": 451242,
-        "bytes_per_round": 112810.5,
-        "best_val_f1": 0.9885057471264368,
-        "best_round": 4,
-        "seed": 42,
-        "run_id": "experiment_20261025_014912_615253_privacy_noise_0_006_s42",
-        "aggregation": "adaptive",
-        "compression": "quantize",
-        "privacy": "gaussian_clip_noise",
-        "noise_multiplier": 0.006,
-        "dataset_source": "SYNTHETIC DEMO DATA",
-        "is_synthetic": true,
-        "per_consumer": {
-          "threshold": 0.5,
-          "accuracy": 0.875,
-          "precision": 1.0,
-          "recall": 0.14285714285714285,
-          "f1": 0.25,
-          "tp": 1,
-          "fp": 0,
-          "tn": 41,
-          "fn": 6,
-          "specificity": 1.0,
-          "roc_auc": 1.0,
-          "pr_auc": 1.0,
-          "n_samples": 48,
-          "positive_rate": 0.14583333333333334,
-          "rule": "consumer flagged if >= ratio of its windows exceed the window threshold",
-          "n_consumers": 48
-        },
-        "privacy_level": "noise_0.006",
-        "privacy_off": false,
-        "epsilon_estimate": 807.4675437675648,
-        "f1_change_vs_privacy_off": -0.00934561467607642
-      }
-    ],
-    "meta": {
-      "reference": "privacy off (no clipping, no noise)",
-      "noise_multipliers": [
-        0.0,
-        0.001,
-        0.003,
-        0.006
-      ],
-      "rounds": 4,
-      "caveat": "epsilon values are single-release classical Gaussian-mechanism estimates; they do not account for composition across rounds and secure aggregation is simulated, so no end-to-end DP guarantee is claimed."
-    }
+    "rows": [],
+    "meta": {}
   },
   "communication_sweep": {
-    "rows": [
-      {
-        "method": "powershield_fl",
-        "kind": "federated",
-        "accuracy": 0.9977678571428571,
-        "precision": 0.9875,
-        "recall": 0.9753086419753086,
-        "f1": 0.9813664596273292,
-        "roc_auc": 0.9970919718874325,
-        "pr_auc": 0.9901822979900442,
-        "threshold": 0.2,
-        "train_time_s": 7.2649321999633685,
-        "wall_time_s": 7.2649321999633685,
-        "n_params": 10689,
-        "model_size_kb": 41.75390625,
-        "inference_per_sample_ms": 0.003991406174463918,
-        "inference_peak_memory_mb": 0.00490570068359375,
-        "rss_delta_mb": 6.08203125,
-        "rounds": 4,
-        "clients": 5,
-        "total_bytes": 1726760,
-        "bytes_per_round": 431690.0,
-        "best_val_f1": 0.9885057471264368,
-        "best_round": 4,
-        "seed": 42,
-        "run_id": "experiment_20261025_014920_866668_communication_none_s42",
-        "aggregation": "adaptive",
-        "compression": "none",
-        "privacy": "gaussian_clip_noise",
-        "noise_multiplier": 0.001,
-        "dataset_source": "SYNTHETIC DEMO DATA",
-        "is_synthetic": true,
-        "per_consumer": {
-          "threshold": 0.5,
-          "accuracy": 0.875,
-          "precision": 1.0,
-          "recall": 0.14285714285714285,
-          "f1": 0.25,
-          "tp": 1,
-          "fp": 0,
-          "tn": 41,
-          "fn": 6,
-          "specificity": 1.0,
-          "roc_auc": 1.0,
-          "pr_auc": 1.0,
-          "n_samples": 48,
-          "positive_rate": 0.14583333333333334,
-          "rule": "consumer flagged if >= ratio of its windows exceed the window threshold",
-          "n_consumers": 48
-        },
-        "compression_label": "none",
-        "communication_reduction_pct": 0.0
-      },
-      {
-        "method": "powershield_fl",
-        "kind": "federated",
-        "accuracy": 0.9977678571428571,
-        "precision": 0.9875,
-        "recall": 0.9753086419753086,
-        "f1": 0.9813664596273292,
-        "roc_auc": 0.9970357663020635,
-        "pr_auc": 0.9901978567766682,
-        "threshold": 0.2,
-        "train_time_s": 6.577762000029907,
-        "wall_time_s": 6.577762000029907,
-        "n_params": 10689,
-        "model_size_kb": 41.75390625,
-        "inference_per_sample_ms": 0.004379882739158347,
-        "inference_peak_memory_mb": 0.00490570068359375,
-        "rss_delta_mb": 3.34765625,
-        "rounds": 4,
-        "clients": 5,
-        "total_bytes": 451222,
-        "bytes_per_round": 112805.5,
-        "best_val_f1": 0.9885057471264368,
-        "best_round": 4,
-        "seed": 42,
-        "run_id": "experiment_20261025_014929_046043_communication_quantize_8bit_s42",
-        "aggregation": "adaptive",
-        "compression": "quantize",
-        "privacy": "gaussian_clip_noise",
-        "noise_multiplier": 0.001,
-        "dataset_source": "SYNTHETIC DEMO DATA",
-        "is_synthetic": true,
-        "per_consumer": {
-          "threshold": 0.5,
-          "accuracy": 0.875,
-          "precision": 1.0,
-          "recall": 0.14285714285714285,
-          "f1": 0.25,
-          "tp": 1,
-          "fp": 0,
-          "tn": 41,
-          "fn": 6,
-          "specificity": 1.0,
-          "roc_auc": 1.0,
-          "pr_auc": 1.0,
-          "n_samples": 48,
-          "positive_rate": 0.14583333333333334,
-          "rule": "consumer flagged if >= ratio of its windows exceed the window threshold",
-          "n_consumers": 48
-        },
-        "compression_label": "quantize_8bit",
-        "communication_reduction_pct": 73.86886423127707
-      },
-      {
-        "method": "powershield_fl",
-        "kind": "federated",
-        "accuracy": 0.9918154761904762,
-        "precision": 1.0,
-        "recall": 0.8641975308641975,
-        "f1": 0.9271523178807947,
-        "roc_auc": 0.9949781531333393,
-        "pr_auc": 0.9730859232379373,
-        "threshold": 0.45,
-        "train_time_s": 7.489734100061469,
-        "wall_time_s": 7.489734100061469,
-        "n_params": 10689,
-        "model_size_kb": 41.75390625,
-        "inference_per_sample_ms": 0.003710546934598824,
-        "inference_peak_memory_mb": 0.00490570068359375,
-        "rss_delta_mb": 5.94921875,
-        "rounds": 4,
-        "clients": 5,
-        "total_bytes": 700440,
-        "bytes_per_round": 175110.0,
-        "best_val_f1": 0.9767441860465116,
-        "best_round": 4,
-        "seed": 42,
-        "run_id": "experiment_20261025_014936_138550_communication_topk_20pct_s42",
-        "aggregation": "adaptive",
-        "compression": "topk",
-        "privacy": "gaussian_clip_noise",
-        "noise_multiplier": 0.001,
-        "dataset_source": "SYNTHETIC DEMO DATA",
-        "is_synthetic": true,
-        "per_consumer": {
-          "threshold": 0.5,
-          "accuracy": 0.8958333333333334,
-          "precision": 1.0,
-          "recall": 0.2857142857142857,
-          "f1": 0.4444444444444444,
-          "tp": 2,
-          "fp": 0,
-          "tn": 41,
-          "fn": 5,
-          "specificity": 1.0,
-          "roc_auc": 0.9756097560975611,
-          "pr_auc": 0.8857142857142857,
-          "n_samples": 48,
-          "positive_rate": 0.14583333333333334,
-          "rule": "consumer flagged if >= ratio of its windows exceed the window threshold",
-          "n_consumers": 48
-        },
-        "compression_label": "topk_20pct",
-        "communication_reduction_pct": 59.43616947346475
-      },
-      {
-        "method": "powershield_fl",
-        "kind": "federated",
-        "accuracy": 0.9914434523809523,
-        "precision": 1.0,
-        "recall": 0.8580246913580247,
-        "f1": 0.9235880398671097,
-        "roc_auc": 0.9948266424249534,
-        "pr_auc": 0.9715889283625075,
-        "threshold": 0.45,
-        "train_time_s": 7.651117500034161,
-        "wall_time_s": 7.651117500034161,
-        "n_params": 10689,
-        "model_size_kb": 41.75390625,
-        "inference_per_sample_ms": 0.0034392578527331352,
-        "inference_peak_memory_mb": 0.00490570068359375,
-        "rss_delta_mb": 3.12109375,
-        "rounds": 4,
-        "clients": 5,
-        "total_bytes": 451227,
-        "bytes_per_round": 112806.75,
-        "best_val_f1": 0.9737609329446064,
-        "best_round": 4,
-        "seed": 42,
-        "run_id": "experiment_20261025_014944_143766_communication_topk_quantize_s42",
-        "aggregation": "adaptive",
-        "compression": "topk_quantize",
-        "privacy": "gaussian_clip_noise",
-        "noise_multiplier": 0.001,
-        "dataset_source": "SYNTHETIC DEMO DATA",
-        "is_synthetic": true,
-        "per_consumer": {
-          "threshold": 0.5,
-          "accuracy": 0.8958333333333334,
-          "precision": 1.0,
-          "recall": 0.2857142857142857,
-          "f1": 0.4444444444444444,
-          "tp": 2,
-          "fp": 0,
-          "tn": 41,
-          "fn": 5,
-          "specificity": 1.0,
-          "roc_auc": 0.9756097560975611,
-          "pr_auc": 0.8857142857142857,
-          "n_samples": 48,
-          "positive_rate": 0.14583333333333334,
-          "rule": "consumer flagged if >= ratio of its windows exceed the window threshold",
-          "n_consumers": 48
-        },
-        "compression_label": "topk_quantize",
-        "communication_reduction_pct": 73.86857467163937
-      }
-    ],
-    "meta": {
-      "reference": "none",
-      "reference_total_bytes": 1726760,
-      "rounds": 4,
-      "method": "upload top-k / int8 quantization; server broadcast quantized when compression enabled",
-      "note": "measured payload bytes include per-tensor headers and indices"
-    }
+    "rows": [],
+    "meta": {}
   },
   "scalability": {
-    "rows": [
-      {
-        "method": "powershield_fl",
-        "kind": "federated",
-        "accuracy": 0.9981398809523809,
-        "precision": 0.9815950920245399,
-        "recall": 0.9876543209876543,
-        "f1": 0.9846153846153847,
-        "roc_auc": 0.9953911419997459,
-        "pr_auc": 0.9925560727342688,
-        "threshold": 0.4,
-        "train_time_s": 6.55801659997087,
-        "wall_time_s": 6.55801659997087,
-        "n_params": 10689,
-        "model_size_kb": 41.75390625,
-        "inference_per_sample_ms": 0.004790038929058937,
-        "inference_peak_memory_mb": 0.00490570068359375,
-        "rss_delta_mb": 5.31640625,
-        "rounds": 4,
-        "clients": 2,
-        "total_bytes": 180497,
-        "bytes_per_round": 45124.25,
-        "best_val_f1": 0.9942857142857143,
-        "best_round": 4,
-        "seed": 42,
-        "run_id": "experiment_20261025_014952_325675_scalability_2clients_s42",
-        "aggregation": "adaptive",
-        "compression": "quantize",
-        "privacy": "gaussian_clip_noise",
-        "noise_multiplier": 0.001,
-        "dataset_source": "SYNTHETIC DEMO DATA",
-        "is_synthetic": true,
-        "per_consumer": {
-          "threshold": 0.5,
-          "accuracy": 0.875,
-          "precision": 1.0,
-          "recall": 0.14285714285714285,
-          "f1": 0.25,
-          "tp": 1,
-          "fp": 0,
-          "tn": 41,
-          "fn": 6,
-          "specificity": 1.0,
-          "roc_auc": 1.0,
-          "pr_auc": 1.0,
-          "n_samples": 48,
-          "positive_rate": 0.14583333333333334,
-          "rule": "consumer flagged if >= ratio of its windows exceed the window threshold",
-          "n_consumers": 48
-        }
-      },
-      {
-        "method": "powershield_fl",
-        "kind": "federated",
-        "accuracy": 0.9977678571428571,
-        "precision": 0.9875,
-        "recall": 0.9753086419753086,
-        "f1": 0.9813664596273292,
-        "roc_auc": 0.9970357663020635,
-        "pr_auc": 0.9901978567766682,
-        "threshold": 0.2,
-        "train_time_s": 7.6042413000250235,
-        "wall_time_s": 7.6042413000250235,
-        "n_params": 10689,
-        "model_size_kb": 41.75390625,
-        "inference_per_sample_ms": 0.0043248046495136805,
-        "inference_peak_memory_mb": 0.00490570068359375,
-        "rss_delta_mb": 4.10546875,
-        "rounds": 4,
-        "clients": 5,
-        "total_bytes": 451222,
-        "bytes_per_round": 112805.5,
-        "best_val_f1": 0.9885057471264368,
-        "best_round": 4,
-        "seed": 42,
-        "run_id": "experiment_20261025_014959_624417_scalability_5clients_s42",
-        "aggregation": "adaptive",
-        "compression": "quantize",
-        "privacy": "gaussian_clip_noise",
-        "noise_multiplier": 0.001,
-        "dataset_source": "SYNTHETIC DEMO DATA",
-        "is_synthetic": true,
-        "per_consumer": {
-          "threshold": 0.5,
-          "accuracy": 0.875,
-          "precision": 1.0,
-          "recall": 0.14285714285714285,
-          "f1": 0.25,
-          "tp": 1,
-          "fp": 0,
-          "tn": 41,
-          "fn": 6,
-          "specificity": 1.0,
-          "roc_auc": 1.0,
-          "pr_auc": 1.0,
-          "n_samples": 48,
-          "positive_rate": 0.14583333333333334,
-          "rule": "consumer flagged if >= ratio of its windows exceed the window threshold",
-          "n_consumers": 48
-        }
-      },
-      {
-        "method": "powershield_fl",
-        "kind": "federated",
-        "accuracy": 0.9828869047619048,
-        "precision": 0.9754098360655737,
-        "recall": 0.7345679012345679,
-        "f1": 0.8380281690140845,
-        "roc_auc": 0.9861196641349715,
-        "pr_auc": 0.9085218181379701,
-        "threshold": 0.4,
-        "train_time_s": 8.953682800056413,
-        "wall_time_s": 8.953682800056413,
-        "n_params": 10689,
-        "model_size_kb": 41.75390625,
-        "inference_per_sample_ms": 0.004531835884336033,
-        "inference_peak_memory_mb": 0.00490570068359375,
-        "rss_delta_mb": 5.3125,
-        "rounds": 4,
-        "clients": 10,
-        "total_bytes": 902445,
-        "bytes_per_round": 225611.25,
-        "best_val_f1": 0.9289940828402367,
-        "best_round": 4,
-        "seed": 42,
-        "run_id": "experiment_20261025_015007_977837_scalability_10clients_s42",
-        "aggregation": "adaptive",
-        "compression": "quantize",
-        "privacy": "gaussian_clip_noise",
-        "noise_multiplier": 0.001,
-        "dataset_source": "SYNTHETIC DEMO DATA",
-        "is_synthetic": true,
-        "per_consumer": {
-          "threshold": 0.5,
-          "accuracy": 0.875,
-          "precision": 1.0,
-          "recall": 0.14285714285714285,
-          "f1": 0.25,
-          "tp": 1,
-          "fp": 0,
-          "tn": 41,
-          "fn": 6,
-          "specificity": 1.0,
-          "roc_auc": 0.9547038327526132,
-          "pr_auc": 0.8306122448979592,
-          "n_samples": 48,
-          "positive_rate": 0.14583333333333334,
-          "rule": "consumer flagged if >= ratio of its windows exceed the window threshold",
-          "n_consumers": 48
-        }
-      }
-    ],
-    "meta": {
-      "client_counts": [
-        2,
-        5,
-        10
-      ],
-      "rounds": 4,
-      "summary": {
-        "n_configurations": 3,
-        "configurations": [
-          2,
-          5,
-          10
-        ],
-        "wall_time_s": [
-          6.55801659997087,
-          7.6042413000250235,
-          8.953682800056413
-        ],
-        "wall_time_slope_s_per_client": 0.29644093062248694,
-        "max_clients": 10,
-        "note": "measured from the same QUICK/FULL configuration; wall time is machine-specific"
-      },
-      "caveat": "wall time and memory are machine-specific and measured on this CPU-only host"
-    }
+    "rows": [],
+    "meta": {}
   },
   "partitions": {
     "seed": 42,
     "strategy": "non_iid",
-    "n_clients": 5,
+    "n_clients": 4,
     "clients": [
       {
         "client_id": "client_00",
-        "n_samples": 2016,
-        "n_consumers": 36,
-        "n_theft_windows": 346,
-        "theft_ratio": 0.17162698412698413
+        "n_samples": 1008,
+        "n_consumers": 28,
+        "n_theft_windows": 145,
+        "theft_ratio": 0.14384920634920634
       },
       {
         "client_id": "client_01",
-        "n_samples": 3640,
-        "n_consumers": 65,
-        "n_theft_windows": 329,
-        "theft_ratio": 0.09038461538461538
+        "n_samples": 252,
+        "n_consumers": 7,
+        "n_theft_windows": 11,
+        "theft_ratio": 0.04365079365079365
       },
       {
         "client_id": "client_02",
-        "n_samples": 336,
-        "n_consumers": 6,
-        "n_theft_windows": 18,
-        "theft_ratio": 0.05357142857142857
+        "n_samples": 324,
+        "n_consumers": 9,
+        "n_theft_windows": 88,
+        "theft_ratio": 0.2716049382716049
       },
       {
         "client_id": "client_03",
-        "n_samples": 2408,
-        "n_consumers": 43,
-        "n_theft_windows": 0,
-        "theft_ratio": 0.0
-      },
-      {
-        "client_id": "client_04",
-        "n_samples": 336,
-        "n_consumers": 6,
-        "n_theft_windows": 13,
-        "theft_ratio": 0.03869047619047619
+        "n_samples": 2628,
+        "n_consumers": 73,
+        "n_theft_windows": 127,
+        "theft_ratio": 0.04832572298325723
       }
     ],
     "heterogeneity": {
       "per_client": [
         {
           "client_id": "client_00",
-          "n_samples": 2016,
-          "n_consumers": 36,
-          "n_theft_windows": 346,
-          "theft_ratio": 0.17162698412698413,
-          "mean_consumption_scaled": -0.03447055444121361,
-          "std_consumption_scaled": 0.9709325432777405
+          "n_samples": 1008,
+          "n_consumers": 28,
+          "n_theft_windows": 145,
+          "theft_ratio": 0.14384920634920634,
+          "mean_consumption_scaled": 0.05010005831718445,
+          "std_consumption_scaled": 0.9994921684265137
         },
         {
           "client_id": "client_01",
-          "n_samples": 3640,
-          "n_consumers": 65,
-          "n_theft_windows": 329,
-          "theft_ratio": 0.09038461538461538,
-          "mean_consumption_scaled": -0.04775654152035713,
-          "std_consumption_scaled": 0.9923842549324036
+          "n_samples": 252,
+          "n_consumers": 7,
+          "n_theft_windows": 11,
+          "theft_ratio": 0.04365079365079365,
+          "mean_consumption_scaled": -0.6502498984336853,
+          "std_consumption_scaled": 0.46377450227737427
         },
         {
           "client_id": "client_02",
-          "n_samples": 336,
-          "n_consumers": 6,
-          "n_theft_windows": 18,
-          "theft_ratio": 0.05357142857142857,
-          "mean_consumption_scaled": 0.2814869284629822,
-          "std_consumption_scaled": 0.8261454105377197
+          "n_samples": 324,
+          "n_consumers": 9,
+          "n_theft_windows": 88,
+          "theft_ratio": 0.2716049382716049,
+          "mean_consumption_scaled": -0.6710300445556641,
+          "std_consumption_scaled": 0.7712217569351196
         },
         {
           "client_id": "client_03",
-          "n_samples": 2408,
-          "n_consumers": 43,
-          "n_theft_windows": 0,
-          "theft_ratio": 0.0,
-          "mean_consumption_scaled": 0.17732836306095123,
-          "std_consumption_scaled": 1.002545952796936
-        },
-        {
-          "client_id": "client_04",
-          "n_samples": 336,
-          "n_consumers": 6,
-          "n_theft_windows": 13,
-          "theft_ratio": 0.03869047619047619,
-          "mean_consumption_scaled": -0.417561799287796,
-          "std_consumption_scaled": 0.7214086651802063
+          "n_samples": 2628,
+          "n_consumers": 73,
+          "n_theft_windows": 127,
+          "theft_ratio": 0.04832572298325723,
+          "mean_consumption_scaled": 0.133971706032753,
+          "std_consumption_scaled": 0.9752370715141296
         }
       ],
       "strategy_note": "clients differ by design under non_iid; iid should be near-uniform",
-      "theft_ratio_std": 0.05812075037322327,
-      "size_cv": 0.7273310933784798,
+      "theft_ratio_std": 0.09264331459100393,
+      "size_cv": 0.9078757842475231,
       "theft_ratio_range": [
-        0.0,
-        0.17162698412698413
+        0.04365079365079365,
+        0.2716049382716049
       ]
     },
     "partition_unit": "consumer",
-    "artifact": "B:\\surya-11\\data\\partitions\\partitions_seed42_n5.npz",
+    "artifact": "B:\\surya-11\\data\\partitions\\partitions_seed42_n4.npz",
     "note": "only consumer IDs and window indices are stored; raw consumption stays out"
   },
   "explainability": {
     "status": "PASS",
-    "run_dir": "B:\\surya-11\\results\\raw\\experiment_20261025_014812_413345_powershield_s42",
+    "run_dir": "B:\\surya-11\\results\\raw\\experiment_20261028_130624_543696_powershield_s42",
     "permutation_importance": {
       "method": "permutation_importance",
       "implementation": "manual feature-shuffle, ROC-AUC drop",
-      "n_repeats": 5,
-      "n_rows": 1500,
-      "baseline_roc_auc": 0.996682260969449,
+      "n_repeats": 3,
+      "n_rows": 400,
+      "baseline_roc_auc": 1.0,
       "top_features": [
         {
-          "feature": "min_max_day_ratio",
-          "importance_mean": 0.011593685701381262,
-          "importance_std": 0.002477021276990429
+          "feature": "daily_diff_std",
+          "importance_mean": 0.010786052009456296,
+          "importance_std": 0.0011319114543472712
         },
         {
           "feature": "max_daily_drop",
-          "importance_mean": 0.0070436436023397775,
-          "importance_std": 0.0006681287057348895
+          "importance_mean": 0.007867907801418514,
+          "importance_std": 0.003440641555022173
         },
         {
-          "feature": "daily_diff_std",
-          "importance_mean": 0.004871779144525301,
-          "importance_std": 0.000867632189333113
+          "feature": "min_max_day_ratio",
+          "importance_mean": 0.007203014184397172,
+          "importance_std": 0.0018936178513558088
         },
         {
-          "feature": "mean_daily_drop",
-          "importance_mean": 0.0008018333993164539,
-          "importance_std": 0.0002360908009000574
+          "feature": "load_variation",
+          "importance_mean": 0.003767730496453884,
+          "importance_std": 0.0027076222790050376
         },
         {
-          "feature": "block_93",
-          "importance_mean": 0.0006479349165547932,
-          "importance_std": 0.0010546766383130145
+          "feature": "consumption_trend",
+          "importance_mean": 0.0024379432624113497,
+          "importance_std": 0.0005863810529842281
         },
         {
-          "feature": "night_day_ratio",
-          "importance_mean": 0.0005754465007612453,
-          "importance_std": 0.00035288838156230593
+          "feature": "acf_lag1",
+          "importance_mean": 0.0021793735224585977,
+          "importance_std": 0.0007783432146019939
         },
         {
-          "feature": "block_91",
-          "importance_mean": 0.0005509119600311197,
-          "importance_std": 0.000580823431079114
+          "feature": "block_88",
+          "importance_mean": 0.0019208037825059199,
+          "importance_std": 0.0012795883625656738
         },
         {
-          "feature": "block_35",
-          "importance_mean": 0.0005263774193009274,
-          "importance_std": 0.00021032804470248187
+          "feature": "block_37",
+          "importance_mean": 0.0015883569739952492,
+          "importance_std": 0.0006103247503641428
         },
         {
-          "feature": "block_97",
-          "importance_mean": 0.00041374157322175974,
-          "importance_std": 0.00031303845545320593
-        },
-        {
-          "feature": "block_96",
-          "importance_mean": 0.00036913331734875763,
-          "importance_std": 0.0007825380321206069
-        },
-        {
-          "feature": "block_94",
-          "importance_mean": 0.00028214721839654456,
-          "importance_std": 0.0007418595704595098
-        },
-        {
-          "feature": "block_85",
-          "importance_mean": 0.0002631887096505192,
-          "importance_std": 0.0005311503406479337
-        },
-        {
-          "feature": "block_39",
-          "importance_mean": 0.0002475758200949807,
-          "importance_std": 0.0001980708283055621
+          "feature": "std_consumption",
+          "importance_mean": 0.0014406028368794122,
+          "importance_std": 0.00048303401413348976
         },
         {
           "feature": "block_92",
-          "importance_mean": 0.00022527169215853516,
-          "importance_std": 0.0005066922806240254
+          "importance_mean": 0.0010712174940898194,
+          "importance_std": 0.001005515483807329
         },
         {
-          "feature": "min_consumption",
-          "importance_mean": 0.00021858045377758372,
-          "importance_std": 0.0003301274655306492
+          "feature": "block_97",
+          "importance_mean": 0.0008126477541371043,
+          "importance_std": 0.0006103247503641428
         },
         {
-          "feature": "peak_offpeak_ratio",
-          "importance_mean": 0.00020854359620618989,
-          "importance_std": 0.0001460239178949034
+          "feature": "block_95",
+          "importance_mean": 0.0008126477541371043,
+          "importance_std": 0.0007861922522825229
+        },
+        {
+          "feature": "block_93",
+          "importance_mean": 0.0007387706855791857,
+          "importance_std": 0.0007783432146019939
+        },
+        {
+          "feature": "block_39",
+          "importance_mean": 0.0007387706855791857,
+          "importance_std": 0.00038917160730099693
         },
         {
           "feature": "block_84",
-          "importance_mean": 0.0001940459130474359,
-          "importance_std": 0.00022975011134770786
-        },
-        {
-          "feature": "weekend_weekday_ratio",
-          "importance_mean": 0.0001639353403331878,
-          "importance_std": 0.0002865722423204992
-        },
-        {
-          "feature": "block_89",
-          "importance_mean": 0.0001583593083490653,
-          "importance_std": 0.00025208351946841214
+          "importance_mean": 0.0007018321513002265,
+          "importance_std": 0.00038917160730099693
         },
         {
           "feature": "block_23",
-          "importance_mean": 0.0001550136891586229,
-          "importance_std": 8.722525361807026e-05
+          "importance_mean": 0.0006648936170212671,
+          "importance_std": 0.0006648936170212671
+        },
+        {
+          "feature": "block_94",
+          "importance_mean": 0.0006279550827423078,
+          "importance_std": 0.0004996952297011115
+        },
+        {
+          "feature": "min_consumption",
+          "importance_mean": 0.0006279550827423078,
+          "importance_std": 0.0005236941075191202
+        },
+        {
+          "feature": "block_63",
+          "importance_mean": 0.0006279550827423078,
+          "importance_std": 0.00016927362939405196
+        },
+        {
+          "feature": "block_20",
+          "importance_mean": 0.0005910165484633486,
+          "importance_std": 0.00016927362939405196
         }
       ]
     },
     "shap": {
       "status": "PASS",
       "explainer": "KernelExplainer",
-      "n_samples_explained": 40
+      "n_samples_explained": 15
     },
     "local_explanations": {
       "status": "PASS",
-      "threshold": 0.1,
+      "threshold": 0.5,
       "records": [
         {
           "verdict": "POTENTIAL_THEFT",
-          "probability_theft": 1.0,
-          "confidence": 1.0,
-          "threshold": 0.1,
-          "top_factors": [
-            {
-              "feature": "max_daily_drop",
-              "human_name": "largest day-over-day drop",
-              "contribution": 5.179532527923584,
-              "value": 5.2467193603515625
-            },
-            {
-              "feature": "weekend_weekday_ratio",
-              "human_name": "weekend vs weekday usage",
-              "contribution": -4.91518497467041,
-              "value": 8.436616897583008
-            },
-            {
-              "feature": "min_max_day_ratio",
-              "human_name": "lowest/highest day ratio",
-              "contribution": 4.779653549194336,
-              "value": -5.032787322998047
-            },
-            {
-              "feature": "mean_daily_drop",
-              "human_name": "mean day-over-day drop",
-              "contribution": 4.592736721038818,
-              "value": -8.7416353225708
-            },
-            {
-              "feature": "daily_diff_std",
-              "human_name": "day-to-day volatility",
-              "contribution": 2.668828010559082,
-              "value": 2.752556085586548
-            }
-          ],
-          "attribution_source": "gradient",
-          "text": "Prediction : POTENTIAL_THEFT\nConfidence : 100.0%\nProbability: 100.0%\nImportant Factors:\n  - largest day-over-day drop: contribution +5.1795 (\u2191 theft-risk)\n  - weekend vs weekday usage: contribution -4.9152 (\u2193 normal)\n  - lowest/highest day ratio: contribution +4.7797 (\u2191 theft-risk)\n  - mean day-over-day drop: contribution +4.5927 (\u2191 theft-risk)\n  - day-to-day volatility: contribution +2.6688 (\u2191 theft-risk)",
-          "sample_index": 2343,
-          "consumer_id": "C0224",
-          "start_date": "2024-05-21",
-          "y_true": 1,
-          "prediction_matches": true
-        },
-        {
-          "verdict": "POTENTIAL_THEFT",
-          "probability_theft": 1.0,
-          "confidence": 1.0,
-          "threshold": 0.1,
-          "top_factors": [
-            {
-              "feature": "max_daily_drop",
-              "human_name": "largest day-over-day drop",
-              "contribution": 5.0219926834106445,
-              "value": 4.985901832580566
-            },
-            {
-              "feature": "min_max_day_ratio",
-              "human_name": "lowest/highest day ratio",
-              "contribution": 4.9799299240112305,
-              "value": -5.074252605438232
-            },
-            {
-              "feature": "load_variation",
-              "human_name": "load variation (std/mean)",
-              "contribution": 1.9642441272735596,
-              "value": 5.236755847930908
-            },
-            {
-              "feature": "weekend_weekday_ratio",
-              "human_name": "weekend vs weekday usage",
-              "contribution": -1.8999409675598145,
-              "value": 3.0947279930114746
-            },
-            {
-              "feature": "daily_diff_std",
-              "human_name": "day-to-day volatility",
-              "contribution": 1.6723111867904663,
-              "value": 1.6440919637680054
-            }
-          ],
-          "attribution_source": "gradient",
-          "text": "Prediction : POTENTIAL_THEFT\nConfidence : 100.0%\nProbability: 100.0%\nImportant Factors:\n  - largest day-over-day drop: contribution +5.0220 (\u2191 theft-risk)\n  - lowest/highest day ratio: contribution +4.9799 (\u2191 theft-risk)\n  - load variation (std/mean): contribution +1.9642 (\u2191 theft-risk)\n  - weekend vs weekday usage: contribution -1.8999 (\u2193 normal)\n  - day-to-day volatility: contribution +1.6723 (\u2191 theft-risk)",
-          "sample_index": 2348,
-          "consumer_id": "C0224",
-          "start_date": "2024-06-05",
-          "y_true": 1,
-          "prediction_matches": true
-        },
-        {
-          "verdict": "POTENTIAL_THEFT",
-          "probability_theft": 1.0,
-          "confidence": 1.0,
-          "threshold": 0.1,
-          "top_factors": [
-            {
-              "feature": "max_daily_drop",
-              "human_name": "largest day-over-day drop",
-              "contribution": 5.10929536819458,
-              "value": 4.885737419128418
-            },
-            {
-              "feature": "min_max_day_ratio",
-              "human_name": "lowest/highest day ratio",
-              "contribution": 4.677526950836182,
-              "value": -4.643907070159912
-            },
-            {
-              "feature": "daily_diff_std",
-              "human_name": "day-to-day volatility",
-              "contribution": 3.651644468307495,
-              "value": 3.5231308937072754
-            },
-            {
-              "feature": "consumption_trend",
-              "human_name": "consumption trend over the window",
-              "contribution": 2.3618457317352295,
-              "value": -5.402466773986816
-            },
-            {
-              "feature": "mean_daily_drop",
-              "human_name": "mean day-over-day drop",
-              "contribution": 1.6563080549240112,
-              "value": -2.9164438247680664
-            }
-          ],
-          "attribution_source": "gradient",
-          "text": "Prediction : POTENTIAL_THEFT\nConfidence : 100.0%\nProbability: 100.0%\nImportant Factors:\n  - largest day-over-day drop: contribution +5.1093 (\u2191 theft-risk)\n  - lowest/highest day ratio: contribution +4.6775 (\u2191 theft-risk)\n  - day-to-day volatility: contribution +3.6516 (\u2191 theft-risk)\n  - consumption trend over the window: contribution +2.3618 (\u2191 theft-risk)\n  - mean day-over-day drop: contribution +1.6563 (\u2191 theft-risk)",
-          "sample_index": 1779,
-          "consumer_id": "C0176",
-          "start_date": "2024-05-09",
-          "y_true": 1,
-          "prediction_matches": true
-        },
-        {
-          "verdict": "POTENTIAL_THEFT",
-          "probability_theft": 1.0,
-          "confidence": 1.0,
-          "threshold": 0.1,
-          "top_factors": [
-            {
-              "feature": "max_daily_drop",
-              "human_name": "largest day-over-day drop",
-              "contribution": 4.545726299285889,
-              "value": 4.346827030181885
-            },
-            {
-              "feature": "min_max_day_ratio",
-              "human_name": "lowest/highest day ratio",
-              "contribution": 4.412508010864258,
-              "value": -4.38079309463501
-            },
-            {
-              "feature": "daily_diff_std",
-              "human_name": "day-to-day volatility",
-              "contribution": 1.965840458869934,
-              "value": 1.8966559171676636
-            },
-            {
-              "feature": "weekend_weekday_ratio",
-              "human_name": "weekend vs weekday usage",
-              "contribution": 1.699026346206665,
-              "value": -2.700897216796875
-            },
-            {
-              "feature": "mean_daily_drop",
-              "human_name": "mean day-over-day drop",
-              "contribution": 1.2151260375976562,
-              "value": -2.13960599899292
-            }
-          ],
-          "attribution_source": "gradient",
-          "text": "Prediction : POTENTIAL_THEFT\nConfidence : 100.0%\nProbability: 100.0%\nImportant Factors:\n  - largest day-over-day drop: contribution +4.5457 (\u2191 theft-risk)\n  - lowest/highest day ratio: contribution +4.4125 (\u2191 theft-risk)\n  - day-to-day volatility: contribution +1.9658 (\u2191 theft-risk)\n  - weekend vs weekday usage: contribution +1.6990 (\u2191 theft-risk)\n  - mean day-over-day drop: contribution +1.2151 (\u2191 theft-risk)",
-          "sample_index": 1778,
-          "consumer_id": "C0176",
-          "start_date": "2024-05-06",
-          "y_true": 1,
-          "prediction_matches": true
-        },
-        {
-          "verdict": "POTENTIAL_THEFT",
-          "probability_theft": 1.0,
-          "confidence": 1.0,
-          "threshold": 0.1,
-          "top_factors": [
-            {
-              "feature": "max_daily_drop",
-              "human_name": "largest day-over-day drop",
-              "contribution": 5.016383647918701,
-              "value": 4.985901832580566
-            },
-            {
-              "feature": "min_max_day_ratio",
-              "human_name": "lowest/highest day ratio",
-              "contribution": 4.95831823348999,
-              "value": -5.022769927978516
-            },
-            {
-              "feature": "mean_daily_drop",
-              "human_name": "mean day-over-day drop",
-              "contribution": 3.2555439472198486,
-              "value": -5.937249183654785
-            },
-            {
-              "feature": "daily_diff_std",
-              "human_name": "day-to-day volatility",
-              "contribution": 2.049530267715454,
-              "value": 2.012518882751465
-            },
-            {
-              "feature": "load_variation",
-              "human_name": "load variation (std/mean)",
-              "contribution": 2.0330557823181152,
-              "value": 5.470064163208008
-            }
-          ],
-          "attribution_source": "gradient",
-          "text": "Prediction : POTENTIAL_THEFT\nConfidence : 100.0%\nProbability: 100.0%\nImportant Factors:\n  - largest day-over-day drop: contribution +5.0164 (\u2191 theft-risk)\n  - lowest/highest day ratio: contribution +4.9583 (\u2191 theft-risk)\n  - mean day-over-day drop: contribution +3.2555 (\u2191 theft-risk)\n  - day-to-day volatility: contribution +2.0495 (\u2191 theft-risk)\n  - load variation (std/mean): contribution +2.0331 (\u2191 theft-risk)",
-          "sample_index": 2347,
-          "consumer_id": "C0224",
-          "start_date": "2024-06-02",
-          "y_true": 1,
-          "prediction_matches": true
-        },
-        {
-          "verdict": "POTENTIAL_THEFT",
-          "probability_theft": 1.0,
-          "confidence": 1.0,
-          "threshold": 0.1,
-          "top_factors": [
-            {
-              "feature": "max_daily_drop",
-              "human_name": "largest day-over-day drop",
-              "contribution": 5.052605628967285,
-              "value": 4.985901832580566
-            },
-            {
-              "feature": "mean_daily_drop",
-              "human_name": "mean day-over-day drop",
-              "contribution": 5.0290846824646,
-              "value": -9.291511535644531
-            },
-            {
-              "feature": "min_max_day_ratio",
-              "human_name": "lowest/highest day ratio",
-              "contribution": 5.0036492347717285,
-              "value": -5.064857482910156
-            },
-            {
-              "feature": "weekend_weekday_ratio",
-              "human_name": "weekend vs weekday usage",
-              "contribution": -3.4529521465301514,
-              "value": 5.6310038566589355
-            },
-            {
-              "feature": "daily_diff_std",
-              "human_name": "day-to-day volatility",
-              "contribution": 2.7705655097961426,
-              "value": 2.7405166625976562
-            }
-          ],
-          "attribution_source": "gradient",
-          "text": "Prediction : POTENTIAL_THEFT\nConfidence : 100.0%\nProbability: 100.0%\nImportant Factors:\n  - largest day-over-day drop: contribution +5.0526 (\u2191 theft-risk)\n  - mean day-over-day drop: contribution +5.0291 (\u2191 theft-risk)\n  - lowest/highest day ratio: contribution +5.0036 (\u2191 theft-risk)\n  - weekend vs weekday usage: contribution -3.4530 (\u2193 normal)\n  - day-to-day volatility: contribution +2.7706 (\u2191 theft-risk)",
-          "sample_index": 2346,
-          "consumer_id": "C0224",
-          "start_date": "2024-05-30",
-          "y_true": 1,
-          "prediction_matches": true
-        },
-        {
-          "verdict": "POTENTIAL_THEFT",
-          "probability_theft": 1.0,
-          "confidence": 1.0,
-          "threshold": 0.1,
+          "probability_theft": 0.9962605834007263,
+          "confidence": 0.9962605834007263,
+          "threshold": 0.5,
           "top_factors": [
             {
               "feature": "mean_daily_drop",
               "human_name": "mean day-over-day drop",
-              "contribution": 5.076061248779297,
-              "value": -9.490367889404297
-            },
-            {
-              "feature": "max_daily_drop",
-              "human_name": "largest day-over-day drop",
-              "contribution": 4.98549747467041,
-              "value": 4.985901832580566
-            },
-            {
-              "feature": "min_max_day_ratio",
-              "human_name": "lowest/highest day ratio",
-              "contribution": 4.806660175323486,
-              "value": -5.032398223876953
-            },
-            {
-              "feature": "weekend_weekday_ratio",
-              "human_name": "weekend vs weekday usage",
-              "contribution": -3.2432403564453125,
-              "value": 5.53066873550415
+              "contribution": 1.545860767364502,
+              "value": -13.344453811645508
             },
             {
               "feature": "daily_diff_std",
               "human_name": "day-to-day volatility",
-              "contribution": 2.661919355392456,
-              "value": 2.739938497543335
-            }
-          ],
-          "attribution_source": "gradient",
-          "text": "Prediction : POTENTIAL_THEFT\nConfidence : 100.0%\nProbability: 100.0%\nImportant Factors:\n  - mean day-over-day drop: contribution +5.0761 (\u2191 theft-risk)\n  - largest day-over-day drop: contribution +4.9855 (\u2191 theft-risk)\n  - lowest/highest day ratio: contribution +4.8067 (\u2191 theft-risk)\n  - weekend vs weekday usage: contribution -3.2432 (\u2193 normal)\n  - day-to-day volatility: contribution +2.6619 (\u2191 theft-risk)",
-          "sample_index": 2345,
-          "consumer_id": "C0224",
-          "start_date": "2024-05-27",
-          "y_true": 1,
-          "prediction_matches": true
-        },
-        {
-          "verdict": "POTENTIAL_THEFT",
-          "probability_theft": 1.0,
-          "confidence": 1.0,
-          "threshold": 0.1,
-          "top_factors": [
-            {
-              "feature": "max_daily_drop",
-              "human_name": "largest day-over-day drop",
-              "contribution": 5.34555721282959,
-              "value": 5.2467193603515625
-            },
-            {
-              "feature": "min_max_day_ratio",
-              "human_name": "lowest/highest day ratio",
-              "contribution": 4.996673107147217,
-              "value": -5.033883094787598
-            },
-            {
-              "feature": "mean_daily_drop",
-              "human_name": "mean day-over-day drop",
-              "contribution": 4.025740146636963,
-              "value": -7.217130661010742
-            },
-            {
-              "feature": "daily_diff_std",
-              "human_name": "day-to-day volatility",
-              "contribution": 3.026970863342285,
-              "value": 2.966647148132324
+              "contribution": 1.4679501056671143,
+              "value": 10.368237495422363
             },
             {
               "feature": "frac_low_days",
               "human_name": "fraction of unusually low days",
-              "contribution": 2.398881673812866,
-              "value": 18.5181827545166
+              "contribution": 0.7253175377845764,
+              "value": 11.7210693359375
+            },
+            {
+              "feature": "max_daily_drop",
+              "human_name": "largest day-over-day drop",
+              "contribution": 0.5923479199409485,
+              "value": 4.993131637573242
+            },
+            {
+              "feature": "min_max_day_ratio",
+              "human_name": "lowest/highest day ratio",
+              "contribution": 0.48229295015335083,
+              "value": -4.7309465408325195
             }
           ],
           "attribution_source": "gradient",
-          "text": "Prediction : POTENTIAL_THEFT\nConfidence : 100.0%\nProbability: 100.0%\nImportant Factors:\n  - largest day-over-day drop: contribution +5.3456 (\u2191 theft-risk)\n  - lowest/highest day ratio: contribution +4.9967 (\u2191 theft-risk)\n  - mean day-over-day drop: contribution +4.0257 (\u2191 theft-risk)\n  - day-to-day volatility: contribution +3.0270 (\u2191 theft-risk)\n  - fraction of unusually low days: contribution +2.3989 (\u2191 theft-risk)",
-          "sample_index": 2344,
-          "consumer_id": "C0224",
-          "start_date": "2024-05-24",
+          "text": "Prediction : POTENTIAL_THEFT\nConfidence : 99.6%\nProbability: 99.6%\nImportant Factors:\n  - mean day-over-day drop: contribution +1.5459 (\u2191 theft-risk)\n  - day-to-day volatility: contribution +1.4680 (\u2191 theft-risk)\n  - fraction of unusually low days: contribution +0.7253 (\u2191 theft-risk)\n  - largest day-over-day drop: contribution +0.5923 (\u2191 theft-risk)\n  - lowest/highest day ratio: contribution +0.4823 (\u2191 theft-risk)",
+          "sample_index": 531,
+          "consumer_id": "C0072",
+          "start_date": "2024-03-22",
           "y_true": 1,
           "prediction_matches": true
         },
         {
           "verdict": "POTENTIAL_THEFT",
-          "probability_theft": 1.0,
-          "confidence": 1.0,
-          "threshold": 0.1,
+          "probability_theft": 0.9949210286140442,
+          "confidence": 0.9949210286140442,
+          "threshold": 0.5,
           "top_factors": [
             {
               "feature": "mean_daily_drop",
               "human_name": "mean day-over-day drop",
-              "contribution": 5.215773105621338,
-              "value": -9.183985710144043
-            },
-            {
-              "feature": "max_daily_drop",
-              "human_name": "largest day-over-day drop",
-              "contribution": 4.837404727935791,
-              "value": 4.625743389129639
-            },
-            {
-              "feature": "min_max_day_ratio",
-              "human_name": "lowest/highest day ratio",
-              "contribution": 4.626669406890869,
-              "value": -4.593414783477783
+              "contribution": 1.5201058387756348,
+              "value": -13.272041320800781
             },
             {
               "feature": "daily_diff_std",
               "human_name": "day-to-day volatility",
-              "contribution": 4.610404014587402,
-              "value": 4.448148727416992
+              "contribution": 1.434906244277954,
+              "value": 10.349892616271973
             },
             {
-              "feature": "acf_lag1",
-              "human_name": "daily autocorrelation",
-              "contribution": 2.0865631103515625,
-              "value": -4.169561386108398
+              "feature": "frac_low_days",
+              "human_name": "fraction of unusually low days",
+              "contribution": 0.7586894035339355,
+              "value": 11.7210693359375
+            },
+            {
+              "feature": "max_daily_drop",
+              "human_name": "largest day-over-day drop",
+              "contribution": 0.628542423248291,
+              "value": 4.993131637573242
+            },
+            {
+              "feature": "min_max_day_ratio",
+              "human_name": "lowest/highest day ratio",
+              "contribution": 0.49927181005477905,
+              "value": -4.7309465408325195
             }
           ],
           "attribution_source": "gradient",
-          "text": "Prediction : POTENTIAL_THEFT\nConfidence : 100.0%\nProbability: 100.0%\nImportant Factors:\n  - mean day-over-day drop: contribution +5.2158 (\u2191 theft-risk)\n  - largest day-over-day drop: contribution +4.8374 (\u2191 theft-risk)\n  - lowest/highest day ratio: contribution +4.6267 (\u2191 theft-risk)\n  - day-to-day volatility: contribution +4.6104 (\u2191 theft-risk)\n  - daily autocorrelation: contribution +2.0866 (\u2191 theft-risk)",
-          "sample_index": 1785,
-          "consumer_id": "C0176",
-          "start_date": "2024-05-27",
+          "text": "Prediction : POTENTIAL_THEFT\nConfidence : 99.5%\nProbability: 99.5%\nImportant Factors:\n  - mean day-over-day drop: contribution +1.5201 (\u2191 theft-risk)\n  - day-to-day volatility: contribution +1.4349 (\u2191 theft-risk)\n  - fraction of unusually low days: contribution +0.7587 (\u2191 theft-risk)\n  - largest day-over-day drop: contribution +0.6285 (\u2191 theft-risk)\n  - lowest/highest day ratio: contribution +0.4993 (\u2191 theft-risk)",
+          "sample_index": 530,
+          "consumer_id": "C0072",
+          "start_date": "2024-03-19",
           "y_true": 1,
           "prediction_matches": true
         },
         {
           "verdict": "POTENTIAL_THEFT",
-          "probability_theft": 1.0,
-          "confidence": 1.0,
-          "threshold": 0.1,
+          "probability_theft": 0.9937036633491516,
+          "confidence": 0.9937036633491516,
+          "threshold": 0.5,
           "top_factors": [
             {
-              "feature": "max_daily_drop",
-              "human_name": "largest day-over-day drop",
-              "contribution": 4.816883087158203,
-              "value": 4.6189141273498535
+              "feature": "frac_low_days",
+              "human_name": "fraction of unusually low days",
+              "contribution": 1.0308400392532349,
+              "value": 14.671828269958496
             },
             {
-              "feature": "min_max_day_ratio",
-              "human_name": "lowest/highest day ratio",
-              "contribution": 4.480892658233643,
-              "value": -4.455658912658691
+              "feature": "consumption_trend",
+              "human_name": "consumption trend over the window",
+              "contribution": 0.757648229598999,
+              "value": -10.769245147705078
             },
             {
               "feature": "daily_diff_std",
               "human_name": "day-to-day volatility",
-              "contribution": 4.0840606689453125,
-              "value": 3.949439764022827
+              "contribution": 0.6327180862426758,
+              "value": 5.1860270500183105
             },
             {
-              "feature": "weekend_weekday_ratio",
-              "human_name": "weekend vs weekday usage",
-              "contribution": 3.6612651348114014,
-              "value": -5.819107532501221
+              "feature": "max_daily_drop",
+              "human_name": "largest day-over-day drop",
+              "contribution": 0.4868380129337311,
+              "value": 4.425650596618652
             },
             {
               "feature": "mean_daily_drop",
               "human_name": "mean day-over-day drop",
-              "contribution": 2.7020256519317627,
-              "value": -4.76415491104126
+              "contribution": 0.45232415199279785,
+              "value": -4.436024188995361
             }
           ],
           "attribution_source": "gradient",
-          "text": "Prediction : POTENTIAL_THEFT\nConfidence : 100.0%\nProbability: 100.0%\nImportant Factors:\n  - largest day-over-day drop: contribution +4.8169 (\u2191 theft-risk)\n  - lowest/highest day ratio: contribution +4.4809 (\u2191 theft-risk)\n  - day-to-day volatility: contribution +4.0841 (\u2191 theft-risk)\n  - weekend vs weekday usage: contribution +3.6613 (\u2191 theft-risk)\n  - mean day-over-day drop: contribution +2.7020 (\u2191 theft-risk)",
-          "sample_index": 1784,
-          "consumer_id": "C0176",
-          "start_date": "2024-05-24",
+          "text": "Prediction : POTENTIAL_THEFT\nConfidence : 99.4%\nProbability: 99.4%\nImportant Factors:\n  - fraction of unusually low days: contribution +1.0308 (\u2191 theft-risk)\n  - consumption trend over the window: contribution +0.7576 (\u2191 theft-risk)\n  - day-to-day volatility: contribution +0.6327 (\u2191 theft-risk)\n  - largest day-over-day drop: contribution +0.4868 (\u2191 theft-risk)\n  - mean day-over-day drop: contribution +0.4523 (\u2191 theft-risk)",
+          "sample_index": 522,
+          "consumer_id": "C0072",
+          "start_date": "2024-02-24",
+          "y_true": 1,
+          "prediction_matches": true
+        },
+        {
+          "verdict": "POTENTIAL_THEFT",
+          "probability_theft": 0.9930276274681091,
+          "confidence": 0.9930276274681091,
+          "threshold": 0.5,
+          "top_factors": [
+            {
+              "feature": "daily_diff_std",
+              "human_name": "day-to-day volatility",
+              "contribution": 1.0356945991516113,
+              "value": 7.465360641479492
+            },
+            {
+              "feature": "mean_daily_drop",
+              "human_name": "mean day-over-day drop",
+              "contribution": 0.8974577784538269,
+              "value": -7.866417407989502
+            },
+            {
+              "feature": "max_daily_drop",
+              "human_name": "largest day-over-day drop",
+              "contribution": 0.568331241607666,
+              "value": 4.975403785705566
+            },
+            {
+              "feature": "min_max_day_ratio",
+              "human_name": "lowest/highest day ratio",
+              "contribution": 0.5047624707221985,
+              "value": -4.720012664794922
+            },
+            {
+              "feature": "load_variation",
+              "human_name": "load variation (std/mean)",
+              "contribution": 0.43686771392822266,
+              "value": 5.060274600982666
+            }
+          ],
+          "attribution_source": "gradient",
+          "text": "Prediction : POTENTIAL_THEFT\nConfidence : 99.3%\nProbability: 99.3%\nImportant Factors:\n  - day-to-day volatility: contribution +1.0357 (\u2191 theft-risk)\n  - mean day-over-day drop: contribution +0.8975 (\u2191 theft-risk)\n  - largest day-over-day drop: contribution +0.5683 (\u2191 theft-risk)\n  - lowest/highest day ratio: contribution +0.5048 (\u2191 theft-risk)\n  - load variation (std/mean): contribution +0.4369 (\u2191 theft-risk)",
+          "sample_index": 526,
+          "consumer_id": "C0072",
+          "start_date": "2024-03-07",
+          "y_true": 1,
+          "prediction_matches": true
+        },
+        {
+          "verdict": "POTENTIAL_THEFT",
+          "probability_theft": 0.9916468858718872,
+          "confidence": 0.9916468858718872,
+          "threshold": 0.5,
+          "top_factors": [
+            {
+              "feature": "daily_diff_std",
+              "human_name": "day-to-day volatility",
+              "contribution": 1.24485445022583,
+              "value": 8.78629207611084
+            },
+            {
+              "feature": "mean_daily_drop",
+              "human_name": "mean day-over-day drop",
+              "contribution": 1.107811689376831,
+              "value": -9.75464153289795
+            },
+            {
+              "feature": "max_daily_drop",
+              "human_name": "largest day-over-day drop",
+              "contribution": 0.5737373232841492,
+              "value": 4.993131637573242
+            },
+            {
+              "feature": "min_max_day_ratio",
+              "human_name": "lowest/highest day ratio",
+              "contribution": 0.5144321918487549,
+              "value": -4.691486358642578
+            },
+            {
+              "feature": "load_variation",
+              "human_name": "load variation (std/mean)",
+              "contribution": 0.4368939995765686,
+              "value": 4.822176456451416
+            }
+          ],
+          "attribution_source": "gradient",
+          "text": "Prediction : POTENTIAL_THEFT\nConfidence : 99.2%\nProbability: 99.2%\nImportant Factors:\n  - day-to-day volatility: contribution +1.2449 (\u2191 theft-risk)\n  - mean day-over-day drop: contribution +1.1078 (\u2191 theft-risk)\n  - largest day-over-day drop: contribution +0.5737 (\u2191 theft-risk)\n  - lowest/highest day ratio: contribution +0.5144 (\u2191 theft-risk)\n  - load variation (std/mean): contribution +0.4369 (\u2191 theft-risk)",
+          "sample_index": 533,
+          "consumer_id": "C0072",
+          "start_date": "2024-03-28",
+          "y_true": 1,
+          "prediction_matches": true
+        },
+        {
+          "verdict": "POTENTIAL_THEFT",
+          "probability_theft": 0.9892807602882385,
+          "confidence": 0.9892807602882385,
+          "threshold": 0.5,
+          "top_factors": [
+            {
+              "feature": "mean_daily_drop",
+              "human_name": "mean day-over-day drop",
+              "contribution": 1.288529396057129,
+              "value": -10.8397855758667
+            },
+            {
+              "feature": "daily_diff_std",
+              "human_name": "day-to-day volatility",
+              "contribution": 1.1823245286941528,
+              "value": 8.860491752624512
+            },
+            {
+              "feature": "max_daily_drop",
+              "human_name": "largest day-over-day drop",
+              "contribution": 0.5066421031951904,
+              "value": 4.993131637573242
+            },
+            {
+              "feature": "load_variation",
+              "human_name": "load variation (std/mean)",
+              "contribution": 0.42809638381004333,
+              "value": 5.03749418258667
+            },
+            {
+              "feature": "min_max_day_ratio",
+              "human_name": "lowest/highest day ratio",
+              "contribution": 0.4134448766708374,
+              "value": -4.696060657501221
+            }
+          ],
+          "attribution_source": "gradient",
+          "text": "Prediction : POTENTIAL_THEFT\nConfidence : 98.9%\nProbability: 98.9%\nImportant Factors:\n  - mean day-over-day drop: contribution +1.2885 (\u2191 theft-risk)\n  - day-to-day volatility: contribution +1.1823 (\u2191 theft-risk)\n  - largest day-over-day drop: contribution +0.5066 (\u2191 theft-risk)\n  - load variation (std/mean): contribution +0.4281 (\u2191 theft-risk)\n  - lowest/highest day ratio: contribution +0.4134 (\u2191 theft-risk)",
+          "sample_index": 532,
+          "consumer_id": "C0072",
+          "start_date": "2024-03-25",
           "y_true": 1,
           "prediction_matches": true
         },
         {
           "verdict": "NORMAL",
-          "probability_theft": 2.093835433925051e-07,
-          "confidence": 0.9999997906164566,
-          "threshold": 0.1,
+          "probability_theft": 0.00428810203447938,
+          "confidence": 0.9957118979655206,
+          "threshold": 0.5,
           "top_factors": [
             {
-              "feature": "block_93",
-              "human_name": "6h block 6 (day 12, 15-18h)",
-              "contribution": -1.7707802057266235,
-              "value": 3.2928614616394043
+              "feature": "block_35",
+              "human_name": "6h block 4 (day 5, 09-12h)",
+              "contribution": -0.463016539812088,
+              "value": 3.2082765102386475
             },
             {
-              "feature": "block_92",
-              "human_name": "6h block 5 (day 12, 12-15h)",
-              "contribution": -1.4360636472702026,
-              "value": 3.3803656101226807
+              "feature": "consumption_trend",
+              "human_name": "consumption trend over the window",
+              "contribution": 0.45576411485671997,
+              "value": -1.96682608127594
             },
             {
-              "feature": "block_96",
-              "human_name": "6h block 1 (day 13, 00-03h)",
-              "contribution": -1.4307904243469238,
-              "value": 3.620018482208252
+              "feature": "block_91",
+              "human_name": "6h block 4 (day 12, 09-12h)",
+              "contribution": -0.37111836671829224,
+              "value": 3.9264609813690186
             },
             {
               "feature": "block_97",
               "human_name": "6h block 2 (day 13, 03-06h)",
-              "contribution": -1.3226230144500732,
-              "value": 3.6070168018341064
+              "contribution": -0.36225321888923645,
+              "value": 3.078928232192993
             },
             {
-              "feature": "block_94",
-              "human_name": "6h block 7 (day 12, 18-21h)",
-              "contribution": -1.2565548419952393,
-              "value": 3.4000258445739746
+              "feature": "block_93",
+              "human_name": "6h block 6 (day 12, 15-18h)",
+              "contribution": -0.35388803482055664,
+              "value": 3.0255932807922363
             }
           ],
           "attribution_source": "gradient",
-          "text": "Prediction : NORMAL\nConfidence : 100.0%\nProbability: 0.0%\nImportant Factors:\n  - 6h block 6 (day 12, 15-18h): contribution -1.7708 (\u2193 normal)\n  - 6h block 5 (day 12, 12-15h): contribution -1.4361 (\u2193 normal)\n  - 6h block 1 (day 13, 00-03h): contribution -1.4308 (\u2193 normal)\n  - 6h block 2 (day 13, 03-06h): contribution -1.3226 (\u2193 normal)\n  - 6h block 7 (day 12, 18-21h): contribution -1.2566 (\u2193 normal)",
-          "sample_index": 91,
-          "consumer_id": "C0005",
-          "start_date": "2024-04-15",
+          "text": "Prediction : NORMAL\nConfidence : 99.6%\nProbability: 0.4%\nImportant Factors:\n  - 6h block 4 (day 5, 09-12h): contribution -0.4630 (\u2193 normal)\n  - consumption trend over the window: contribution +0.4558 (\u2191 theft-risk)\n  - 6h block 4 (day 12, 09-12h): contribution -0.3711 (\u2193 normal)\n  - 6h block 2 (day 13, 03-06h): contribution -0.3623 (\u2193 normal)\n  - 6h block 6 (day 12, 15-18h): contribution -0.3539 (\u2193 normal)",
+          "sample_index": 1256,
+          "consumer_id": "C0173",
+          "start_date": "2024-04-06",
           "y_true": 0,
           "prediction_matches": true
         },
         {
           "verdict": "NORMAL",
-          "probability_theft": 1.537940050866382e-07,
-          "confidence": 0.9999998462059949,
-          "threshold": 0.1,
+          "probability_theft": 0.0034485396463423967,
+          "confidence": 0.9965514603536576,
+          "threshold": 0.5,
           "top_factors": [
-            {
-              "feature": "block_93",
-              "human_name": "6h block 6 (day 12, 15-18h)",
-              "contribution": -1.6750822067260742,
-              "value": 3.3208889961242676
-            },
-            {
-              "feature": "block_92",
-              "human_name": "6h block 5 (day 12, 12-15h)",
-              "contribution": -1.3850581645965576,
-              "value": 3.3423221111297607
-            },
             {
               "feature": "block_97",
               "human_name": "6h block 2 (day 13, 03-06h)",
-              "contribution": -1.3317698240280151,
-              "value": 3.6534924507141113
+              "contribution": -0.3655664622783661,
+              "value": 4.0698113441467285
+            },
+            {
+              "feature": "block_93",
+              "human_name": "6h block 6 (day 12, 15-18h)",
+              "contribution": -0.3153694272041321,
+              "value": 3.0575127601623535
             },
             {
               "feature": "block_96",
               "human_name": "6h block 1 (day 13, 00-03h)",
-              "contribution": -1.3071935176849365,
-              "value": 3.5992424488067627
+              "contribution": -0.30940428376197815,
+              "value": 3.906296491622925
             },
             {
-              "feature": "block_85",
-              "human_name": "6h block 6 (day 11, 15-18h)",
-              "contribution": -1.2348564863204956,
-              "value": 3.37839674949646
+              "feature": "block_35",
+              "human_name": "6h block 4 (day 5, 09-12h)",
+              "contribution": -0.2780674993991852,
+              "value": 2.206948757171631
+            },
+            {
+              "feature": "block_34",
+              "human_name": "6h block 3 (day 5, 06-09h)",
+              "contribution": -0.26769134402275085,
+              "value": 3.0847086906433105
             }
           ],
           "attribution_source": "gradient",
-          "text": "Prediction : NORMAL\nConfidence : 100.0%\nProbability: 0.0%\nImportant Factors:\n  - 6h block 6 (day 12, 15-18h): contribution -1.6751 (\u2193 normal)\n  - 6h block 5 (day 12, 12-15h): contribution -1.3851 (\u2193 normal)\n  - 6h block 2 (day 13, 03-06h): contribution -1.3318 (\u2193 normal)\n  - 6h block 1 (day 13, 00-03h): contribution -1.3072 (\u2193 normal)\n  - 6h block 6 (day 11, 15-18h): contribution -1.2349 (\u2193 normal)",
-          "sample_index": 84,
-          "consumer_id": "C0005",
+          "text": "Prediction : NORMAL\nConfidence : 99.7%\nProbability: 0.3%\nImportant Factors:\n  - 6h block 2 (day 13, 03-06h): contribution -0.3656 (\u2193 normal)\n  - 6h block 6 (day 12, 15-18h): contribution -0.3154 (\u2193 normal)\n  - 6h block 1 (day 13, 00-03h): contribution -0.3094 (\u2193 normal)\n  - 6h block 4 (day 5, 09-12h): contribution -0.2781 (\u2193 normal)\n  - 6h block 3 (day 5, 06-09h): contribution -0.2677 (\u2193 normal)",
+          "sample_index": 1252,
+          "consumer_id": "C0173",
           "start_date": "2024-03-25",
           "y_true": 0,
           "prediction_matches": true
         },
         {
           "verdict": "NORMAL",
-          "probability_theft": 1.5174674672380206e-07,
-          "confidence": 0.9999998482532533,
-          "threshold": 0.1,
+          "probability_theft": 0.0030832714401185513,
+          "confidence": 0.9969167285598814,
+          "threshold": 0.5,
           "top_factors": [
-            {
-              "feature": "block_93",
-              "human_name": "6h block 6 (day 12, 15-18h)",
-              "contribution": -1.5970478057861328,
-              "value": 3.197578191757202
-            },
-            {
-              "feature": "block_92",
-              "human_name": "6h block 5 (day 12, 12-15h)",
-              "contribution": -1.2935234308242798,
-              "value": 3.163872718811035
-            },
             {
               "feature": "block_97",
               "human_name": "6h block 2 (day 13, 03-06h)",
-              "contribution": -1.2073267698287964,
-              "value": 3.351860761642456
+              "contribution": -0.3928883373737335,
+              "value": 3.906985282897949
+            },
+            {
+              "feature": "block_93",
+              "human_name": "6h block 6 (day 12, 15-18h)",
+              "contribution": -0.35981711745262146,
+              "value": 3.158175230026245
             },
             {
               "feature": "block_96",
               "human_name": "6h block 1 (day 13, 00-03h)",
-              "contribution": -1.1949599981307983,
-              "value": 3.3283092975616455
+              "contribution": -0.32204553484916687,
+              "value": 3.9329960346221924
             },
             {
-              "feature": "block_85",
-              "human_name": "6h block 6 (day 11, 15-18h)",
-              "contribution": -1.1823463439941406,
-              "value": 3.242445707321167
+              "feature": "block_35",
+              "human_name": "6h block 4 (day 5, 09-12h)",
+              "contribution": -0.31731173396110535,
+              "value": 2.386430025100708
+            },
+            {
+              "feature": "min_consumption",
+              "human_name": "minimum consumption",
+              "contribution": -0.2979259788990021,
+              "value": 2.1287155151367188
             }
           ],
           "attribution_source": "gradient",
-          "text": "Prediction : NORMAL\nConfidence : 100.0%\nProbability: 0.0%\nImportant Factors:\n  - 6h block 6 (day 12, 15-18h): contribution -1.5970 (\u2193 normal)\n  - 6h block 5 (day 12, 12-15h): contribution -1.2935 (\u2193 normal)\n  - 6h block 2 (day 13, 03-06h): contribution -1.2073 (\u2193 normal)\n  - 6h block 1 (day 13, 00-03h): contribution -1.1950 (\u2193 normal)\n  - 6h block 6 (day 11, 15-18h): contribution -1.1823 (\u2193 normal)",
-          "sample_index": 77,
-          "consumer_id": "C0005",
-          "start_date": "2024-03-04",
+          "text": "Prediction : NORMAL\nConfidence : 99.7%\nProbability: 0.3%\nImportant Factors:\n  - 6h block 2 (day 13, 03-06h): contribution -0.3929 (\u2193 normal)\n  - 6h block 6 (day 12, 15-18h): contribution -0.3598 (\u2193 normal)\n  - 6h block 1 (day 13, 00-03h): contribution -0.3220 (\u2193 normal)\n  - 6h block 4 (day 5, 09-12h): contribution -0.3173 (\u2193 normal)\n  - minimum consumption: contribution -0.2979 (\u2193 normal)",
+          "sample_index": 1259,
+          "consumer_id": "C0173",
+          "start_date": "2024-04-15",
           "y_true": 0,
           "prediction_matches": true
         }
@@ -2219,10 +1292,7 @@
     "training_convergence": "B:\\surya-11\\results\\figures\\training_convergence.png",
     "communication_comparison": "B:\\surya-11\\results\\figures\\communication_comparison.png",
     "confusion_matrix": "B:\\surya-11\\results\\figures\\confusion_matrix.png",
-    "roc_curve": "B:\\surya-11\\results\\figures\\roc_curve.png",
-    "privacy_utility_tradeoff": "B:\\surya-11\\results\\figures\\privacy_utility_tradeoff.png",
-    "communication_accuracy_tradeoff": "B:\\surya-11\\results\\figures\\communication_accuracy_tradeoff.png",
-    "scalability": "B:\\surya-11\\results\\figures\\scalability.png"
+    "roc_curve": "B:\\surya-11\\results\\figures\\roc_curve.png"
   },
   "tables": {
     "table1_dataset_statistics": {
@@ -2236,31 +1306,23 @@
     "table3_federated_comparison": {
       "csv": "B:\\surya-11\\results\\tables\\table3_federated_comparison.csv",
       "markdown": "B:\\surya-11\\results\\tables\\table3_federated_comparison.md"
-    },
-    "table4_privacy_comparison": {
-      "csv": "B:\\surya-11\\results\\tables\\table4_privacy_comparison.csv",
-      "markdown": "B:\\surya-11\\results\\tables\\table4_privacy_comparison.md"
-    },
-    "table5_scalability": {
-      "csv": "B:\\surya-11\\results\\tables\\table5_scalability.csv",
-      "markdown": "B:\\surya-11\\results\\tables\\table5_scalability.md"
     }
   },
   "dataset": {
     "source": "SYNTHETIC DEMO DATA",
     "is_synthetic": true,
     "stats": {
-      "n_consumers": 240,
-      "n_rows": 2073600,
-      "normal_samples": 204,
-      "theft_samples": 36,
-      "class_ratio_theft": 0.15,
-      "missing_values": 4244,
+      "n_consumers": 180,
+      "n_rows": 1036800,
+      "normal_samples": 151,
+      "theft_samples": 29,
+      "class_ratio_theft": 0.16111111111111112,
+      "missing_values": 2021,
       "duplicate_rows": 0,
-      "mean_consumption": 1.1633569723287183,
-      "std_consumption": 0.7105045221058944,
+      "mean_consumption": 1.1526200217442024,
+      "std_consumption": 0.7009154840660424,
       "source": "SYNTHETIC DEMO DATA",
-      "days": 180,
+      "days": 120,
       "interval_minutes": 30,
       "readings_per_day": 48,
       "seed": 42,
@@ -2270,19 +1332,19 @@
       "source": "SYNTHETIC DEMO DATA",
       "is_synthetic": true,
       "n_consumers": {
-        "train": 156,
-        "val": 36,
-        "test": 48
+        "train": 117,
+        "val": 27,
+        "test": 36
       },
       "n_windows": {
-        "train": 8736,
-        "val": 2016,
-        "test": 2688
+        "train": 4212,
+        "val": 972,
+        "test": 1296
       },
       "theft_ratio": {
-        "train": 0.08081501831501832,
-        "val": 0.0873015873015873,
-        "test": 0.060267857142857144
+        "train": 0.08808167141500475,
+        "val": 0.06481481481481481,
+        "test": 0.0941358024691358
       },
       "n_features": 133,
       "n_engineered": 21,
@@ -2290,48 +1352,48 @@
         "report": {
           "strategy": "class_weight",
           "distribution": {
-            "normal_samples": 8030,
-            "theft_samples": 706,
-            "total": 8736,
-            "theft_ratio": 0.08081501831501832,
-            "imbalance_ratio": 11.373937677053824
+            "normal_samples": 3841,
+            "theft_samples": 371,
+            "total": 4212,
+            "theft_ratio": 0.08808167141500475,
+            "imbalance_ratio": 10.35309973045822
           },
           "focal_gamma": 2.0,
           "weights": {
-            "0": 0.5439601494396015,
-            "1": 6.186968838526912
+            "0": 0.5482947149179901,
+            "1": 5.67654986522911
           }
         },
         "splits": {
           "train": {
-            "normal_samples": 8030,
-            "theft_samples": 706,
-            "total": 8736,
-            "theft_ratio": 0.08081501831501832,
-            "imbalance_ratio": 11.373937677053824
+            "normal_samples": 3841,
+            "theft_samples": 371,
+            "total": 4212,
+            "theft_ratio": 0.08808167141500475,
+            "imbalance_ratio": 10.35309973045822
           },
           "val": {
-            "normal_samples": 1840,
-            "theft_samples": 176,
-            "total": 2016,
-            "theft_ratio": 0.0873015873015873,
-            "imbalance_ratio": 10.454545454545455
+            "normal_samples": 909,
+            "theft_samples": 63,
+            "total": 972,
+            "theft_ratio": 0.06481481481481481,
+            "imbalance_ratio": 14.428571428571429
           },
           "test": {
-            "normal_samples": 2526,
-            "theft_samples": 162,
-            "total": 2688,
-            "theft_ratio": 0.060267857142857144,
-            "imbalance_ratio": 15.592592592592593
+            "normal_samples": 1174,
+            "theft_samples": 122,
+            "total": 1296,
+            "theft_ratio": 0.0941358024691358,
+            "imbalance_ratio": 9.62295081967213
           }
         }
       },
       "outlier_bounds": {
         "method": "iqr",
         "lower": 0.0,
-        "upper": 4.1696828454732895,
-        "train_mean": 1.1592169424043597,
-        "train_std": 0.5775933201940423
+        "upper": 4.133077889680862,
+        "train_mean": 1.1170455433873683,
+        "train_std": 0.5835919262247345
       }
     },
     "cleaning": {
@@ -2343,36 +1405,36 @@
         "window": 3,
         "spike_threshold": 6.0,
         "min_deviation_frac": 0.5,
-        "values_replaced": 2034
+        "values_replaced": 1056
       },
       "missing": {
-        "missing_before": 4244,
+        "missing_before": 2021,
         "strategy": "interpolate",
         "missing_after": 0,
-        "interpolated_or_filled": 4244
+        "interpolated_or_filled": 2021
       },
       "global_median_source": "train consumers only",
-      "rows_after_cleaning": 2073600
+      "rows_after_cleaning": 1036800
     },
     "preprocessing": {
       "split": {
-        "train": 156,
-        "val": 36,
-        "test": 48
+        "train": 117,
+        "val": 27,
+        "test": 36
       },
       "split_unit": "consumer",
       "outliers": {
         "method": "iqr",
         "lower": 0.0,
-        "upper": 4.1696828454732895,
-        "train_mean": 1.1592169424043597,
-        "train_std": 0.5775933201940423
+        "upper": 4.133077889680862,
+        "train_mean": 1.1170455433873683,
+        "train_std": 0.5835919262247345
       },
-      "outlier_clip_fraction_train": 1.558048433048433e-05,
+      "outlier_clip_fraction_train": 1.9290123456790123e-05,
       "value_scaler": {
         "method": "standard",
-        "center": 1.1592169424043597,
-        "scale": 0.5775933201940423,
+        "center": 1.1170455433873683,
+        "scale": 0.5835919262247345,
         "minimum": 0.0
       },
       "cleaning": {
@@ -2384,16 +1446,16 @@
           "window": 3,
           "spike_threshold": 6.0,
           "min_deviation_frac": 0.5,
-          "values_replaced": 2034
+          "values_replaced": 1056
         },
         "missing": {
-          "missing_before": 4244,
+          "missing_before": 2021,
           "strategy": "interpolate",
           "missing_after": 0,
-          "interpolated_or_filled": 4244
+          "interpolated_or_filled": 2021
         },
         "global_median_source": "train consumers only",
-        "rows_after_cleaning": 2073600
+        "rows_after_cleaning": 1036800
       },
       "label_rule": "window-level labels respect theft_start_day (synthetic)"
     },
@@ -2401,67 +1463,43 @@
       "report": {
         "strategy": "class_weight",
         "distribution": {
-          "normal_samples": 8030,
-          "theft_samples": 706,
-          "total": 8736,
-          "theft_ratio": 0.08081501831501832,
-          "imbalance_ratio": 11.373937677053824
+          "normal_samples": 3841,
+          "theft_samples": 371,
+          "total": 4212,
+          "theft_ratio": 0.08808167141500475,
+          "imbalance_ratio": 10.35309973045822
         },
         "focal_gamma": 2.0,
         "weights": {
-          "0": 0.5439601494396015,
-          "1": 6.186968838526912
+          "0": 0.5482947149179901,
+          "1": 5.67654986522911
         }
       },
       "splits": {
         "train": {
-          "normal_samples": 8030,
-          "theft_samples": 706,
-          "total": 8736,
-          "theft_ratio": 0.08081501831501832,
-          "imbalance_ratio": 11.373937677053824
+          "normal_samples": 3841,
+          "theft_samples": 371,
+          "total": 4212,
+          "theft_ratio": 0.08808167141500475,
+          "imbalance_ratio": 10.35309973045822
         },
         "val": {
-          "normal_samples": 1840,
-          "theft_samples": 176,
-          "total": 2016,
-          "theft_ratio": 0.0873015873015873,
-          "imbalance_ratio": 10.454545454545455
+          "normal_samples": 909,
+          "theft_samples": 63,
+          "total": 972,
+          "theft_ratio": 0.06481481481481481,
+          "imbalance_ratio": 14.428571428571429
         },
         "test": {
-          "normal_samples": 2526,
-          "theft_samples": 162,
-          "total": 2688,
-          "theft_ratio": 0.060267857142857144,
-          "imbalance_ratio": 15.592592592592593
+          "normal_samples": 1174,
+          "theft_samples": 122,
+          "total": 1296,
+          "theft_ratio": 0.0941358024691358,
+          "imbalance_ratio": 9.62295081967213
         }
       }
     },
     "labels": [
-      1,
-      0,
-      1,
-      1,
-      1,
-      0,
-      1,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      1,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
       0,
       0,
       0,
@@ -2472,6 +1510,21 @@
       0,
       1,
       0,
+      1,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      1,
+      1,
       1,
       0,
       0,
@@ -2491,15 +1544,6 @@
       0,
       0,
       0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
       1,
       0,
       0,
@@ -2512,6 +1556,8 @@
       0,
       0,
       0,
+      1,
+      1,
       0,
       0,
       0,
@@ -2528,27 +1574,6 @@
       0,
       1,
       0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      1,
-      0,
-      1,
-      1,
-      1,
-      1,
-      0,
-      0,
-      0,
-      0,
       1,
       0,
       0,
@@ -2558,11 +1583,7 @@
       0,
       0,
       0,
-      0,
-      0,
-      0,
-      0,
-      0,
+      1,
       0,
       0,
       0,
@@ -2583,70 +1604,9 @@
       0,
       0,
       0,
-      1,
-      0,
-      1,
-      0,
-      0,
-      0,
-      0,
       0,
       0,
       1,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      1,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      1,
-      0,
-      1,
-      1,
-      0,
-      0,
-      0,
-      1,
-      1,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      1,
-      1,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      1,
-      0,
-      0,
-      0,
       0,
       0,
       0,
@@ -2666,18 +1626,60 @@
       0,
       0,
       0,
+      1,
       0,
       0,
       0,
       0,
       1,
       0,
+      0,
+      0,
+      0,
+      0,
       1,
       0,
       0,
       0,
       0,
-      1
+      0,
+      1,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0
     ],
     "table": [
       {
@@ -2690,27 +1692,27 @@
       },
       {
         "statistic": "consumers_total",
-        "value": 240
+        "value": 180
       },
       {
         "statistic": "consumers_train",
-        "value": 156
+        "value": 117
       },
       {
         "statistic": "consumers_validation",
-        "value": 36
+        "value": 27
       },
       {
         "statistic": "consumers_test",
-        "value": 48
+        "value": 36
       },
       {
         "statistic": "raw_rows",
-        "value": 2073600
+        "value": 1036800
       },
       {
         "statistic": "raw_missing_values",
-        "value": 4244
+        "value": 2021
       },
       {
         "statistic": "raw_duplicate_rows",
@@ -2718,15 +1720,15 @@
       },
       {
         "statistic": "window_samples_train",
-        "value": 8736
+        "value": 4212
       },
       {
         "statistic": "window_samples_validation",
-        "value": 2016
+        "value": 972
       },
       {
         "statistic": "window_samples_test",
-        "value": 2688
+        "value": 1296
       },
       {
         "statistic": "feature_count",
@@ -2734,11 +1736,11 @@
       },
       {
         "statistic": "theft_ratio_train_windows",
-        "value": 0.08081501831501832
+        "value": 0.08808167141500475
       },
       {
         "statistic": "theft_ratio_test_windows",
-        "value": 0.060267857142857144
+        "value": 0.0941358024691358
       },
       {
         "statistic": "split_unit",
@@ -2754,42 +1756,42 @@
     "fedavg_baseline": {
       "f1": {
         "n": 1,
-        "mean": 0.9937888198757764,
+        "mean": 0.623574144486692,
         "std": NaN,
         "ci_low": NaN,
         "ci_high": NaN
       },
       "precision": {
         "n": 1,
-        "mean": 1.0,
+        "mean": 0.5815602836879432,
         "std": NaN,
         "ci_low": NaN,
         "ci_high": NaN
       },
       "recall": {
         "n": 1,
-        "mean": 0.9876543209876543,
+        "mean": 0.6721311475409836,
         "std": NaN,
         "ci_low": NaN,
         "ci_high": NaN
       },
       "roc_auc": {
         "n": 1,
-        "mean": 0.9972850258545692,
+        "mean": 0.8858533247688999,
         "std": NaN,
         "ci_low": NaN,
         "ci_high": NaN
       },
       "train_time_s": {
         "n": 1,
-        "mean": 15.509063599980436,
+        "mean": 3.5329930000007153,
         "std": NaN,
         "ci_low": NaN,
         "ci_high": NaN
       },
       "total_bytes": {
         "n": 1,
-        "mean": 3453520.0,
+        "mean": 1036056.0,
         "std": NaN,
         "ci_low": NaN,
         "ci_high": NaN
@@ -2798,42 +1800,42 @@
     "powershield_fl": {
       "f1": {
         "n": 1,
-        "mean": 0.9969040247678018,
+        "mean": 0.5714285714285714,
         "std": NaN,
         "ci_low": NaN,
         "ci_high": NaN
       },
       "precision": {
         "n": 1,
-        "mean": 1.0,
+        "mean": 0.5063291139240507,
         "std": NaN,
         "ci_low": NaN,
         "ci_high": NaN
       },
       "recall": {
         "n": 1,
-        "mean": 0.9938271604938271,
+        "mean": 0.6557377049180327,
         "std": NaN,
         "ci_low": NaN,
         "ci_high": NaN
       },
       "roc_auc": {
         "n": 1,
-        "mean": 0.9968573746615446,
+        "mean": 0.8377621694082164,
         "std": NaN,
         "ci_low": NaN,
         "ci_high": NaN
       },
       "train_time_s": {
         "n": 1,
-        "mean": 15.965171199990436,
+        "mean": 2.8758723000064492,
         "std": NaN,
         "ci_low": NaN,
         "ci_high": NaN
       },
       "total_bytes": {
         "n": 1,
-        "mean": 902449.0,
+        "mean": 270742.0,
         "std": NaN,
         "ci_low": NaN,
         "ci_high": NaN
@@ -2845,12 +1847,12 @@
     }
   },
   "artifacts": {
-    "dashboard_run_dir": "B:\\surya-11\\results\\raw\\experiment_20261025_014812_413345_powershield_s42",
-    "proposed_checkpoint": "B:\\surya-11\\results\\raw\\experiment_20261025_014812_413345_powershield_s42\\model\\checkpoint.pt",
-    "proposed_threshold": 0.1,
+    "dashboard_run_dir": "B:\\surya-11\\results\\raw\\experiment_20261028_130624_543696_powershield_s42",
+    "proposed_checkpoint": "B:\\surya-11\\results\\raw\\experiment_20261028_130624_543696_powershield_s42\\model\\checkpoint.pt",
+    "proposed_threshold": 0.5,
     "run_dirs": [
-      "B:\\surya-11\\results\\raw\\experiment_20261025_014756_354071_fedavg_s42",
-      "B:\\surya-11\\results\\raw\\experiment_20261025_014812_413345_powershield_s42"
+      "B:\\surya-11\\results\\raw\\experiment_20261028_130620_629588_fedavg_s42",
+      "B:\\surya-11\\results\\raw\\experiment_20261028_130624_543696_powershield_s42"
     ]
   }
 }

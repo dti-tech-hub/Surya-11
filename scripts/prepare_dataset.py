@@ -9,7 +9,7 @@ import pandas as pd
 
 from evaluation.figures import plot_class_distribution
 from preprocessing.pipeline import prepare_data, save_processed
-from utilities.config import load_config, resolve_path
+from utilities.config import get, load_config, resolve_path
 from utilities.seed import set_seed
 
 
@@ -40,7 +40,7 @@ def main() -> int:
         ),
         encoding="utf-8",
     )
-    figures = resolve_path(cfg, "results/figures")
+    figures = resolve_path(cfg, get(cfg, "experiment.output_dir", "results")) / "figures"
     figures.mkdir(parents=True, exist_ok=True)
     plot_class_distribution(splits.labels.astype(int).tolist(), figures / "class_distribution.png", splits.source)
     print(f"Processed windows cached at {path}")

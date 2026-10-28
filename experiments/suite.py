@@ -327,8 +327,12 @@ def _avg_rows(rows: Sequence[dict[str, Any]], keys: Sequence[str]) -> list[dict[
     return agg.to_dict(orient="records")
 
 
+def _results_root(cfg: dict) -> Path:
+    return resolve_path(cfg, get(cfg, "experiment.output_dir", "results"))
+
+
 def build_and_save_tables(summary: dict[str, Any], cfg: dict) -> dict[str, Any]:
-    out = resolve_path(cfg, "results/tables")
+    out = _results_root(cfg) / "tables"
     out.mkdir(parents=True, exist_ok=True)
     paths: dict[str, Any] = {}
 
@@ -372,7 +376,7 @@ def build_and_save_tables(summary: dict[str, Any], cfg: dict) -> dict[str, Any]:
 
 
 def build_and_save_figures(summary: dict[str, Any], cfg: dict, artifacts: dict[str, Any]) -> dict[str, Any]:
-    out = resolve_path(cfg, "results/figures")
+    out = _results_root(cfg) / "figures"
     out.mkdir(parents=True, exist_ok=True)
     paths: dict[str, str] = {}
     source = _stamp(summary)
@@ -536,7 +540,7 @@ def run_suite(
             dataset_json = metrics_dir / "dataset_statistics.json"
             dataset_json.write_text(json.dumps(summary["dataset"], indent=2, default=_json_default), encoding="utf-8")
             # dataset table + class figure
-            save_table(_dataset_table(splits), resolve_path(cfg, "results/tables"), "table1_dataset_statistics")
+            save_table(_dataset_table(splits), _results_root(cfg) / "tables", "table1_dataset_statistics")
 
         # Main partitions are shared by FedAvg and PowerShield-FL for fairness.
         try:

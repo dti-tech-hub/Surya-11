@@ -2,17 +2,17 @@
   "source": "SYNTHETIC DEMO DATA",
   "is_synthetic": true,
   "stats": {
-    "n_consumers": 240,
-    "n_rows": 2073600,
-    "normal_samples": 204,
-    "theft_samples": 36,
-    "class_ratio_theft": 0.15,
-    "missing_values": 4244,
+    "n_consumers": 180,
+    "n_rows": 1036800,
+    "normal_samples": 151,
+    "theft_samples": 29,
+    "class_ratio_theft": 0.16111111111111112,
+    "missing_values": 2021,
     "duplicate_rows": 0,
-    "mean_consumption": 1.1633569723287183,
-    "std_consumption": 0.7105045221058944,
+    "mean_consumption": 1.1526200217442024,
+    "std_consumption": 0.7009154840660424,
     "source": "SYNTHETIC DEMO DATA",
-    "days": 180,
+    "days": 120,
     "interval_minutes": 30,
     "readings_per_day": 48,
     "seed": 42,
@@ -22,19 +22,19 @@
     "source": "SYNTHETIC DEMO DATA",
     "is_synthetic": true,
     "n_consumers": {
-      "train": 156,
-      "val": 36,
-      "test": 48
+      "train": 117,
+      "val": 27,
+      "test": 36
     },
     "n_windows": {
-      "train": 8736,
-      "val": 2016,
-      "test": 2688
+      "train": 4212,
+      "val": 972,
+      "test": 1296
     },
     "theft_ratio": {
-      "train": 0.08081501831501832,
-      "val": 0.0873015873015873,
-      "test": 0.060267857142857144
+      "train": 0.08808167141500475,
+      "val": 0.06481481481481481,
+      "test": 0.0941358024691358
     },
     "n_features": 133,
     "n_engineered": 21,
@@ -42,48 +42,48 @@
       "report": {
         "strategy": "class_weight",
         "distribution": {
-          "normal_samples": 8030,
-          "theft_samples": 706,
-          "total": 8736,
-          "theft_ratio": 0.08081501831501832,
-          "imbalance_ratio": 11.373937677053824
+          "normal_samples": 3841,
+          "theft_samples": 371,
+          "total": 4212,
+          "theft_ratio": 0.08808167141500475,
+          "imbalance_ratio": 10.35309973045822
         },
         "focal_gamma": 2.0,
         "weights": {
-          "0": 0.5439601494396015,
-          "1": 6.186968838526912
+          "0": 0.5482947149179901,
+          "1": 5.67654986522911
         }
       },
       "splits": {
         "train": {
-          "normal_samples": 8030,
-          "theft_samples": 706,
-          "total": 8736,
-          "theft_ratio": 0.08081501831501832,
-          "imbalance_ratio": 11.373937677053824
+          "normal_samples": 3841,
+          "theft_samples": 371,
+          "total": 4212,
+          "theft_ratio": 0.08808167141500475,
+          "imbalance_ratio": 10.35309973045822
         },
         "val": {
-          "normal_samples": 1840,
-          "theft_samples": 176,
-          "total": 2016,
-          "theft_ratio": 0.0873015873015873,
-          "imbalance_ratio": 10.454545454545455
+          "normal_samples": 909,
+          "theft_samples": 63,
+          "total": 972,
+          "theft_ratio": 0.06481481481481481,
+          "imbalance_ratio": 14.428571428571429
         },
         "test": {
-          "normal_samples": 2526,
-          "theft_samples": 162,
-          "total": 2688,
-          "theft_ratio": 0.060267857142857144,
-          "imbalance_ratio": 15.592592592592593
+          "normal_samples": 1174,
+          "theft_samples": 122,
+          "total": 1296,
+          "theft_ratio": 0.0941358024691358,
+          "imbalance_ratio": 9.62295081967213
         }
       }
     },
     "outlier_bounds": {
       "method": "iqr",
       "lower": 0.0,
-      "upper": 4.1696828454732895,
-      "train_mean": 1.1592169424043597,
-      "train_std": 0.5775933201940423
+      "upper": 4.133077889680862,
+      "train_mean": 1.1170455433873683,
+      "train_std": 0.5835919262247345
     }
   },
   "cleaning": {
@@ -95,36 +95,36 @@
       "window": 3,
       "spike_threshold": 6.0,
       "min_deviation_frac": 0.5,
-      "values_replaced": 2034
+      "values_replaced": 1056
     },
     "missing": {
-      "missing_before": 4244,
+      "missing_before": 2021,
       "strategy": "interpolate",
       "missing_after": 0,
-      "interpolated_or_filled": 4244
+      "interpolated_or_filled": 2021
     },
     "global_median_source": "train consumers only",
-    "rows_after_cleaning": 2073600
+    "rows_after_cleaning": 1036800
   },
   "preprocessing": {
     "split": {
-      "train": 156,
-      "val": 36,
-      "test": 48
+      "train": 117,
+      "val": 27,
+      "test": 36
     },
     "split_unit": "consumer",
     "outliers": {
       "method": "iqr",
       "lower": 0.0,
-      "upper": 4.1696828454732895,
-      "train_mean": 1.1592169424043597,
-      "train_std": 0.5775933201940423
+      "upper": 4.133077889680862,
+      "train_mean": 1.1170455433873683,
+      "train_std": 0.5835919262247345
     },
-    "outlier_clip_fraction_train": 1.558048433048433e-05,
+    "outlier_clip_fraction_train": 1.9290123456790123e-05,
     "value_scaler": {
       "method": "standard",
-      "center": 1.1592169424043597,
-      "scale": 0.5775933201940423,
+      "center": 1.1170455433873683,
+      "scale": 0.5835919262247345,
       "minimum": 0.0
     },
     "cleaning": {
@@ -136,16 +136,16 @@
         "window": 3,
         "spike_threshold": 6.0,
         "min_deviation_frac": 0.5,
-        "values_replaced": 2034
+        "values_replaced": 1056
       },
       "missing": {
-        "missing_before": 4244,
+        "missing_before": 2021,
         "strategy": "interpolate",
         "missing_after": 0,
-        "interpolated_or_filled": 4244
+        "interpolated_or_filled": 2021
       },
       "global_median_source": "train consumers only",
-      "rows_after_cleaning": 2073600
+      "rows_after_cleaning": 1036800
     },
     "label_rule": "window-level labels respect theft_start_day (synthetic)"
   },
@@ -153,67 +153,43 @@
     "report": {
       "strategy": "class_weight",
       "distribution": {
-        "normal_samples": 8030,
-        "theft_samples": 706,
-        "total": 8736,
-        "theft_ratio": 0.08081501831501832,
-        "imbalance_ratio": 11.373937677053824
+        "normal_samples": 3841,
+        "theft_samples": 371,
+        "total": 4212,
+        "theft_ratio": 0.08808167141500475,
+        "imbalance_ratio": 10.35309973045822
       },
       "focal_gamma": 2.0,
       "weights": {
-        "0": 0.5439601494396015,
-        "1": 6.186968838526912
+        "0": 0.5482947149179901,
+        "1": 5.67654986522911
       }
     },
     "splits": {
       "train": {
-        "normal_samples": 8030,
-        "theft_samples": 706,
-        "total": 8736,
-        "theft_ratio": 0.08081501831501832,
-        "imbalance_ratio": 11.373937677053824
+        "normal_samples": 3841,
+        "theft_samples": 371,
+        "total": 4212,
+        "theft_ratio": 0.08808167141500475,
+        "imbalance_ratio": 10.35309973045822
       },
       "val": {
-        "normal_samples": 1840,
-        "theft_samples": 176,
-        "total": 2016,
-        "theft_ratio": 0.0873015873015873,
-        "imbalance_ratio": 10.454545454545455
+        "normal_samples": 909,
+        "theft_samples": 63,
+        "total": 972,
+        "theft_ratio": 0.06481481481481481,
+        "imbalance_ratio": 14.428571428571429
       },
       "test": {
-        "normal_samples": 2526,
-        "theft_samples": 162,
-        "total": 2688,
-        "theft_ratio": 0.060267857142857144,
-        "imbalance_ratio": 15.592592592592593
+        "normal_samples": 1174,
+        "theft_samples": 122,
+        "total": 1296,
+        "theft_ratio": 0.0941358024691358,
+        "imbalance_ratio": 9.62295081967213
       }
     }
   },
   "labels": [
-    1,
-    0,
-    1,
-    1,
-    1,
-    0,
-    1,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    1,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
     0,
     0,
     0,
@@ -224,6 +200,21 @@
     0,
     1,
     0,
+    1,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    1,
+    1,
     1,
     0,
     0,
@@ -243,15 +234,6 @@
     0,
     0,
     0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
     1,
     0,
     0,
@@ -264,6 +246,8 @@
     0,
     0,
     0,
+    1,
+    1,
     0,
     0,
     0,
@@ -280,27 +264,6 @@
     0,
     1,
     0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    1,
-    0,
-    1,
-    1,
-    1,
-    1,
-    0,
-    0,
-    0,
-    0,
     1,
     0,
     0,
@@ -310,11 +273,7 @@
     0,
     0,
     0,
-    0,
-    0,
-    0,
-    0,
-    0,
+    1,
     0,
     0,
     0,
@@ -335,70 +294,9 @@
     0,
     0,
     0,
-    1,
-    0,
-    1,
-    0,
-    0,
-    0,
-    0,
     0,
     0,
     1,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    1,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    1,
-    0,
-    1,
-    1,
-    0,
-    0,
-    0,
-    1,
-    1,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    1,
-    1,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    1,
-    0,
-    0,
-    0,
     0,
     0,
     0,
@@ -418,18 +316,60 @@
     0,
     0,
     0,
+    1,
     0,
     0,
     0,
     0,
     1,
     0,
+    0,
+    0,
+    0,
+    0,
     1,
     0,
     0,
     0,
     0,
-    1
+    0,
+    1,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0
   ],
   "table": [
     {
@@ -442,27 +382,27 @@
     },
     {
       "statistic": "consumers_total",
-      "value": 240
+      "value": 180
     },
     {
       "statistic": "consumers_train",
-      "value": 156
+      "value": 117
     },
     {
       "statistic": "consumers_validation",
-      "value": 36
+      "value": 27
     },
     {
       "statistic": "consumers_test",
-      "value": 48
+      "value": 36
     },
     {
       "statistic": "raw_rows",
-      "value": 2073600
+      "value": 1036800
     },
     {
       "statistic": "raw_missing_values",
-      "value": 4244
+      "value": 2021
     },
     {
       "statistic": "raw_duplicate_rows",
@@ -470,15 +410,15 @@
     },
     {
       "statistic": "window_samples_train",
-      "value": 8736
+      "value": 4212
     },
     {
       "statistic": "window_samples_validation",
-      "value": 2016
+      "value": 972
     },
     {
       "statistic": "window_samples_test",
-      "value": 2688
+      "value": 1296
     },
     {
       "statistic": "feature_count",
@@ -486,11 +426,11 @@
     },
     {
       "statistic": "theft_ratio_train_windows",
-      "value": 0.08081501831501832
+      "value": 0.08808167141500475
     },
     {
       "statistic": "theft_ratio_test_windows",
-      "value": 0.060267857142857144
+      "value": 0.0941358024691358
     },
     {
       "statistic": "split_unit",

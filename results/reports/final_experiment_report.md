@@ -4,9 +4,9 @@
 
 > **DATASET: SYNTHETIC DEMO DATA** — results from this dataset are a software demonstration, not evidence about real utility theft rates.
 
-- Generated: 2026-10-25T01:46:23.794390+00:00
-- Suite ID: `experiment_20261025_014623_793809_suite_s42`
-- Mode: `quick`; demo: `False`
+- Generated: 2026-10-28T13:06:06.219341+00:00
+- Suite ID: `experiment_20261028_130606_218899_suite_s42`
+- Mode: `quick`; demo: `True`
 - Seeds: [42]
 - Dataset source: **SYNTHETIC DEMO DATA**
 
@@ -20,19 +20,16 @@
 | fedavg_s42 | PASS |
 | proposed_s42 | PASS |
 | explainability_s42 | PASS |
-| privacy_sweep | PASS |
-| communication_sweep | PASS |
-| scalability | PASS |
 | tables | PASS |
 | figures | PASS |
 
 ## 2. Dataset
 
 - Source: **SYNTHETIC DEMO DATA**
-- Consumers: train 156, validation 36, test 48
-- Windows: train 8736, validation 2016, test 2688
+- Consumers: train 117, validation 27, test 36
+- Windows: train 4212, validation 972, test 1296
 - Features: 133
-- Raw missing values: 4244
+- Raw missing values: 2021
 - Raw duplicate rows: 0
 - Split unit: consumer (no consumer appears in two splits)
 
@@ -42,58 +39,57 @@
 |:--------------------------|:--------------------------------------------------------|
 | dataset_source            | SYNTHETIC DEMO DATA                                     |
 | synthetic_demo_data       | True                                                    |
-| consumers_total           | 240                                                     |
-| consumers_train           | 156                                                     |
-| consumers_validation      | 36                                                      |
-| consumers_test            | 48                                                      |
-| raw_rows                  | 2073600                                                 |
-| raw_missing_values        | 4244                                                    |
+| consumers_total           | 180                                                     |
+| consumers_train           | 117                                                     |
+| consumers_validation      | 27                                                      |
+| consumers_test            | 36                                                      |
+| raw_rows                  | 1036800                                                 |
+| raw_missing_values        | 2021                                                    |
 | raw_duplicate_rows        | 0                                                       |
-| window_samples_train      | 8736                                                    |
-| window_samples_validation | 2016                                                    |
-| window_samples_test       | 2688                                                    |
+| window_samples_train      | 4212                                                    |
+| window_samples_validation | 972                                                     |
+| window_samples_test       | 1296                                                    |
 | feature_count             | 133                                                     |
-| theft_ratio_train_windows | 0.08081501831501832                                     |
-| theft_ratio_test_windows  | 0.060267857142857144                                    |
+| theft_ratio_train_windows | 0.08808167141500475                                     |
+| theft_ratio_test_windows  | 0.0941358024691358                                      |
 | split_unit                | consumer                                                |
 | label_rule                | window-level labels respect theft_start_day (synthetic) |
 
 ## 3. Preprocessing
 
-- Cleaning report: `{"duplicates_dropped": 0, "negative_values": 0, "infinite_values": 0, "noise": {"enabled": true, "window": 3, "spike_threshold": 6.0, "min_deviation_frac": 0.5, "values_replaced": 2034}, "missing": {"missing_before": 4244, "strategy": "interpolate", "missing_after": 0, "interpolated_or_filled": 4244}, "global_median_source": "train consumers only", "rows_after_cleaning": 2073600}`
+- Cleaning report: `{"duplicates_dropped": 0, "negative_values": 0, "infinite_values": 0, "noise": {"enabled": true, "window": 3, "spike_threshold": 6.0, "min_deviation_frac": 0.5, "values_replaced": 1056}, "missing": {"missing_before": 2021, "strategy": "interpolate", "missing_after": 0, "interpolated_or_filled": 2021}, "global_median_source": "train consumers only", "rows_after_cleaning": 1036800}`
 - Missing-value strategy: `interpolate`
 - Noise handling: Hampel-style rolling median (enabled=True)
 - Outlier handling: iqr bounds fitted on training consumers, action=clip (records are not deleted)
 - Scaling: standard, fitted on training consumers only
-- Class imbalance: {"normal_samples": 8030, "theft_samples": 706, "total": 8736, "theft_ratio": 0.08081501831501832, "imbalance_ratio": 11.373937677053824}
+- Class imbalance: {"normal_samples": 3841, "theft_samples": 371, "total": 4212, "theft_ratio": 0.08808167141500475, "imbalance_ratio": 10.35309973045822}
 - Theft anomalies are preserved; robust clipping only limits extreme numerical outliers.
 
 ## 4. Client simulation
 
 - Partition strategy: `non_iid`
-- Clients: 5
-- Heterogeneity: theft-ratio std=0.0581, size CV=0.7273
+- Clients: 4
+- Heterogeneity: theft-ratio std=0.0926, size CV=0.9079
 
 ### Per-client summary
 
 | client_id   |   n_samples |   n_consumers |   n_theft_windows |   theft_ratio |
 |:------------|------------:|--------------:|------------------:|--------------:|
-| client_00   |        2016 |            36 |               346 |        0.1716 |
-| client_01   |        3640 |            65 |               329 |        0.0904 |
-| client_02   |         336 |             6 |                18 |        0.0536 |
-| client_03   |        2408 |            43 |                 0 |        0      |
-| client_04   |         336 |             6 |                13 |        0.0387 |
+| client_00   |        1008 |            28 |               145 |        0.1438 |
+| client_01   |         252 |             7 |                11 |        0.0437 |
+| client_02   |         324 |             9 |                88 |        0.2716 |
+| client_03   |        2628 |            73 |               127 |        0.0483 |
 
 ## 5. Models
 
 - Lightweight MLP: hidden=[64, 32], parameters=10689
-- CNN-LSTM baseline: executed
-- Centralized baselines: centralized_logistic_regression, centralized_random_forest, centralized_mlp, centralized_lightweight_mlp, cnn_lstm_baseline
+- CNN-LSTM baseline: NOT RUN
+- Centralized baselines: centralized_lightweight_mlp, centralized_logistic_regression, centralized_mlp
 - Federated local model is the same lightweight MLP for FedAvg and PowerShield-FL so aggregation/privacy effects are not confounded by architecture.
 
 ## 6. Federated configuration
 
-- Rounds: 8 (sweeps use their own configured round counts)
+- Rounds: 3 (sweeps use their own configured round counts)
 - Local epochs: 2
 - Batch size: 128
 - Learning rate: 0.001
@@ -123,68 +119,61 @@
 
 ## 10. Actual results
 
-### Table 2 — Centralized model comparison
+Results are averaged over 1 seed(s): `[42]`. Per-seed rows are retained where they show run-to-run variability.
 
-| method                          |   accuracy |   precision |   recall |     f1 |   roc_auc |   pr_auc |   train_time_s |   n_params |
-|:--------------------------------|-----------:|------------:|---------:|-------:|----------:|---------:|---------------:|-----------:|
-| centralized_logistic_regression |     0.9993 |      0.9938 |   0.9938 | 0.9938 |    0.9986 |   0.9952 |         0.5045 |        134 |
-| centralized_random_forest       |     0.9996 |      1      |   0.9938 | 0.9969 |    0.995  |   0.9942 |         5.1712 |      21862 |
-| centralized_mlp                 |     0.9829 |      0.7816 |   0.9938 | 0.875  |    0.9996 |   0.9967 |        15.4467 |      25473 |
-| centralized_lightweight_mlp     |     0.9933 |      0.9045 |   0.9938 | 0.9471 |    0.9991 |   0.9958 |         7.5176 |      10689 |
-| cnn_lstm_baseline               |     0.9769 |      1      |   0.6173 | 0.7634 |    0.9444 |   0.7797 |        36.1622 |      21617 |
+### Table 2 — Centralized model comparison (seed-averaged)
 
-### Table 3 — Federated comparison
+| method                          |   accuracy_mean |   precision_mean |   recall_mean |   f1_mean |   f1_std |   roc_auc_mean |   pr_auc_mean |   train_time_s_mean |   n_params_mean |
+|:--------------------------------|----------------:|-----------------:|--------------:|----------:|---------:|---------------:|--------------:|--------------------:|----------------:|
+| centralized_lightweight_mlp     |          0.9931 |           0.9913 |        0.9344 |    0.962  |      nan |         0.9922 |        0.9723 |              1.3902 |           10689 |
+| centralized_logistic_regression |          0.9869 |           1      |        0.8607 |    0.9251 |      nan |         0.9912 |        0.9665 |              0.1707 |             134 |
+| centralized_mlp                 |          0.9969 |           1      |        0.9672 |    0.9833 |      nan |         0.9942 |        0.9819 |              5.8074 |           25473 |
 
-| method          |   clients |   rounds |     f1 |   precision |   recall |   roc_auc |   train_time_s |   total_bytes |   bytes_per_round |
-|:----------------|----------:|---------:|-------:|------------:|---------:|----------:|---------------:|--------------:|------------------:|
-| fedavg_baseline |         5 |        8 | 0.9938 |           1 |   0.9877 |    0.9973 |        15.5091 |       3453520 |            431690 |
-| powershield_fl  |         5 |        8 | 0.9969 |           1 |   0.9938 |    0.9969 |        15.9652 |        902449 |            112806 |
+### Table 3 — Federated comparison (seed-averaged)
 
-- Measured communication: FedAvg 3453520 bytes vs PowerShield-FL 902449 bytes (reduction 73.87%).
+| method          |   accuracy_mean |   precision_mean |   recall_mean |   f1_mean |   f1_std |   roc_auc_mean |   pr_auc_mean |   train_time_s_mean |   total_bytes_mean |   bytes_per_round_mean |
+|:----------------|----------------:|-----------------:|--------------:|----------:|---------:|---------------:|--------------:|--------------------:|-------------------:|-----------------------:|
+| fedavg_baseline |          0.9236 |           0.5816 |        0.6721 |    0.6236 |      nan |         0.8859 |        0.7482 |              3.533  |        1.03606e+06 |               345352   |
+| powershield_fl  |          0.9074 |           0.5063 |        0.6557 |    0.5714 |      nan |         0.8378 |        0.7212 |              2.8759 |   270742           |                90247.3 |
+
+- Measured communication: FedAvg 1036056 bytes vs PowerShield-FL 270742 bytes (reduction 73.87%).
 
 ### Table 4 — Privacy / utility
 
-| privacy_level   |   noise_multiplier |   epsilon_estimate |     f1 |   precision |   recall |   train_time_s |   total_bytes |
-|:----------------|-------------------:|-------------------:|-------:|------------:|---------:|---------------:|--------------:|
-| off             |              0     |            nan     | 0.9907 |      0.9938 |   0.9877 |         7.3283 |        451241 |
-| noise_0         |              0     |            nan     | 0.9814 |      0.9875 |   0.9753 |         7.5765 |        451235 |
-| noise_0.001     |              0.001 |           4844.81  | 0.9814 |      0.9875 |   0.9753 |         7.4271 |        451222 |
-| noise_0.003     |              0.003 |           1614.94  | 0.9814 |      0.9875 |   0.9753 |         7.4017 |        451243 |
-| noise_0.006     |              0.006 |            807.467 | 0.9814 |      0.9875 |   0.9753 |         7.836  |        451242 |
+NOT RUN
 
 ### Communication sweep
 
-| compression_label   | compression   |     f1 |   roc_auc |   total_bytes |   communication_reduction_pct |   train_time_s |
-|:--------------------|:--------------|-------:|----------:|--------------:|------------------------------:|---------------:|
-| none                | none          | 0.9814 |    0.9971 |       1726760 |                        0      |         7.2649 |
-| quantize_8bit       | quantize      | 0.9814 |    0.997  |        451222 |                       73.8689 |         6.5778 |
-| topk_20pct          | topk          | 0.9272 |    0.995  |        700440 |                       59.4362 |         7.4897 |
-| topk_quantize       | topk_quantize | 0.9236 |    0.9948 |        451227 |                       73.8686 |         7.6511 |
+NOT RUN
 
 ### Table 5 — Scalability
 
-|   clients |   rounds |   train_time_s |   total_bytes |   rss_delta_mb |     f1 |   accuracy |
-|----------:|---------:|---------------:|--------------:|---------------:|-------:|-----------:|
-|         2 |        4 |         6.558  |        180497 |         5.3164 | 0.9846 |     0.9981 |
-|         5 |        4 |         7.6042 |        451222 |         4.1055 | 0.9814 |     0.9978 |
-|        10 |        4 |         8.9537 |        902445 |         5.3125 | 0.838  |     0.9829 |
+NOT RUN
+
+### Table 6 — Consumer-level test results
+
+| method          |   seed |   precision |   recall |     f1 |   roc_auc |   tp |   fp |   tn |   fn |   n_consumers |
+|:----------------|-------:|------------:|---------:|-------:|----------:|-----:|-----:|-----:|-----:|--------------:|
+| fedavg_baseline |     42 |         0.6 |      0.5 | 0.5455 |    0.9    |    3 |    2 |   28 |    3 |            36 |
+| powershield_fl  |     42 |         0.6 |      0.5 | 0.5455 |    0.8444 |    3 |    2 |   28 |    3 |            36 |
 
 ## 11. Comparison and claim support
 
 | Claim | Evidence | Status | Note |
 |---|---|---|---|
-| PowerShield-FL detection F1 vs FedAvg | FedAvg mean F1=0.9938, PowerShield-FL mean F1=0.9969, difference=+0.0031 | **SUPPORTED** | measured on this synthetic demo dataset; single-seed differences are not statistical evidence |
-| Communication reduction vs standard FedAvg | FedAvg total=3453520 bytes, PowerShield-FL total=902449 bytes, measured reduction=73.87% | **SUPPORTED** | bytes are actual serialized payloads measured by the communication layer |
-| Privacy/utility trade-off | F1 range across measured privacy settings: 0.9814–0.9907 | **MEASURED** | noise multipliers are small because per-coordinate Gaussian noise is applied to a high-dimensional update; see privacy caveat |
-| Scalability across client counts | measured client counts: 2, 5, 10 | **MEASURED** | quick mode uses up to the configured client count; high counts may hit CPU/RAM limits |
+| PowerShield-FL detection F1 vs FedAvg | FedAvg mean F1=0.6236, PowerShield-FL mean F1=0.5714, difference=-0.0521 | **NO ADVANTAGE OBSERVED** | measured on this synthetic demo dataset; single-seed differences are not statistical evidence |
+| Communication reduction vs standard FedAvg | FedAvg total=1036056 bytes, PowerShield-FL total=270742 bytes, measured reduction=73.87% | **SUPPORTED** | bytes are actual serialized payloads measured by the communication layer |
+| Privacy/utility trade-off | privacy sweep not executed | **NOT RUN** |  |
+| Scalability | scalability sweep not executed | **NOT RUN** |  |
 
 The objective is not to force PowerShield-FL to win. The table above states whether the measured F1/communication results support each claim on this dataset. Single-seed results are descriptive, not inferential.
 
 ## 12. Statistical analysis
 
-- fedavg_baseline: F1 mean=0.9938, std=N/A, 95% CI=[N/A, N/A]
-- powershield_fl: F1 mean=0.9969, std=N/A, 95% CI=[N/A, N/A]
-- Paired comparison: `{"n": 1, "note": "STATISTICAL TEST NOT RUN \u2014 fewer than 2 paired seeds"}`
+- fedavg_baseline: F1 mean=0.6236, std=N/A, 95% CI=[N/A, N/A], per-seed values=[]
+- powershield_fl: F1 mean=0.5714, std=N/A, 95% CI=[N/A, N/A], per-seed values=[]
+- Paired FedAvg − PowerShield-FL F1 difference: mean=NOT RUN, std=NOT RUN, n=1; paired t p=NOT RUN, Wilcoxon p=NOT RUN; significant at alpha=0.05: **None**
+- Caveat: 
 
 ## 13. Figures and tables
 
@@ -200,14 +189,6 @@ The objective is not to force PowerShield-FL to win. The table above states whet
   "table3_federated_comparison": {
     "csv": "B:\\surya-11\\results\\tables\\table3_federated_comparison.csv",
     "markdown": "B:\\surya-11\\results\\tables\\table3_federated_comparison.md"
-  },
-  "table4_privacy_comparison": {
-    "csv": "B:\\surya-11\\results\\tables\\table4_privacy_comparison.csv",
-    "markdown": "B:\\surya-11\\results\\tables\\table4_privacy_comparison.md"
-  },
-  "table5_scalability": {
-    "csv": "B:\\surya-11\\results\\tables\\table5_scalability.csv",
-    "markdown": "B:\\surya-11\\results\\tables\\table5_scalability.md"
   }
 }
 - Figures: {
@@ -220,10 +201,7 @@ The objective is not to force PowerShield-FL to win. The table above states whet
   "training_convergence": "B:\\surya-11\\results\\figures\\training_convergence.png",
   "communication_comparison": "B:\\surya-11\\results\\figures\\communication_comparison.png",
   "confusion_matrix": "B:\\surya-11\\results\\figures\\confusion_matrix.png",
-  "roc_curve": "B:\\surya-11\\results\\figures\\roc_curve.png",
-  "privacy_utility_tradeoff": "B:\\surya-11\\results\\figures\\privacy_utility_tradeoff.png",
-  "communication_accuracy_tradeoff": "B:\\surya-11\\results\\figures\\communication_accuracy_tradeoff.png",
-  "scalability": "B:\\surya-11\\results\\figures\\scalability.png"
+  "roc_curve": "B:\\surya-11\\results\\figures\\roc_curve.png"
 }
 
 ## 14. Limitations
@@ -232,10 +210,11 @@ The objective is not to force PowerShield-FL to win. The table above states whet
 - The demo uses simulated clients, not physically distributed organizations with real network links.
 - Secure aggregation is a masking simulation, not a cryptographic protocol; it provides no malicious-party guarantees.
 - The epsilon estimate covers one release of a client update and does not compose across rounds.
-- The lightweight MLP is evaluated against a CNN-LSTM on a small synthetic dataset; the CNN-LSTM may be under-trained relative to its capacity.
+- The lightweight MLP is evaluated against a CNN-LSTM on a synthetic dataset; the CNN-LSTM is unstable across seeds and may be under-trained relative to its capacity.
 - Wall time and memory are machine-specific (CPU-only host); they are not portable benchmarks.
-- QUICK mode uses small client/round counts; FULL mode is configurable but was not necessarily executed for this report.
+- This report covers `quick` mode with 1 seed(s); other configured modes/seeds remain NOT RUN until executed.
 - Client-level labels are inferred from theft activation in synthetic data; real datasets may have noisy labels.
+- The consumer-level decision rule is a fixed mean-probability threshold of 0.5; it is not tuned on validation consumers.
 
 - Full-mode status: **NOT RUN (this report is quick mode)**
 
@@ -247,7 +226,7 @@ The objective is not to force PowerShield-FL to win. The table above states whet
 - RAM: 15.72 GB
 - GPU: CPU only
 - Package versions: `{"numpy": "2.4.4", "pandas": "3.0.1", "sklearn": "1.8.0", "torch": "2.14.1+cpu", "matplotlib": "3.10.8", "scipy": "1.17.1", "shap": "0.53.0", "streamlit": "1.65.0", "yaml": "6.0.3"}`
-- Run directories: ["B:\\surya-11\\results\\raw\\experiment_20261025_014756_354071_fedavg_s42", "B:\\surya-11\\results\\raw\\experiment_20261025_014812_413345_powershield_s42"]
+- Run directories: ["B:\\surya-11\\results\\raw\\experiment_20261028_130620_629588_fedavg_s42", "B:\\surya-11\\results\\raw\\experiment_20261028_130624_543696_powershield_s42"]
 - Re-run: `python main.py --mode quick` (or `--mode full`), seeds are recorded in the configuration.
 
 ## 16. Claim discipline

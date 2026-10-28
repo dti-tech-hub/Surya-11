@@ -9,7 +9,7 @@ import numpy as np
 from evaluation.figures import plot_client_distribution
 from federated.partition import build_partition, heterogeneity_report
 from preprocessing.pipeline import prepare_data
-from utilities.config import load_config, resolve_path
+from utilities.config import get, load_config, resolve_path
 from utilities.seed import set_seed
 
 
@@ -43,7 +43,7 @@ def main() -> int:
     stem = f"partitions_seed{args.seed}_n{len(partitions)}"
     np.savez_compressed(out / f"{stem}.npz", **{p.client_id: p.indices for p in partitions})
     (out / f"{stem}.json").write_text(json.dumps(summary, indent=2, default=str), encoding="utf-8")
-    figures = resolve_path(cfg, "results/figures")
+    figures = resolve_path(cfg, get(cfg, "experiment.output_dir", "results")) / "figures"
     figures.mkdir(parents=True, exist_ok=True)
     plot_client_distribution(summary["clients"], figures / "client_distribution.png", splits.source)
     for client in summary["clients"]:

@@ -43,22 +43,52 @@ def _stage_status(summary: dict[str, Any], name: str) -> str:
     return str(stage.get("status", "UNKNOWN")).upper()
 
 
+def _aggregate_rows(
+    rows: Sequence[dict[str, Any]],
+    key: str,
+    metrics: Sequence[str],
+) -> list[dict[str, Any]]:
+    """Seed-average numeric metrics, keeping mean and standard deviation."""
+    if not rows:
+        return []
+    frame = pd.DataFrame(rows)
+    cols = [m for m in metrics if m in frame.columns]
+    if not cols:
+        return []
+    grouped = frame.groupby(key, dropna=False)[cols].agg(["mean", "std"]).reset_index()
+    grouped.columns = [
+        f"{a}_{b}" if b else str(a) for a, b in grouped.columns.to_flat_index()
+    ]
+    return grouped.to_dict(orient="records")
+
+
 def _claims(summary: dict[str, Any]) -> list[dict[str, str]]:
     """Claims are generated from measured values, never assumed."""
     proposed = summary.get("main", {}).get("proposed", [])
     fedavg = summary.get("main", {}).get("fedavg", [])
+    seeds = summary.get("seeds", [])
+    n_seeds = len(seeds) if isinstance(seeds, (list, tuple)) else 1
+    paired = summary.get("statistics", {}).get("paired_f1_fedavg_vs_proposed", {})
     claims: list[dict[str, str]] = []
     if proposed and fedavg:
         p_f1 = float(pd.Series([r["f1"] for r in proposed]).mean())
         f_f1 = float(pd.Series([r["f1"] for r in fedavg]).mean())
         diff = p_f1 - f_f1
-        verdict = "measured on this synthetic demo dataset"
+        if n_seeds > 1 and paired:
+            p_value = paired.get("paired_ttest", {}).get("p_value")
+            verdict = (
+                f"mean over {n_seeds} seeds; paired t-test p={_f(p_value)} "
+                f"(significant at alpha={paired.get('alpha', 0.05)}: {paired.get('significant_at_alpha')}); "
+                f"{paired.get('caveat', '')}"
+            )
+        else:
+            verdict = "measured on this synthetic demo dataset; single-seed differences are not statistical evidence"
         claims.append(
             {
                 "claim": "PowerShield-FL detection F1 vs FedAvg",
                 "evidence": f"FedAvg mean F1={_f(f_f1)}, PowerShield-FL mean F1={_f(p_f1)}, difference={diff:+.4f}",
                 "status": "SUPPORTED" if diff > 0 else ("NO ADVANTAGE OBSERVED" if diff <= 0 else "NOT RUN"),
-                "note": verdict + "; single-seed differences are not statistical evidence",
+                "note": verdict,
             }
         )
         ref = float(pd.Series([r["total_bytes"] for r in fedavg]).mean())
@@ -69,7 +99,8 @@ def _claims(summary: dict[str, Any]) -> list[dict[str, str]]:
                 "claim": "Communication reduction vs standard FedAvg",
                 "evidence": f"FedAvg total={int(ref)} bytes, PowerShield-FL total={int(cand)} bytes, measured reduction={reduction:.2f}%",
                 "status": "SUPPORTED" if reduction > 0 else "NO REDUCTION OBSERVED",
-                "note": "bytes are actual serialized payloads measured by the communication layer",
+                "note": "bytes are actual serialized payloads measured by the communication layer"
+                + (f"; mean of {n_seeds} seeds" if n_seeds > 1 else ""),
             }
         )
     else:
@@ -104,7 +135,7 @@ def _claims(summary: dict[str, Any]) -> list[dict[str, str]]:
                 "claim": "Scalability across client counts",
                 "evidence": "measured client counts: " + ", ".join(str(r["clients"]) for r in rows),
                 "status": "MEASURED",
-                "note": "quick mode uses up to the configured client count; high counts may hit CPU/RAM limits",
+                "note": "the sweep uses its own configured round count; high client counts may hit CPU/RAM limits",
             }
         )
     else:
@@ -133,6 +164,27 @@ def generate_report(cfg: dict, summary: dict[str, Any], path: str | Path) -> Pat
     communication_rows = summary.get("communication_sweep", {}).get("rows", [])
     scalability_rows = summary.get("scalability", {}).get("rows", [])
     stats = summary.get("statistics", {})
+    seeds = summary.get("seeds", [])
+    n_seeds = len(seeds) if isinstance(seeds, (list, tuple)) else 1
+    central_means = _aggregate_rows(
+        central,
+        "method",
+        ["accuracy", "precision", "recall", "f1", "roc_auc", "pr_auc", "train_time_s", "n_params", "model_size_kb"],
+    )
+    federated_means = _aggregate_rows(
+        federated,
+        "method",
+        ["accuracy", "precision", "recall", "f1", "roc_auc", "pr_auc", "train_time_s", "total_bytes", "bytes_per_round"],
+    )
+    consumer_rows = [
+        {
+            "method": row.get("method"),
+            "seed": row.get("seed"),
+            **row.get("per_consumer", {}),
+        }
+        for row in federated
+        if row.get("per_consumer")
+    ]
 
     lines: list[str] = []
     lines.append("# PowerShield-FL — Final Experiment Report\n")
@@ -195,7 +247,8 @@ def generate_report(cfg: dict, summary: dict[str, Any], path: str | Path) -> Pat
         )
     lines.append("- CNN-LSTM baseline: "
                  + ("executed" if any(r.get("method") == "cnn_lstm_baseline" for r in central) else "NOT RUN"))
-    lines.append("- Centralized baselines: " + (", ".join(r["method"] for r in central) if central else "NOT RUN"))
+    central_methods = sorted({str(r.get("method")) for r in central if r.get("method")})
+    lines.append("- Centralized baselines: " + (", ".join(central_methods) if central_methods else "NOT RUN"))
     lines.append("- Federated local model is the same lightweight MLP for FedAvg and PowerShield-FL "
                  "so aggregation/privacy effects are not confounded by architecture.\n")
 
@@ -228,10 +281,17 @@ def generate_report(cfg: dict, summary: dict[str, Any], path: str | Path) -> Pat
     lines.append("- Emphasis on precision, recall, F1, ROC-AUC and PR-AUC under class imbalance.\n")
 
     lines.append("## 10. Actual results\n")
-    lines.append("### Table 2 — Centralized model comparison\n")
-    lines.append(_df_markdown(central, ["method", "accuracy", "precision", "recall", "f1", "roc_auc", "pr_auc", "train_time_s", "n_params"]))
-    lines.append("### Table 3 — Federated comparison\n")
-    lines.append(_df_markdown(federated, ["method", "clients", "rounds", "f1", "precision", "recall", "roc_auc", "train_time_s", "total_bytes", "bytes_per_round"]))
+    lines.append(f"Results are averaged over {n_seeds} seed(s): `{seeds}`. Per-seed rows are retained where they show run-to-run variability.\n")
+    lines.append("### Table 2 — Centralized model comparison (seed-averaged)\n")
+    lines.append(_df_markdown(central_means, ["method", "accuracy_mean", "precision_mean", "recall_mean", "f1_mean", "f1_std", "roc_auc_mean", "pr_auc_mean", "train_time_s_mean", "n_params_mean"]))
+    if n_seeds > 1:
+        lines.append("### Table 2b — Centralized results by seed\n")
+        lines.append(_df_markdown(central, ["method", "seed", "accuracy", "precision", "recall", "f1", "roc_auc", "pr_auc", "train_time_s", "n_params"]))
+    lines.append("### Table 3 — Federated comparison (seed-averaged)\n")
+    lines.append(_df_markdown(federated_means, ["method", "accuracy_mean", "precision_mean", "recall_mean", "f1_mean", "f1_std", "roc_auc_mean", "pr_auc_mean", "train_time_s_mean", "total_bytes_mean", "bytes_per_round_mean"]))
+    if n_seeds > 1:
+        lines.append("### Table 3b — Federated results by seed\n")
+        lines.append(_df_markdown(federated, ["method", "seed", "accuracy", "precision", "recall", "f1", "roc_auc", "pr_auc", "train_time_s", "total_bytes", "bytes_per_round"]))
     if summary.get("main", {}).get("communication_comparison"):
         cc = summary["main"]["communication_comparison"]
         lines.append(
@@ -246,6 +306,8 @@ def generate_report(cfg: dict, summary: dict[str, Any], path: str | Path) -> Pat
     lines.append(_df_markdown(communication_rows, ["compression_label", "compression", "f1", "roc_auc", "total_bytes", "communication_reduction_pct", "train_time_s"]))
     lines.append("### Table 5 — Scalability\n")
     lines.append(_df_markdown(scalability_rows, ["clients", "rounds", "train_time_s", "total_bytes", "rss_delta_mb", "f1", "accuracy"]))
+    lines.append("### Table 6 — Consumer-level test results\n")
+    lines.append(_df_markdown(consumer_rows, ["method", "seed", "precision", "recall", "f1", "roc_auc", "tp", "fp", "tn", "fn", "n_consumers"]))
 
     lines.append("## 11. Comparison and claim support\n")
     claims = _claims(summary)
@@ -258,19 +320,33 @@ def generate_report(cfg: dict, summary: dict[str, Any], path: str | Path) -> Pat
         lines.append(
             "The objective is not to force PowerShield-FL to win. The table above states whether "
             "the measured F1/communication results support each claim on this dataset. "
-            "Single-seed results are descriptive, not inferential.\n"
+            + (
+                f"Results are averaged over {n_seeds} seeds; the paired test and its caveat are reported below."
+                if n_seeds > 1
+                else "Single-seed results are descriptive, not inferential."
+            )
+            + "\n"
         )
 
     lines.append("## 12. Statistical analysis\n")
     if stats:
         for name, values in stats.items():
             if name == "paired_f1_fedavg_vs_proposed":
-                lines.append(f"- Paired comparison: `{json.dumps(values, default=str)}`")
-            elif isinstance(values, dict):
+                t = values.get("paired_ttest", {})
+                w = values.get("wilcoxon", {})
                 lines.append(
-                    f"- {name}: F1 mean={_f(values.get('f1', {}).get('mean'))}, "
-                    f"std={_f(values.get('f1', {}).get('std'))}, "
-                    f"95% CI=[{_f(values.get('f1', {}).get('ci_low'))}, {_f(values.get('f1', {}).get('ci_high'))}]"
+                    f"- Paired FedAvg − PowerShield-FL F1 difference: mean={_f(values.get('mean_difference'))}, "
+                    f"std={_f(values.get('std_difference'))}, n={values.get('n')}; "
+                    f"paired t p={_f(t.get('p_value'))}, Wilcoxon p={_f(w.get('p_value'))}; "
+                    f"significant at alpha={values.get('alpha', 0.05)}: **{values.get('significant_at_alpha')}**"
+                )
+                lines.append(f"- Caveat: {values.get('caveat', '')}")
+            elif isinstance(values, dict):
+                f1 = values.get("f1", {})
+                lines.append(
+                    f"- {name}: F1 mean={_f(f1.get('mean'))}, std={_f(f1.get('std'))}, "
+                    f"95% CI=[{_f(f1.get('ci_low'))}, {_f(f1.get('ci_high'))}], "
+                    f"per-seed values={json.dumps(f1.get('values', []), default=str)}"
                 )
     else:
         lines.append("NOT RUN")
@@ -287,10 +363,11 @@ def generate_report(cfg: dict, summary: dict[str, Any], path: str | Path) -> Pat
         "The demo uses simulated clients, not physically distributed organizations with real network links.",
         "Secure aggregation is a masking simulation, not a cryptographic protocol; it provides no malicious-party guarantees.",
         "The epsilon estimate covers one release of a client update and does not compose across rounds.",
-        "The lightweight MLP is evaluated against a CNN-LSTM on a small synthetic dataset; the CNN-LSTM may be under-trained relative to its capacity.",
+        "The lightweight MLP is evaluated against a CNN-LSTM on a synthetic dataset; the CNN-LSTM is unstable across seeds and may be under-trained relative to its capacity.",
         "Wall time and memory are machine-specific (CPU-only host); they are not portable benchmarks.",
-        "QUICK mode uses small client/round counts; FULL mode is configurable but was not necessarily executed for this report.",
+        f"This report covers `{summary.get('mode', 'unknown')}` mode with {n_seeds} seed(s); other configured modes/seeds remain NOT RUN until executed.",
         "Client-level labels are inferred from theft activation in synthetic data; real datasets may have noisy labels.",
+        "The consumer-level decision rule is a fixed mean-probability threshold of 0.5; it is not tuned on validation consumers.",
     ]
     for item in limitations:
         lines.append(f"- {item}")
