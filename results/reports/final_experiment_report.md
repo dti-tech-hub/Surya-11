@@ -4,8 +4,8 @@
 
 > **DATASET: SYNTHETIC DEMO DATA** — results from this dataset are a software demonstration, not evidence about real utility theft rates.
 
-- Generated: 2026-10-28T13:06:06.219341+00:00
-- Suite ID: `experiment_20261028_130606_218899_suite_s42`
+- Generated: 2026-10-28T13:26:46.352018+00:00
+- Suite ID: `experiment_20261028_132646_351780_suite_s42`
 - Mode: `quick`; demo: `True`
 - Seeds: [42]
 - Dataset source: **SYNTHETIC DEMO DATA**
@@ -125,16 +125,16 @@ Results are averaged over 1 seed(s): `[42]`. Per-seed rows are retained where th
 
 | method                          |   accuracy_mean |   precision_mean |   recall_mean |   f1_mean |   f1_std |   roc_auc_mean |   pr_auc_mean |   train_time_s_mean |   n_params_mean |
 |:--------------------------------|----------------:|-----------------:|--------------:|----------:|---------:|---------------:|--------------:|--------------------:|----------------:|
-| centralized_lightweight_mlp     |          0.9931 |           0.9913 |        0.9344 |    0.962  |      nan |         0.9922 |        0.9723 |              1.3902 |           10689 |
-| centralized_logistic_regression |          0.9869 |           1      |        0.8607 |    0.9251 |      nan |         0.9912 |        0.9665 |              0.1707 |             134 |
-| centralized_mlp                 |          0.9969 |           1      |        0.9672 |    0.9833 |      nan |         0.9942 |        0.9819 |              5.8074 |           25473 |
+| centralized_lightweight_mlp     |          0.9931 |           0.9913 |        0.9344 |    0.962  |      nan |         0.9922 |        0.9723 |              1.0859 |           10689 |
+| centralized_logistic_regression |          0.9869 |           1      |        0.8607 |    0.9251 |      nan |         0.9912 |        0.9665 |              0.1229 |             134 |
+| centralized_mlp                 |          0.9969 |           1      |        0.9672 |    0.9833 |      nan |         0.9942 |        0.9819 |              4.4467 |           25473 |
 
 ### Table 3 — Federated comparison (seed-averaged)
 
 | method          |   accuracy_mean |   precision_mean |   recall_mean |   f1_mean |   f1_std |   roc_auc_mean |   pr_auc_mean |   train_time_s_mean |   total_bytes_mean |   bytes_per_round_mean |
 |:----------------|----------------:|-----------------:|--------------:|----------:|---------:|---------------:|--------------:|--------------------:|-------------------:|-----------------------:|
-| fedavg_baseline |          0.9236 |           0.5816 |        0.6721 |    0.6236 |      nan |         0.8859 |        0.7482 |              3.533  |        1.03606e+06 |               345352   |
-| powershield_fl  |          0.9074 |           0.5063 |        0.6557 |    0.5714 |      nan |         0.8378 |        0.7212 |              2.8759 |   270742           |                90247.3 |
+| fedavg_baseline |          0.9236 |           0.5816 |        0.6721 |    0.6236 |      nan |         0.8859 |        0.7482 |              1.7173 |        1.03606e+06 |               345352   |
+| powershield_fl  |          0.9074 |           0.5063 |        0.6557 |    0.5714 |      nan |         0.8378 |        0.7212 |              1.5652 |   270742           |                90247.3 |
 
 - Measured communication: FedAvg 1036056 bytes vs PowerShield-FL 270742 bytes (reduction 73.87%).
 
@@ -226,7 +226,7 @@ The objective is not to force PowerShield-FL to win. The table above states whet
 - RAM: 15.72 GB
 - GPU: CPU only
 - Package versions: `{"numpy": "2.4.4", "pandas": "3.0.1", "sklearn": "1.8.0", "torch": "2.14.1+cpu", "matplotlib": "3.10.8", "scipy": "1.17.1", "shap": "0.53.0", "streamlit": "1.65.0", "yaml": "6.0.3"}`
-- Run directories: ["B:\\surya-11\\results\\raw\\experiment_20261028_130620_629588_fedavg_s42", "B:\\surya-11\\results\\raw\\experiment_20261028_130624_543696_powershield_s42"]
+- Run directories: ["B:\\surya-11\\results\\raw\\experiment_20261028_132658_536888_fedavg_s42", "B:\\surya-11\\results\\raw\\experiment_20261028_132701_053069_powershield_s42"]
 - Re-run: `python main.py --mode quick` (or `--mode full`), seeds are recorded in the configuration.
 
 ## 16. Claim discipline
