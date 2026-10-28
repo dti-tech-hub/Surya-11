@@ -4,18 +4,18 @@
 |:--------------------------|:--------------------------------------------------------|
 | dataset_source            | SYNTHETIC DEMO DATA                                     |
 | synthetic_demo_data       | True                                                    |
-| consumers_total           | 240                                                     |
-| consumers_train           | 156                                                     |
-| consumers_validation      | 36                                                      |
-| consumers_test            | 48                                                      |
-| raw_rows                  | 2073600                                                 |
-| raw_missing_values        | 4244                                                    |
+| consumers_total           | 600                                                     |
+| consumers_train           | 390                                                     |
+| consumers_validation      | 90                                                      |
+| consumers_test            | 120                                                     |
+| raw_rows                  | 10512000                                                |
+| raw_missing_values        | 20802                                                   |
 | raw_duplicate_rows        | 0                                                       |
-| window_samples_train      | 8736                                                    |
-| window_samples_validation | 2016                                                    |
-| window_samples_test       | 2688                                                    |
+| window_samples_train      | 46020                                                   |
+| window_samples_validation | 10620                                                   |
+| window_samples_test       | 14160                                                   |
 | feature_count             | 133                                                     |
-| theft_ratio_train_windows | 0.08081501831501832                                     |
-| theft_ratio_test_windows  | 0.060267857142857144                                    |
+| theft_ratio_train_windows | 0.05999565406345067                                     |
+| theft_ratio_test_windows  | 0.06024011299435028                                     |
 | split_unit                | consumer                                                |
 | label_rule                | window-level labels respect theft_start_day (synthetic) |

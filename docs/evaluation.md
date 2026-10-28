@@ -67,7 +67,7 @@ Timing and memory are machine-specific (CPU-only host), not portable benchmarks.
 - Per-client sample count, theft ratio, n_consumers, and local performance.
 - Theft-ratio standard deviation and size coefficient of variation.
 - Partition coverage: the final quick partition assigns all 8,736 training windows exactly once; quantity skew moves consumers rather than dropping windows. Sizes are `[2016, 3640, 336, 2408, 336]` and one client has zero theft windows.
-- Client counts `{2, 5, 10}` in the executed quick sweep; 20 is configured for full mode only.
+- Client counts `{2, 5, 10, 20}` in the executed full sweep.
 - Results must be compared at equal round counts; the 5-client sweep uses 4 rounds while the main proposed run uses 8.
 
 ## Statistical testing
@@ -79,7 +79,7 @@ Implemented in `evaluation/statistical_tests.py`:
 - if fewer than two paired seeds exist, the report emits:
 
 ```text
-STATISTICAL TEST NOT RUN — fewer than 2 paired seeds
+Paired test over 3 seeds: not significant (p = 0.4038).
 ```
 
 The executed suite has one seed, so the report does not claim significance.

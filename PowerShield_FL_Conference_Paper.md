@@ -8,13 +8,13 @@ Department of Computer Science and Engineering
 
 **Manuscript draft — 26 October 2026**
 
-> **DATA STATUS — SYNTHETIC DEMO DATA.** All experimental numbers in this manuscript were produced by the final QUICK-mode suite `experiment_20261025_014623_793809_suite_s42` on a synthetic smart-meter benchmark. No real utility or customer data were used. **Full mode is NOT RUN. Real-data execution is DATASET NOT CONFIGURED.**
+> **DATA STATUS — SYNTHETIC DEMO DATA.** All experimental numbers in this manuscript were produced by the final FULL-mode suite `experiment_20261028_072746_856067_suite_s42` on a synthetic smart-meter benchmark: 600 consumers, 10 clients, 25 federated rounds, seeds [42, 123, 2026]. No real utility or customer data were used. Real-data execution is **DATASET NOT CONFIGURED**.
 >
-> **CLAIM STATUS.** The results are single-seed, descriptive measurements. No statistical significance, formal end-to-end differential privacy, production secure aggregation, or real-world deployment claim is made.
+> **CLAIM STATUS.** Window-level F1 differences between FedAvg and PowerShield-FL are not statistically significant (paired t p = 0.4038; Wilcoxon p = 0.5 over 3 seeds). No formal end-to-end differential privacy, production secure aggregation, or real-world deployment claim is made.
 
 ## Abstract
 
-Electricity theft and other non-technical losses impose substantial costs on utilities, but centralized theft detection requires pooling sensitive smart-meter records. Federated learning (FL) offers an alternative: clients train locally and share model updates rather than raw consumption data. This paper presents **PowerShield-FL**, an end-to-end research framework that combines a lightweight multi-layer perceptron, consumer-level non-IID client simulation, update clipping with Gaussian perturbation, measured communication compression, adaptive size-quality-reliability aggregation, and post-hoc explainability. We evaluate the framework on a synthetic 240-consumer benchmark in QUICK mode with five clients, eight federated rounds, and one seed. At the window level, PowerShield-FL reaches F1 = 0.9969 (precision = 1.0000, recall = 0.9938), compared with F1 = 0.9938 for FedAvg, while transmitting 902,449 bytes rather than 3,453,520 bytes—a measured reduction of 73.87%. The proposed pipeline matches the F1 of a centralized Random Forest (0.9969) without pooling raw records, although the centralized model is trained on pooled data and the comparison is not compute-matched. The apparent +0.0031 F1 advantage over FedAvg corresponds to **one additional true-positive window** out of 162 theft windows and is not statistically significant. More importantly, consumer-level F1 is only 0.25 for both methods at a fixed mean-probability threshold of 0.5, even though consumer-level ROC-AUC is 1.0; the gap is a calibration and threshold problem, not a ranking failure. The privacy layer is update-level clipping plus Gaussian noise with single-release ε estimates between 807 and 4,845; secure aggregation is simulated and disabled, and no formal end-to-end differential-privacy guarantee is claimed. Full mode and real-data experiments are **NOT RUN** and **DATASET NOT CONFIGURED**, respectively. The study supports the feasibility of lightweight, communication-efficient FL on synthetic data—not real-world deployment.
+Electricity theft and other non-technical losses impose substantial costs on utilities, but centralized theft detection requires pooling sensitive smart-meter records. Federated learning (FL) offers an alternative: clients train locally and share model updates rather than raw consumption data. This paper presents **PowerShield-FL**, an end-to-end research framework that combines a lightweight multi-layer perceptron, consumer-level non-IID client simulation, update clipping with Gaussian perturbation, measured communication compression, adaptive size-quality-reliability aggregation, and post-hoc explainability. We evaluate the framework on a synthetic 600-consumer benchmark in FULL mode with ten clients, 25 federated rounds, and three seeds. At the window level, PowerShield-FL reaches F1 = 0.9802 ± 0.0090 (precision = 0.9989, recall = 0.9622), compared with F1 = 0.9823 ± 0.0071 for FedAvg, while transmitting 5,640,225 bytes rather than 21,584,500 bytes per seed—a measured reduction of 73.87%. The difference in F1 is not statistically significant (paired t p = 0.4038; Wilcoxon p = 0.5). The proposed pipeline is competitive with centralized baselines on window-level F1 (lightweight MLP 0.9839) without pooling raw records, although centralized models are trained on pooled data and the comparison is not compute-matched. Consumer-level F1 ranges from 0.3529 to 0.6667 across seeds at a fixed mean-probability threshold of 0.5, even though consumer-level ROC-AUC is 1.0; the gap is a calibration and threshold problem, not a ranking failure. The privacy layer is update-level clipping plus Gaussian noise with single-release ε estimates between 807 and 4,845; secure aggregation is simulated and disabled, and no formal end-to-end differential-privacy guarantee is claimed. Real-data experiments are **DATASET NOT CONFIGURED**. The study supports the feasibility of lightweight, communication-efficient FL on synthetic data.
 
 **Index Terms—** federated learning, electricity-theft detection, non-technical loss, smart meters, communication efficiency, differential privacy, non-IID data, explainability.
 
@@ -96,7 +96,7 @@ Figure 1 summarizes the pipeline. Raw smart-meter panels are split by consumer i
 
 ### 3.3 Data Construction and Leakage Control
 
-The synthetic generator creates 240 consumers over 180 days at 30-minute resolution: 2,073,600 raw rows in total. Each consumer has a base load, an intraday profile, seasonal and weekend factors, Gaussian noise, missing values, and occasional spikes. Fifteen percent of consumers (36 of 240) are assigned a theft episode. For a theft consumer, metered consumption is multiplied by a scale factor between 0.35 and 0.85 from a random activation day, with a 25% chance that a given day is inactive; the activation day lies between 25% and 85% of the observation period. These settings produce a detectable but non-trivial pattern of level reduction.
+The synthetic generator creates 600 consumers over 365 days at 30-minute resolution: 10,512,000 raw rows in total. Each consumer has a base load, an intraday profile, seasonal and weekend factors, Gaussian noise, missing values, and occasional spikes. Twelve percent of consumers (72 of 600) are assigned a theft episode. For a theft consumer, metered consumption is multiplied by a scale factor between 0.35 and 0.85 from a random activation day, with a 25% chance that a given day is inactive; the activation day lies between 25% and 85% of the observation period. These settings produce a detectable but non-trivial pattern of level reduction.
 
 The split unit is the **consumer**, not the window. Consumers are divided into 156 training, 36 validation, and 48 test consumers (65%/15%/20%). All windows from a consumer remain in exactly one split. Cleaning statistics, outlier bounds, and feature scalers are fitted on training consumers only and then applied to validation and test consumers. This prevents identity leakage and avoids fitting preprocessing objects on held-out data.
 
@@ -199,20 +199,19 @@ These methods answer different questions. Permutation importance measures model 
 
 ### 4.1 Data and Splits
 
-Table 1 summarizes the synthetic dataset. The benchmark is generated from seed 42 and is labelled **SYNTHETIC DEMO DATA** in every artifact. It contains 2,073,600 raw rows, 4,244 missing values, and zero duplicate rows. The 240 consumers are split into 156 training, 36 validation, and 48 test consumers. The training split is used for client partitioning; the validation split is held by the server; the test split is untouched until final evaluation.
+Table 1 summarizes the synthetic dataset. The benchmark is generated from seed 42 and is labelled **SYNTHETIC DEMO DATA** in every artifact. It contains 10,512,000 raw rows, 20,802 missing values, and zero duplicate rows. The 600 consumers are split into 390 training, 90 validation, and 120 test consumers. The training split is used for client partitioning; the validation split is held by the server; the test split is untouched until final evaluation.
 
 **Table 1. Synthetic dataset and split summary (SYNTHETIC DEMO DATA).**
 
 | Item | Train | Validation | Test | Total |
 |---|---:|---:|---:|---:|
-| Consumers | 156 | 36 | 48 | 240 |
-| Theft consumers | 24 | 5 | 7 | 36 |
-| Windows | 8,736 | 2,016 | 2,688 | 13,440 |
-| Theft windows | 706 | 176 | 162 | 1,044 |
-| Theft ratio | 8.08% | 8.73% | 6.03% | 7.77% |
-| Windows per consumer | 56 | 56 | 56 | 56 |
+| Consumers | 390 | 90 | 120 | 600 |
+| Windows | 46,020 | 10,620 | 14,160 | 70,800 |
+| Theft windows | 2,761 | 599 | 853 | 4,213 |
+| Theft ratio | 6.00% | 5.64% | 6.02% | 5.95% |
+| Windows per consumer | 118 | 118 | 118 | 118 |
 
-**Raw data:** 2,073,600 rows; 4,244 missing values; 0 duplicate rows; 133 features; 14-day windows; stride 3 days. The theft consumers are 36 of 240 (15%). The total theft-window count and ratio are arithmetic sums over the three splits.
+**Raw data:** 2,073,600 rows; 20,802 missing values; 0 duplicate rows; 133 features; 14-day windows; stride 3 days. The theft consumers are 36 of 240 (15%). The total theft-window count and ratio are arithmetic sums over the three splits.
 
 ### 4.2 Client Simulation
 
@@ -222,12 +221,17 @@ Table 2 reports the realized client partition. Client sizes range from 336 to 3,
 
 | Client | Consumers | Assigned windows | Theft windows | Theft ratio | Local train | Local validation |
 |---|---:|---:|---:|---:|---:|---:|
-| client_00 | 36 | 2,016 | 346 | 17.16% | 1,714 | 302 |
-| client_01 | 65 | 3,640 | 329 | 9.04% | 3,094 | 546 |
-| client_02 | 6 | 336 | 18 | 5.36% | 286 | 50 |
-| client_03 | 43 | 2,408 | 0 | 0.00% | 2,047 | 361 |
-| client_04 | 6 | 336 | 13 | 3.87% | 286 | 50 |
-| **Total** | **156** | **8,736** | **706** | **8.08%** | **7,427** | **1,309** |
+| client_00 | 7 | 826 | 0 | 0.00% | 702 | 124 |
+| client_01 | 23 | 2,714 | 151 | 5.56% | 2,307 | 407 |
+| client_02 | 14 | 1,652 | 117 | 7.08% | 1,404 | 248 |
+| client_03 | 7 | 826 | 206 | 24.94% | 702 | 124 |
+| client_04 | 104 | 12,272 | 312 | 2.54% | 10,431 | 1,841 |
+| client_05 | 7 | 826 | 69 | 8.35% | 702 | 124 |
+| client_06 | 7 | 826 | 88 | 10.65% | 702 | 124 |
+| client_07 | 7 | 826 | 37 | 4.48% | 702 | 124 |
+| client_08 | 207 | 24,426 | 1,756 | 7.19% | 20,762 | 3,664 |
+| client_09 | 7 | 826 | 25 | 3.03% | 702 | 124 |
+| **Total** | **390** | **46,020** | **2,761** | **6.00%** | **39,116** | **6,904** |
 
 ### 4.3 Baselines
 
@@ -251,11 +255,11 @@ Window-level detection is evaluated with accuracy, precision, recall, F1, ROC-AU
 
 ### 4.6 Statistical Protocol
 
-The suite used one seed. Consequently, the paper reports descriptive point estimates only. It does **not** report confidence intervals over seeds, paired t-tests, or Wilcoxon tests. The exact status is **STATISTICAL TEST NOT RUN — fewer than 2 paired seeds**. The +0.0031 F1 difference between PowerShield-FL and FedAvg is discussed as a one-window difference, not as evidence of a statistically reliable improvement.
+The suite used three seeds. Consequently, the paper reports mean ± standard deviation, 95% confidence intervals, and a paired t-test / Wilcoxon test over seeds. The FedAvg vs PowerShield-FL window-level F1 difference is not statistically significant (paired t p = 0.4038; Wilcoxon p = 0.5). The difference is discussed as a small effect, not as evidence of a statistically reliable improvement.
 
 ### 4.7 Reproducibility
 
-The authoritative artifacts are the final quick suite `experiment_20261025_014623_793809_suite_s42`, the machine-readable `results/metrics/summary.json`, the generated report `results/reports/final_experiment_report.md`, and `FINAL_STATUS.md`. The main FedAvg and PowerShield-FL runs are `experiment_20261025_014756_354071_fedavg_s42` and `experiment_20261025_014812_413345_powershield_s42`, respectively. The project passed 33 tests; the pipeline checks reported 12 PASS, 1 WARNING (the expected synthetic-data warning), and 0 FAIL. The dashboard loaded 10 tabs with zero exceptions, and notebooks 1–5 executed. Full mode (600 consumers, 10 clients, 25 rounds, 3 seeds, 20-client scalability) is **NOT RUN**. Real SGCC/IRISE execution is **DATASET NOT CONFIGURED**.
+The authoritative artifacts are the final quick suite `experiment_20261025_014623_793809_suite_s42`, the machine-readable `results/metrics/summary.json`, the generated report `results/reports/final_experiment_report.md`, and `FINAL_STATUS.md`. The main FedAvg and PowerShield-FL runs are `experiment_20261025_014756_354071_fedavg_s42` and `experiment_20261025_014812_413345_powershield_s42`, respectively. The project passed 33 tests; the pipeline checks reported 12 PASS, 1 WARNING (the expected synthetic-data warning), and 0 FAIL. The dashboard loaded 10 tabs with zero exceptions, and notebooks 1–5 executed. Full mode (600 consumers, 10 clients, 25 rounds, 3 seeds, 20-client scalability) is **EXECUTED** as suite `experiment_20261028_072746_856067_suite_s42`. Real SGCC/IRISE execution is **DATASET NOT CONFIGURED**.
 
 ## 5. Results
 
@@ -273,11 +277,11 @@ Table 3 reports centralized detection. Random Forest and PowerShield-FL both rea
 
 | Method | Accuracy | Precision | Recall | F1 | ROC-AUC | PR-AUC | Threshold |
 |---|---:|---:|---:|---:|---:|---:|---:|
-| Logistic Regression | 0.9993 | 0.9938 | 0.9938 | 0.9938 | 0.9986 | 0.9952 | 0.20 |
-| Random Forest | 0.9996 | 1.0000 | 0.9938 | 0.9969 | 0.9950 | 0.9942 | 0.35 |
-| Central MLP | 0.9829 | 0.7816 | 0.9938 | 0.8750 | 0.9996 | 0.9967 | 0.25 |
-| Central lightweight MLP | 0.9933 | 0.9045 | 0.9938 | 0.9471 | 0.9991 | 0.9958 | 0.25 |
-| CNN-LSTM | 0.9769 | 1.0000 | 0.6173 | 0.7634 | 0.9444 | 0.7797 | 0.45 |
+| Logistic Regression | 0.9986 | 0.9991 | 0.9739 | 0.9863 | 0.9950 | 0.9849 | 0.43 |
+| Random Forest | 0.9965 | 0.9863 | 0.9468 | 0.9660 | 0.9962 | 0.9858 | 0.38 |
+| Central MLP | 0.9982 | 1.0000 | 0.9646 | 0.9819 | 0.9940 | 0.9833 | 0.35 |
+| Central lightweight MLP | 0.9984 | 0.9995 | 0.9688 | 0.9839 | 0.9949 | 0.9846 | 0.32 |
+| CNN-LSTM | 0.9866 | 0.9529 | 0.7700 | 0.8476 | 0.9696 | 0.8689 | 0.82 |
 
 Table 4 reports resource use. The Random Forest has 21,862 tree nodes and a 170.80 KiB payload estimate; its 0.5187 ms per-sample inference is measured through scikit-learn’s Python path and is not a like-for-like optimized benchmark against batched PyTorch inference. The lightweight model has 10,689 parameters and a 41.75 KiB parameter payload. The centralized Lightweight MLP trains in 7.52 s, while the federated PowerShield-FL run takes 15.97 s for eight rounds of five clients. The training budgets are not compute-matched: the centralized lightweight model performs 8 epochs on pooled data, whereas each federated client performs 2 local epochs per round over 8 rounds. The centralized results should therefore be read as references, not as a controlled architecture comparison.
 
@@ -301,8 +305,8 @@ Table 5 compares FedAvg and PowerShield-FL. Both use the same model and partitio
 
 | Method | Precision | Recall | F1 | ROC-AUC | PR-AUC | Time (s) | Total bytes |
 |---|---:|---:|---:|---:|---:|---:|---:|
-| FedAvg | 1.0000 | 0.9877 | 0.9938 | 0.9973 | 0.9927 | 15.51 | 3,453,520 |
-| PowerShield-FL | 1.0000 | 0.9938 | 0.9969 | 0.9969 | 0.9945 | 15.97 | 902,449 |
+| FedAvg | 1.0000 | 0.9653 | 0.9823 | 0.9930 | 0.9816 | 284.24 | 21,584,500 |
+| PowerShield-FL | 0.9989 | 0.9622 | 0.9802 | 0.9930 | 0.9816 | 316.62 | 5,640,225 |
 
 Both methods use 8 rounds and the same 10,689-parameter model. FedAvg uses sample-count aggregation with privacy off and compression off. PowerShield-FL uses adaptive aggregation, clipping plus Gaussian perturbation, and dense int8 compression.
 
@@ -322,10 +326,10 @@ The compression sweep (Table 6 and Figure 3b) isolates the compression choice ov
 
 | Compression | Precision | Recall | F1 | ROC-AUC | Total bytes | Reduction vs none |
 |---|---:|---:|---:|---:|---:|---:|
-| None (float32) | 0.9875 | 0.9753 | 0.9814 | 0.9971 | 1,726,760 | 0.00% |
-| Dense int8 | 0.9875 | 0.9753 | 0.9814 | 0.9970 | 451,222 | 73.87% |
-| Top-k 20% | 1.0000 | 0.8642 | 0.9272 | 0.9950 | 700,440 | 59.44% |
-| Top-k + int8 | 1.0000 | 0.8580 | 0.9236 | 0.9948 | 451,227 | 73.87% |
+| None (float32) | 1.0000 | 0.9379 | 0.9679 | 0.9737 | 3,453,520 | 0.00% |
+| Dense int8 | 1.0000 | 0.9402 | 0.9692 | 0.9734 | 902,464 | 73.87% |
+| Top-k 20% | 0.9974 | 0.9109 | 0.9522 | 0.9729 | 1,400,880 | 59.44% |
+| Top-k + int8 | 0.9962 | 0.9156 | 0.9542 | 0.9735 | 902,486 | 73.87% |
 
 ![Figure 3](results/figures/paper_communication.png)
 
@@ -341,11 +345,11 @@ The single-release ε estimates are 4,844.81, 1,614.94, and 807.47 for σ = 0.00
 
 | Privacy setting | Precision | Recall | F1 | ROC-AUC | Single-release ε |
 |---|---:|---:|---:|---:|---:|
-| Off | 0.9938 | 0.9877 | 0.9907 | 0.9974 | — |
-| Clipping only (σ = 0) | 0.9875 | 0.9753 | 0.9814 | 0.9970 | — |
-| Clip + noise σ = 0.001 | 0.9875 | 0.9753 | 0.9814 | 0.9970 | 4,844.81 |
-| Clip + noise σ = 0.003 | 0.9875 | 0.9753 | 0.9814 | 0.9970 | 1,614.94 |
-| Clip + noise σ = 0.006 | 0.9875 | 0.9753 | 0.9814 | 0.9969 | 807.47 |
+| Off | 1.0000 | 0.9484 | 0.9735 | 0.9799 | — |
+| Clipping only (σ = 0) | 1.0000 | 0.9402 | 0.9692 | 0.9730 | — |
+| Clip + noise σ = 0.001 | 1.0000 | 0.9402 | 0.9692 | 0.9734 | 4,844.81 |
+| Clip + noise σ = 0.003 | 1.0000 | 0.9402 | 0.9692 | 0.9735 | 1,614.94 |
+| Clip + noise σ = 0.006 | 1.0000 | 0.9402 | 0.9692 | 0.9733 | 807.47 |
 
 ![Figure 4](results/figures/paper_privacy.png)
 
@@ -359,9 +363,10 @@ Table 8 and Figure 5 report a four-round scalability sweep with 2, 5, and 10 cli
 
 | Clients | Accuracy | Precision | Recall | F1 | ROC-AUC | Wall time (s) | Total bytes |
 |---:|---:|---:|---:|---:|---:|---:|---:|
-| 2 | 0.9981 | 0.9816 | 0.9877 | 0.9846 | 0.9954 | 6.558 | 180,497 |
-| 5 | 0.9978 | 0.9875 | 0.9753 | 0.9814 | 0.9970 | 7.604 | 451,222 |
-| 10 | 0.9829 | 0.9754 | 0.7346 | 0.8380 | 0.9861 | 8.954 | 902,445 |
+| 2 | 0.9971 | 1.0000 | 0.9519 | 0.9754 | 0.9898 | 36.96 | 180,495 |
+| 5 | 0.9969 | 1.0000 | 0.9484 | 0.9735 | 0.9875 | 32.62 | 451,256 |
+| 10 | 0.9964 | 1.0000 | 0.9402 | 0.9692 | 0.9734 | 33.64 | 902,464 |
+| 20 | 0.9940 | 0.9638 | 0.9355 | 0.9494 | 0.9743 | 48.00 | 1,804,808 |
 
 ![Figure 5](results/figures/paper_scalability.png)
 
@@ -385,7 +390,7 @@ The table is diagnostic, not causal. Because FedAvg also differs in privacy and 
 
 ### 5.8 Explainability
 
-Permutation importance over 1,500 test windows and five repeats has a baseline ROC-AUC of 0.996682. The most important features are `min_max_day_ratio` (0.01159 ± 0.00248), `max_daily_drop` (0.00704 ± 0.00067), `daily_diff_std` (0.00487 ± 0.00087), `mean_daily_drop` (0.000802 ± 0.000236), and `block_93` (0.000648 ± 0.001055). Figure 6 shows the top ten. The top features are consistent with the synthetic theft mechanism, which multiplies consumption by a factor below one: ratios and drop statistics are exactly the kind of signal the generator creates. This is evidence that the model uses plausible features on this benchmark, not evidence that the same features would dominate in real utility data.
+Permutation importance over 1,500 test windows and five repeats has a baseline ROC-AUC of 1.000000. The most important features are `min_max_day_ratio` (0.02010 ± 0.00275), `daily_diff_std` (0.00899 ± 0.00099), `weekend_weekday_ratio` (0.00306 ± 0.00272), `max_daily_drop` (0.00180 ± 0.00019), and `mean_daily_drop` (0.00038 ± 0.00015). Figure 6 shows the top ten. The top features are consistent with the synthetic theft mechanism, which multiplies consumption by a factor below one: ratios and drop statistics are exactly the kind of signal the generator creates. This is evidence that the model uses plausible features on this benchmark, not evidence that the same features would dominate in real utility data.
 
 The SHAP analysis used 40 test windows, a 30-row background sample, and 100 evaluation samples, and produced 10 local explanations. The SHAP values and permutation importances are model-specific and correlational. They are useful for debugging and analyst support, but they should not be presented as causal evidence about theft behavior.
 
@@ -393,11 +398,11 @@ The SHAP analysis used 40 test windows, a 30-row background sample, and 100 eval
 
 | Rank | Feature | Mean ROC-AUC drop | Standard deviation |
 |---:|---|---:|---:|
-| 1 | min_max_day_ratio | 0.01159 | 0.00248 |
-| 2 | max_daily_drop | 0.00704 | 0.00067 |
-| 3 | daily_diff_std | 0.00487 | 0.00087 |
-| 4 | mean_daily_drop | 0.000802 | 0.000236 |
-| 5 | block_93 | 0.000648 | 0.001055 |
+| 1 | min_max_day_ratio | 0.02010 | 0.00275 |
+| 2 | daily_diff_std | 0.00899 | 0.00099 |
+| 3 | weekend_weekday_ratio | 0.00306 | 0.00272 |
+| 4 | max_daily_drop | 0.00180 | 0.00019 |
+| 5 | mean_daily_drop | 0.00038 | 0.00015 |
 | 6 | night_day_ratio | 0.000575 | 0.000353 |
 | 7 | block_91 | 0.000551 | 0.000581 |
 | 8 | block_35 | 0.000526 | 0.000210 |
@@ -418,10 +423,10 @@ This distinction is crucial. A model can rank consumers well and still fail an o
 
 | Method | Level | Precision | Recall | F1 | ROC-AUC | PR-AUC | TP / FP / TN / FN |
 |---|---|---|---:|---:|---:|---:|---:|---|
-| FedAvg | Window | 1.0000 | 0.9877 | 0.9938 | 0.9973 | 0.9927 | 160 / 0 / 2,526 / 2 |
-| PowerShield-FL | Window | 1.0000 | 0.9938 | 0.9969 | 0.9969 | 0.9945 | 161 / 0 / 2,526 / 1 |
-| FedAvg | Consumer | 1.0000 | 0.1429 | 0.2500 | 1.0000 | 1.0000 | 1 / 0 / 41 / 6 |
-| PowerShield-FL | Consumer | 1.0000 | 0.1429 | 0.2500 | 1.0000 | 1.0000 | 1 / 0 / 41 / 6 |
+| FedAvg | Window | 1.0000 | 0.9683 | 0.9839 | 0.9888 | 0.9775 | 826 / 0 / 13,307 / 27 |
+| PowerShield-FL | Window | 1.0000 | 0.9578 | 0.9784 | 0.9866 | 0.9747 | 817 / 0 / 13,307 / 36 |
+| FedAvg | Consumer | 1.0000 | 0.5714 | 0.7273 | 1.0000 | 1.0000 | 8 / 0 / 106 / 6 |
+| PowerShield-FL | Consumer | 1.0000 | 0.5000 | 0.6667 | 1.0000 | 1.0000 | 7 / 0 / 106 / 7 |
 
 Figure 7 shows the window-level confusion matrices. The only difference between the two matrices is the single FN/TP cell: FedAvg misses two theft windows, PowerShield-FL misses one. Figure 8 visualizes the window-to-consumer gap. The contrast is the central empirical lesson of the paper: window-level F1 is not a substitute for consumer-level evaluation.
 
@@ -483,7 +488,7 @@ The partition is deliberately harsh: client sizes differ by more than 10×, and 
 
 **Internal validity.** The suite uses one seed. There are no confidence intervals over seeds, no paired significance tests, and no hyperparameter search. The main comparison changes three system layers at once (aggregation, privacy, compression), so it cannot attribute the F1 difference to a single component. The training budgets for centralized and federated models are not compute-matched. The consumer threshold is fixed rather than tuned. The 4-round sweeps are shorter than the 8-round main run.
 
-**External validity.** The study uses simulated clients, a CPU-only host, and a synthetic dataset. It does not use SGCC, IRISE, or any real utility data. Full mode—600 consumers, 10 clients, 25 rounds, 3 seeds, 20-client scalability—is **NOT RUN**. The results should not be generalized to real utilities, real non-IID populations, or production communication networks.
+**External validity.** The study uses simulated clients, a CPU-only host, and a synthetic dataset. It does not use SGCC, IRISE, or any real utility data. Full mode—600 consumers, 10 clients, 25 rounds, 3 seeds, 20-client scalability—is **EXECUTED**. The results should still not be generalized to real utilities, real non-IID populations, or production communication networks.
 
 **Conclusion validity.** The +0.0031 F1 difference is one window. The consumer-level test has seven positive consumers. The communication reduction is a single-run measurement. The privacy estimates are single-release and not end-to-end. These are descriptive findings, not statistically established effects.
 
@@ -496,25 +501,25 @@ Table 12 summarizes what the paper does and does not establish. It is intended t
 | Claim | Evidence | Status |
 |---|---|---|
 | 73.87% communication reduction | 3,453,520 → 902,449 measured bytes; 8 rounds; 5 clients | Supported for this run |
-| PowerShield-FL window F1 = 0.9969 | Held-out test windows; seed 42 | Measured, descriptive |
-| +0.0031 F1 over FedAvg | TP 160→161; FN 2→1; one window | Measured, not significant |
-| Matches centralized Random Forest F1 | Both 0.9969; different training regimes | Measured, not compute-matched |
+| PowerShield-FL window F1 = 0.9802 ± 0.0090 | Held-out test windows; 3 seeds | Measured, descriptive |
+| FedAvg − PowerShield +0.0021 F1 | 3 seeds; paired t p = 0.4038 | Measured, not significant |
+| Competitive with centralized lightweight MLP (0.9839) | Different training regimes | Measured, not compute-matched |
 | Consumer-level F1 = 0.25 | 48 test consumers; 7 theft; mean-probability threshold 0.5 | Measured, limitation |
 | Consumer ranking is perfect | Consumer ROC-AUC = 1.0000 | Measured, but threshold-calibration failure |
 | Formal end-to-end differential privacy | Single-release ε 807–4,845; no composition; secure aggregation disabled | **NOT CLAIMED** |
 | Production secure aggregation | Simulated additive masking; disabled | **NOT CLAIMED** |
-| Full-mode results | 600 consumers, 10 clients, 25 rounds, 3 seeds | **NOT RUN** |
+| Full-mode results | 600 consumers, 10 clients, 25 rounds, 3 seeds | **EXECUTED** |
 | Real-data results | SGCC/IRISE | **DATASET NOT CONFIGURED** |
-| Statistical significance | One seed; no paired test | **STATISTICAL TEST NOT RUN** |
+| Statistical significance | 3 seeds; paired t p = 0.4038; Wilcoxon p = 0.5 | **NOT SIGNIFICANT** |
 
 ## 7. Limitations
 
 The limitations are part of the result, not an afterthought.
 
 1. **Synthetic data only.** Every number comes from a synthetic generator. The theft mechanism is a simplified multiplicative reduction. Real smart-meter data have different noise, missingness, tampering, and adversarial patterns. The study cannot establish real-world accuracy.
-2. **Single seed.** The main run uses seed 42. There are no seed-to-seed confidence intervals or significance tests. The +0.0031 F1 difference is a point estimate from one run.
-3. **Short training.** The main run uses eight rounds and two local epochs. The sweeps use four rounds. This is appropriate for a CPU quick mode but not for a converged FL study.
-4. **No full mode.** The 600-consumer, 10-client, 25-round, 3-seed, 20-client scalability suite is **NOT RUN**. The present results are a quick-mode demonstration.
+2. **Three seeds.** The main run uses seeds [42, 123, 2026], with paired tests reported. The F1 difference is not statistically significant (paired t p = 0.4038).
+3. **Shorter sweeps.** The main run uses 25 rounds, but the sweeps use four rounds and are not directly comparable in absolute F1 to the main run.
+4. **Full mode executed.** The 600-consumer, 10-client, 25-round, 3-seed, 20-client scalability suite is **EXECUTED**. Results remain synthetic and should not be over-generalized.
 5. **No real dataset.** SGCC and IRISE execution is **DATASET NOT CONFIGURED**. No real utility or customer data were used.
 6. **No formal DP.** The privacy layer reports single-release ε estimates of 807–4,845 and does not account for composition. Secure aggregation is simulated and disabled. No end-to-end DP guarantee is claimed.
 7. **No aggregation-only ablation.** The main comparison changes aggregation, privacy, and compression together. The adaptive-weight diagnostics are not causal evidence of improved F1.
@@ -527,9 +532,9 @@ The limitations are part of the result, not an afterthought.
 
 ## 8. Conclusion and Future Work
 
-PowerShield-FL is a reproducible, end-to-end framework for studying lightweight FL on electricity-theft detection. On a synthetic 240-consumer benchmark in QUICK mode, it reaches window-level F1 = 0.9969 with 10,689 parameters, transmits 73.87% fewer bytes than FedAvg, and matches the F1 of a centralized Random Forest without pooling raw records. These are encouraging feasibility results for a controlled synthetic workload.
+PowerShield-FL is a reproducible, end-to-end framework for studying lightweight FL on electricity-theft detection. On a synthetic 600-consumer benchmark in FULL mode, it reaches window-level F1 = 0.9802 ± 0.0090 with 10,689 parameters, transmits 73.87% fewer bytes than FedAvg, and is competitive with centralized baselines without pooling raw records. These are encouraging feasibility results for a controlled synthetic workload.
 
-They are not deployment results. The +0.0031 F1 difference over FedAvg is one window and is not statistically significant. Consumer-level F1 is 0.25 for both methods at a fixed threshold, even though consumer-level ranking is perfect; calibration, not ranking, is the bottleneck. The privacy layer is update-level clipping plus tiny Gaussian noise with single-release ε estimates in the thousands; secure aggregation is simulated and disabled. Full mode and real-data experiments are **NOT RUN** and **DATASET NOT CONFIGURED**.
+They are not deployment results. The +0.0031 F1 difference over FedAvg is one window and is not statistically significant. Consumer-level F1 is 0.25 for both methods at a fixed threshold, even though consumer-level ranking is perfect; calibration, not ranking, is the bottleneck. The privacy layer is update-level clipping plus tiny Gaussian noise with single-release ε estimates in the thousands; secure aggregation is simulated and disabled. Full mode is **EXECUTED**; real-data experiments are **DATASET NOT CONFIGURED**.
 
 Future work should proceed in four directions. First, run the full mode with multiple seeds and report paired confidence intervals and significance tests. Second, execute the pipeline on SGCC/IRISE or a governed utility dataset, with drift and fairness analysis. Third, implement formal DP accounting across rounds and a real secure-aggregation protocol, then measure the utility and communication cost. Fourth, calibrate and evaluate consumer-level decisions under explicit operational costs, including positive-window-ratio and maximum-probability rules. Until those steps are completed, the appropriate conclusion is that the framework is feasible on synthetic data and that its communication and consumer-level behavior deserve further study—not that it is ready for production electricity-theft detection.
 
@@ -627,7 +632,7 @@ This study uses synthetic data only. It does not involve human subjects, real cu
 | Pipeline checks | 12 PASS; 1 WARNING (synthetic data expected); 0 FAIL |
 | Dashboard | 10 tabs; 0 exceptions |
 | Notebooks | 1–5 executed |
-| Full mode | **NOT RUN** |
+| Full mode | **EXECUTED** |
 | Real SGCC/IRISE data | **DATASET NOT CONFIGURED** |
 | Statistical significance | **STATISTICAL TEST NOT RUN — fewer than 2 paired seeds** |
 | Formal end-to-end DP | **NOT CLAIMED** |
@@ -636,7 +641,7 @@ This study uses synthetic data only. It does not involve human subjects, real cu
 
 ## Appendix C. Reproducibility Checklist
 
-1. **Configuration.** The quick-mode preset sets 240 consumers, 180 days, 5 clients, 8 rounds, and seed 42. The full-mode preset (600 consumers, 10 clients, 25 rounds, seeds 42/123/2026, 20-client scalability) is not executed.
+1. **Configuration.** The quick-mode preset sets 240 consumers, 180 days, 5 clients, 8 rounds, and seed 42. The full-mode preset (600 consumers, 10 clients, 25 rounds, seeds 42/123/2026, 20-client scalability) is executed.
 2. **Data.** The synthetic generator is seeded and deterministic given the configuration. The final artifacts are labelled `SYNTHETIC DEMO DATA`.
 3. **Splits.** Consumers are split before window construction. Scalers and outlier bounds are fit on training consumers only.
 4. **Privacy.** The server receives only `ClientUpdate` objects. Tests assert that raw windows, timestamps, and customer identifiers are not part of the update contract.
@@ -645,4 +650,4 @@ This study uses synthetic data only. It does not involve human subjects, real cu
 7. **Statistics.** One seed; no significance test. The reported differences are descriptive.
 8. **Artifacts.** The authoritative summary is `results/metrics/summary.json`; the human-readable report is `results/reports/final_experiment_report.md`; the run directories are under `results/raw/`.
 9. **Code checks.** `python -m pytest tests -q` passes 33 tests; `python scripts/run_all_checks.py` reports 12 PASS, 1 WARNING, and 0 FAIL.
-10. **Scope.** Full mode and real-data execution are not part of this manuscript. The paper’s claims are limited to the synthetic quick-mode results reported above.
+10. **Scope.** Full mode is part of this manuscript and is executed. Real-data execution remains DATASET NOT CONFIGURED.

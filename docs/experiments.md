@@ -16,9 +16,9 @@ python main.py --demo
 python main.py --mode quick
 ```
 
-240 synthetic consumers × 180 days, 5 non-IID clients, 8 rounds, all sweeps. This is the configuration used for the reported results; it completed in a few minutes on CPU.
+Quick mode: 240 synthetic consumers × 180 days, 5 non-IID clients, 8 rounds, all sweeps. Full mode: 600 consumers × 365 days, 10 clients, 25 rounds, seeds [42, 123, 2026], 20-client scalability.
 
-### Full mode (configured, NOT RUN here)
+### Full mode (executed: `experiment_20261028_072746_856067_suite_s42`)
 
 ```bash
 python main.py --mode full

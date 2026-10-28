@@ -4,10 +4,10 @@
 
 > **DATASET: SYNTHETIC DEMO DATA** — results from this dataset are a software demonstration, not evidence about real utility theft rates.
 
-- Generated: 2026-10-28T13:32:26.476985+00:00
-- Suite ID: `experiment_20261028_133226_476644_suite_s42`
-- Mode: `quick`; demo: `False`
-- Seeds: [42]
+- Generated: 2026-10-28T07:27:46.856639+00:00
+- Suite ID: `experiment_20261028_072746_856067_suite_s42`
+- Mode: `full`; demo: `False`
+- Seeds: [42, 123, 2026]
 - Dataset source: **SYNTHETIC DEMO DATA**
 
 ## 1. Implementation status
@@ -20,6 +20,12 @@
 | fedavg_s42 | PASS |
 | proposed_s42 | PASS |
 | explainability_s42 | PASS |
+| centralized_s123 | PASS |
+| fedavg_s123 | PASS |
+| proposed_s123 | PASS |
+| centralized_s2026 | PASS |
+| fedavg_s2026 | PASS |
+| proposed_s2026 | PASS |
 | privacy_sweep | PASS |
 | communication_sweep | PASS |
 | scalability | PASS |
@@ -29,10 +35,10 @@
 ## 2. Dataset
 
 - Source: **SYNTHETIC DEMO DATA**
-- Consumers: train 156, validation 36, test 48
-- Windows: train 8736, validation 2016, test 2688
+- Consumers: train 390, validation 90, test 120
+- Windows: train 46020, validation 10620, test 14160
 - Features: 133
-- Raw missing values: 4244
+- Raw missing values: 20802
 - Raw duplicate rows: 0
 - Split unit: consumer (no consumer appears in two splits)
 
@@ -42,47 +48,52 @@
 |:--------------------------|:--------------------------------------------------------|
 | dataset_source            | SYNTHETIC DEMO DATA                                     |
 | synthetic_demo_data       | True                                                    |
-| consumers_total           | 240                                                     |
-| consumers_train           | 156                                                     |
-| consumers_validation      | 36                                                      |
-| consumers_test            | 48                                                      |
-| raw_rows                  | 2073600                                                 |
-| raw_missing_values        | 4244                                                    |
+| consumers_total           | 600                                                     |
+| consumers_train           | 390                                                     |
+| consumers_validation      | 90                                                      |
+| consumers_test            | 120                                                     |
+| raw_rows                  | 10512000                                                |
+| raw_missing_values        | 20802                                                   |
 | raw_duplicate_rows        | 0                                                       |
-| window_samples_train      | 8736                                                    |
-| window_samples_validation | 2016                                                    |
-| window_samples_test       | 2688                                                    |
+| window_samples_train      | 46020                                                   |
+| window_samples_validation | 10620                                                   |
+| window_samples_test       | 14160                                                   |
 | feature_count             | 133                                                     |
-| theft_ratio_train_windows | 0.08081501831501832                                     |
-| theft_ratio_test_windows  | 0.060267857142857144                                    |
+| theft_ratio_train_windows | 0.05999565406345067                                     |
+| theft_ratio_test_windows  | 0.06024011299435028                                     |
 | split_unit                | consumer                                                |
 | label_rule                | window-level labels respect theft_start_day (synthetic) |
 
 ## 3. Preprocessing
 
-- Cleaning report: `{"duplicates_dropped": 0, "negative_values": 0, "infinite_values": 0, "noise": {"enabled": true, "window": 3, "spike_threshold": 6.0, "min_deviation_frac": 0.5, "values_replaced": 2034}, "missing": {"missing_before": 4244, "strategy": "interpolate", "missing_after": 0, "interpolated_or_filled": 4244}, "global_median_source": "train consumers only", "rows_after_cleaning": 2073600}`
+- Cleaning report: `{"duplicates_dropped": 0, "negative_values": 0, "infinite_values": 0, "noise": {"enabled": true, "window": 3, "spike_threshold": 6.0, "min_deviation_frac": 0.5, "values_replaced": 10595}, "missing": {"missing_before": 20802, "strategy": "interpolate", "missing_after": 0, "interpolated_or_filled": 20802}, "global_median_source": "train consumers only", "rows_after_cleaning": 10512000}`
 - Missing-value strategy: `interpolate`
 - Noise handling: Hampel-style rolling median (enabled=True)
 - Outlier handling: iqr bounds fitted on training consumers, action=clip (records are not deleted)
 - Scaling: standard, fitted on training consumers only
-- Class imbalance: {"normal_samples": 8030, "theft_samples": 706, "total": 8736, "theft_ratio": 0.08081501831501832, "imbalance_ratio": 11.373937677053824}
+- Class imbalance: {"normal_samples": 43259, "theft_samples": 2761, "total": 46020, "theft_ratio": 0.05999565406345067, "imbalance_ratio": 15.667873958710612}
 - Theft anomalies are preserved; robust clipping only limits extreme numerical outliers.
 
 ## 4. Client simulation
 
 - Partition strategy: `non_iid`
-- Clients: 5
-- Heterogeneity: theft-ratio std=0.0581, size CV=0.7273
+- Clients: 10
+- Heterogeneity: theft-ratio std=0.0655, size CV=1.6110
 
 ### Per-client summary
 
 | client_id   |   n_samples |   n_consumers |   n_theft_windows |   theft_ratio |
 |:------------|------------:|--------------:|------------------:|--------------:|
-| client_00   |        2016 |            36 |               346 |        0.1716 |
-| client_01   |        3640 |            65 |               329 |        0.0904 |
-| client_02   |         336 |             6 |                18 |        0.0536 |
-| client_03   |        2408 |            43 |                 0 |        0      |
-| client_04   |         336 |             6 |                13 |        0.0387 |
+| client_00   |         826 |             7 |                 0 |        0      |
+| client_01   |        2714 |            23 |               151 |        0.0556 |
+| client_02   |        1652 |            14 |               117 |        0.0708 |
+| client_03   |         826 |             7 |               206 |        0.2494 |
+| client_04   |       12272 |           104 |               312 |        0.0254 |
+| client_05   |         826 |             7 |                69 |        0.0835 |
+| client_06   |         826 |             7 |                88 |        0.1065 |
+| client_07   |         826 |             7 |                37 |        0.0448 |
+| client_08   |       24426 |           207 |              1756 |        0.0719 |
+| client_09   |         826 |             7 |                25 |        0.0303 |
 
 ## 5. Models
 
@@ -93,7 +104,7 @@
 
 ## 6. Federated configuration
 
-- Rounds: 8 (sweeps use their own configured round counts)
+- Rounds: 25 (sweeps use their own configured round counts)
 - Local epochs: 2
 - Batch size: 128
 - Learning rate: 0.001
@@ -123,78 +134,114 @@
 
 ## 10. Actual results
 
-Results are averaged over 1 seed(s): `[42]`. Per-seed rows are retained where they show run-to-run variability.
+Results are averaged over 3 seed(s): `[42, 123, 2026]`. Per-seed rows are retained where they show run-to-run variability.
 
 ### Table 2 — Centralized model comparison (seed-averaged)
 
 | method                          |   accuracy_mean |   precision_mean |   recall_mean |   f1_mean |   f1_std |   roc_auc_mean |   pr_auc_mean |   train_time_s_mean |   n_params_mean |
 |:--------------------------------|----------------:|-----------------:|--------------:|----------:|---------:|---------------:|--------------:|--------------------:|----------------:|
-| centralized_lightweight_mlp     |          0.9933 |           0.9045 |        0.9938 |    0.9471 |      nan |         0.9991 |        0.9958 |              5.1783 |           10689 |
-| centralized_logistic_regression |          0.9993 |           0.9938 |        0.9938 |    0.9938 |      nan |         0.9986 |        0.9952 |              0.1481 |             134 |
-| centralized_mlp                 |          0.9829 |           0.7816 |        0.9938 |    0.875  |      nan |         0.9996 |        0.9967 |             27.049  |           25473 |
-| centralized_random_forest       |          0.9996 |           1      |        0.9938 |    0.9969 |      nan |         0.995  |        0.9942 |              1.394  |           21862 |
-| cnn_lstm_baseline               |          0.9769 |           1      |        0.6173 |    0.7634 |      nan |         0.9444 |        0.7797 |             24.4711 |           21617 |
+| centralized_lightweight_mlp     |          0.9984 |           0.9995 |        0.9688 |    0.9839 |   0.0102 |         0.9949 |        0.9846 |             49.749  |         10689   |
+| centralized_logistic_regression |          0.9986 |           0.9991 |        0.9739 |    0.9863 |   0.0057 |         0.995  |        0.9849 |              2.8013 |           134   |
+| centralized_mlp                 |          0.9982 |           1      |        0.9646 |    0.9819 |   0.0103 |         0.994  |        0.9833 |             43.1313 |         25473   |
+| centralized_random_forest       |          0.9965 |           0.9863 |        0.9468 |    0.966  |   0.0134 |         0.9962 |        0.9857 |             43.815  |         52499.3 |
+| cnn_lstm_baseline               |          0.9866 |           0.9529 |        0.77   |    0.8476 |   0.0858 |         0.9696 |        0.8689 |            348.449  |         21617   |
+
+### Table 2b — Centralized results by seed
+
+| method                          |   seed |   accuracy |   precision |   recall |     f1 |   roc_auc |   pr_auc |   train_time_s |   n_params |
+|:--------------------------------|-------:|-----------:|------------:|---------:|-------:|----------:|---------:|---------------:|-----------:|
+| centralized_logistic_regression |     42 |     0.9989 |      0.9988 |   0.9836 | 0.9911 |    0.9951 |   0.9884 |         3.0681 |        134 |
+| centralized_random_forest       |     42 |     0.996  |      1      |   0.9332 | 0.9654 |    0.9953 |   0.9855 |        48.3634 |      48762 |
+| centralized_mlp                 |     42 |     0.9982 |      1      |   0.9695 | 0.9845 |    0.9928 |   0.9835 |        48.7243 |      25473 |
+| centralized_lightweight_mlp     |     42 |     0.9987 |      1      |   0.9777 | 0.9887 |    0.9948 |   0.9865 |        36.2309 |      10689 |
+| cnn_lstm_baseline               |     42 |     0.9931 |      0.9666 |   0.9168 | 0.941  |    0.9862 |   0.9548 |       455.423  |      21617 |
+| centralized_logistic_regression |    123 |     0.9982 |      1      |   0.9608 | 0.98   |    0.9921 |   0.9764 |         3.459  |        134 |
+| centralized_random_forest       |    123 |     0.9956 |      0.9602 |   0.9458 | 0.953  |    0.9946 |   0.9795 |        43.8905 |      61664 |
+| centralized_mlp                 |    123 |     0.9973 |      1      |   0.9428 | 0.9705 |    0.9904 |   0.9733 |        40.4821 |      25473 |
+| centralized_lightweight_mlp     |    123 |     0.9975 |      0.9984 |   0.9473 | 0.9722 |    0.9917 |   0.975  |        36.1126 |      10689 |
+| cnn_lstm_baseline               |    123 |     0.9856 |      0.9323 |   0.747  | 0.8294 |    0.9606 |   0.8346 |       315.273  |      21617 |
+| centralized_logistic_regression |   2026 |     0.9988 |      0.9985 |   0.9772 | 0.9877 |    0.9979 |   0.99   |         1.8767 |        134 |
+| centralized_random_forest       |   2026 |     0.998  |      0.9985 |   0.9615 | 0.9797 |    0.9987 |   0.9923 |        39.1912 |      47072 |
+| centralized_mlp                 |   2026 |     0.9991 |      1      |   0.9815 | 0.9906 |    0.9987 |   0.993  |        40.1876 |      25473 |
+| centralized_lightweight_mlp     |   2026 |     0.9991 |      1      |   0.9815 | 0.9906 |    0.9983 |   0.9923 |        76.9034 |      10689 |
+| cnn_lstm_baseline               |   2026 |     0.9811 |      0.9597 |   0.6462 | 0.7724 |    0.9621 |   0.8173 |       274.651  |      21617 |
 
 ### Table 3 — Federated comparison (seed-averaged)
 
 | method          |   accuracy_mean |   precision_mean |   recall_mean |   f1_mean |   f1_std |   roc_auc_mean |   pr_auc_mean |   train_time_s_mean |   total_bytes_mean |   bytes_per_round_mean |
 |:----------------|----------------:|-----------------:|--------------:|----------:|---------:|---------------:|--------------:|--------------------:|-------------------:|-----------------------:|
-| fedavg_baseline |          0.9993 |                1 |        0.9877 |    0.9938 |      nan |         0.9973 |        0.9927 |              8.1964 |        3.45352e+06 |                 431690 |
-| powershield_fl  |          0.9996 |                1 |        0.9938 |    0.9969 |      nan |         0.9969 |        0.9945 |             10.1309 |   902449           |                 112806 |
+| fedavg_baseline |          0.9982 |           1      |        0.9653 |    0.9823 |   0.0071 |          0.993 |        0.9816 |             284.237 |        2.15845e+07 |                 863380 |
+| powershield_fl  |          0.998  |           0.9989 |        0.9622 |    0.9802 |   0.009  |          0.993 |        0.9816 |             316.62  |        5.64022e+06 |                 225609 |
 
-- Measured communication: FedAvg 3453520 bytes vs PowerShield-FL 902449 bytes (reduction 73.87%).
+### Table 3b — Federated results by seed
+
+| method          |   seed |   accuracy |   precision |   recall |     f1 |   roc_auc |   pr_auc |   train_time_s |   total_bytes |   bytes_per_round |
+|:----------------|-------:|-----------:|------------:|---------:|-------:|----------:|---------:|---------------:|--------------:|------------------:|
+| fedavg_baseline |     42 |     0.9981 |      1      |   0.9683 | 0.9839 |    0.9888 |   0.9775 |        329.326 |      21584500 |            863380 |
+| fedavg_baseline |    123 |     0.9977 |      1      |   0.9503 | 0.9745 |    0.9924 |   0.9769 |        280.49  |      21584500 |            863380 |
+| fedavg_baseline |   2026 |     0.9989 |      1      |   0.9772 | 0.9885 |    0.9979 |   0.9904 |        242.896 |      21584500 |            863380 |
+| powershield_fl  |     42 |     0.9975 |      1      |   0.9578 | 0.9784 |    0.9866 |   0.9747 |        306.664 |       5640150 |            225606 |
+| powershield_fl  |    123 |     0.9975 |      0.9968 |   0.9488 | 0.9722 |    0.9939 |   0.9771 |        326.217 |       5640337 |            225613 |
+| powershield_fl  |   2026 |     0.999  |      1      |   0.98   | 0.9899 |    0.9985 |   0.993  |        316.979 |       5640188 |            225608 |
+
+- Measured communication: FedAvg 21584500 bytes vs PowerShield-FL 5640225 bytes (reduction 73.87%).
 
 ### Table 4 — Privacy / utility
 
 | privacy_level   |   noise_multiplier |   epsilon_estimate |     f1 |   precision |   recall |   train_time_s |   total_bytes |
 |:----------------|-------------------:|-------------------:|-------:|------------:|---------:|---------------:|--------------:|
-| off             |              0     |            nan     | 0.9907 |      0.9938 |   0.9877 |         5.6934 |        451241 |
-| noise_0         |              0     |            nan     | 0.9814 |      0.9875 |   0.9753 |         4.5981 |        451235 |
-| noise_0.001     |              0.001 |           4844.81  | 0.9814 |      0.9875 |   0.9753 |         5.7929 |        451222 |
-| noise_0.003     |              0.003 |           1614.94  | 0.9814 |      0.9875 |   0.9753 |         6.1899 |        451243 |
-| noise_0.006     |              0.006 |            807.467 | 0.9814 |      0.9875 |   0.9753 |         5.3124 |        451242 |
+| off             |              0     |            nan     | 0.9735 |           1 |   0.9484 |        47.079  |        902359 |
+| noise_0         |              0     |            nan     | 0.9692 |           1 |   0.9402 |        33.3511 |        902405 |
+| noise_0.001     |              0.001 |           4844.81  | 0.9692 |           1 |   0.9402 |        58.0736 |        902464 |
+| noise_0.003     |              0.003 |           1614.94  | 0.9692 |           1 |   0.9402 |        51.2933 |        902483 |
+| noise_0.006     |              0.006 |            807.467 | 0.9692 |           1 |   0.9402 |        57.4226 |        902493 |
 
 ### Communication sweep
 
 | compression_label   | compression   |     f1 |   roc_auc |   total_bytes |   communication_reduction_pct |   train_time_s |
 |:--------------------|:--------------|-------:|----------:|--------------:|------------------------------:|---------------:|
-| none                | none          | 0.9814 |    0.9971 |       1726760 |                        0      |         4.6731 |
-| quantize_8bit       | quantize      | 0.9814 |    0.997  |        451222 |                       73.8689 |         5.3364 |
-| topk_20pct          | topk          | 0.9272 |    0.995  |        700440 |                       59.4362 |         6.5637 |
-| topk_quantize       | topk_quantize | 0.9236 |    0.9948 |        451227 |                       73.8686 |         5.9201 |
+| none                | none          | 0.9679 |    0.9737 |       3453520 |                        0      |        46.4168 |
+| quantize_8bit       | quantize      | 0.9692 |    0.9734 |        902464 |                       73.8683 |        32.5914 |
+| topk_20pct          | topk          | 0.9522 |    0.9729 |       1400880 |                       59.4362 |        48.5697 |
+| topk_quantize       | topk_quantize | 0.9542 |    0.9735 |        902486 |                       73.8676 |        49.2478 |
 
 ### Table 5 — Scalability
 
-|   clients |   rounds |   train_time_s |   total_bytes |   rss_delta_mb |     f1 |   accuracy |
-|----------:|---------:|---------------:|--------------:|---------------:|-------:|-----------:|
-|         2 |        4 |         3.1952 |        180497 |         4.9375 | 0.9846 |     0.9981 |
-|         5 |        4 |         3.6588 |        451222 |         5.3555 | 0.9814 |     0.9978 |
-|        10 |        4 |         4.37   |        902445 |         4.7969 | 0.838  |     0.9829 |
+|   clients |   rounds |   train_time_s |      total_bytes |   rss_delta_mb |     f1 |   accuracy |
+|----------:|---------:|---------------:|-----------------:|---------------:|-------:|-----------:|
+|         2 |        4 |        36.957  | 180495           |        28.1211 | 0.9754 |     0.9971 |
+|         5 |        4 |        32.6173 | 451256           |        22.2656 | 0.9735 |     0.9969 |
+|        10 |        4 |        33.6418 | 902464           |        18.918  | 0.9692 |     0.9964 |
+|        20 |        4 |        48.0006 |      1.80481e+06 |        26.2461 | 0.9494 |     0.994  |
 
 ### Table 6 — Consumer-level test results
 
-| method          |   seed |   precision |   recall |   f1 |   roc_auc |   tp |   fp |   tn |   fn |   n_consumers |
-|:----------------|-------:|------------:|---------:|-----:|----------:|-----:|-----:|-----:|-----:|--------------:|
-| fedavg_baseline |     42 |           1 |   0.1429 | 0.25 |         1 |    1 |    0 |   41 |    6 |            48 |
-| powershield_fl  |     42 |           1 |   0.1429 | 0.25 |         1 |    1 |    0 |   41 |    6 |            48 |
+| method          |   seed |   precision |   recall |     f1 |   roc_auc |   tp |   fp |   tn |   fn |   n_consumers |
+|:----------------|-------:|------------:|---------:|-------:|----------:|-----:|-----:|-----:|-----:|--------------:|
+| fedavg_baseline |     42 |           1 |   0.5714 | 0.7273 |         1 |    8 |    0 |  106 |    6 |           120 |
+| fedavg_baseline |    123 |           1 |   0.2143 | 0.3529 |         1 |    3 |    0 |  106 |   11 |           120 |
+| fedavg_baseline |   2026 |           1 |   0.4286 | 0.6    |         1 |    6 |    0 |  106 |    8 |           120 |
+| powershield_fl  |     42 |           1 |   0.5    | 0.6667 |         1 |    7 |    0 |  106 |    7 |           120 |
+| powershield_fl  |    123 |           1 |   0.2143 | 0.3529 |         1 |    3 |    0 |  106 |   11 |           120 |
+| powershield_fl  |   2026 |           1 |   0.4286 | 0.6    |         1 |    6 |    0 |  106 |    8 |           120 |
 
 ## 11. Comparison and claim support
 
 | Claim | Evidence | Status | Note |
 |---|---|---|---|
-| PowerShield-FL detection F1 vs FedAvg | FedAvg mean F1=0.9938, PowerShield-FL mean F1=0.9969, difference=+0.0031 | **SUPPORTED** | measured on this synthetic demo dataset; single-seed differences are not statistical evidence |
-| Communication reduction vs standard FedAvg | FedAvg total=3453520 bytes, PowerShield-FL total=902449 bytes, measured reduction=73.87% | **SUPPORTED** | bytes are actual serialized payloads measured by the communication layer |
-| Privacy/utility trade-off | F1 range across measured privacy settings: 0.9814–0.9907 | **MEASURED** | noise multipliers are small because per-coordinate Gaussian noise is applied to a high-dimensional update; see privacy caveat |
-| Scalability across client counts | measured client counts: 2, 5, 10 | **MEASURED** | the sweep uses its own configured round count; high client counts may hit CPU/RAM limits |
+| PowerShield-FL detection F1 vs FedAvg | FedAvg mean F1=0.9823, PowerShield-FL mean F1=0.9802, difference=-0.0021 | **NO ADVANTAGE OBSERVED** | mean over 3 seeds; paired t-test p=0.4038 (significant at alpha=0.05: False); low statistical power with few seeds; treat non-significance as 'inconclusive', not 'no difference' |
+| Communication reduction vs standard FedAvg | FedAvg total=21584500 bytes, PowerShield-FL total=5640225 bytes, measured reduction=73.87% | **SUPPORTED** | bytes are actual serialized payloads measured by the communication layer; mean of 3 seeds |
+| Privacy/utility trade-off | F1 range across measured privacy settings: 0.9692–0.9735 | **MEASURED** | noise multipliers are small because per-coordinate Gaussian noise is applied to a high-dimensional update; see privacy caveat |
+| Scalability across client counts | measured client counts: 2, 5, 10, 20 | **MEASURED** | the sweep uses its own configured round count; high client counts may hit CPU/RAM limits |
 
-The objective is not to force PowerShield-FL to win. The table above states whether the measured F1/communication results support each claim on this dataset. Single-seed results are descriptive, not inferential.
+The objective is not to force PowerShield-FL to win. The table above states whether the measured F1/communication results support each claim on this dataset. Results are averaged over 3 seeds; the paired test and its caveat are reported below.
 
 ## 12. Statistical analysis
 
-- fedavg_baseline: F1 mean=0.9938, std=N/A, 95% CI=[N/A, N/A], per-seed values=[]
-- powershield_fl: F1 mean=0.9969, std=N/A, 95% CI=[N/A, N/A], per-seed values=[]
-- Paired FedAvg − PowerShield-FL F1 difference: mean=NOT RUN, std=NOT RUN, n=1; paired t p=NOT RUN, Wilcoxon p=NOT RUN; significant at alpha=0.05: **None**
-- Caveat: 
+- fedavg_baseline: F1 mean=0.9823, std=0.0071, 95% CI=[0.9646, 1.0000], per-seed values=[0.9839189994044074, 0.9745173745173745, 0.9884559884559885]
+- powershield_fl: F1 mean=0.9802, std=0.0090, 95% CI=[0.9579, 1.0025], per-seed values=[0.9784431137724551, 0.9722222222222222, 0.9899135446685879]
+- Paired FedAvg − PowerShield-FL F1 difference: mean=0.0021, std=0.0035, n=3; paired t p=0.4038, Wilcoxon p=0.5000; significant at alpha=0.05: **False**
+- Caveat: low statistical power with few seeds; treat non-significance as 'inconclusive', not 'no difference'
 
 ## 13. Figures and tables
 
@@ -229,7 +276,7 @@ The objective is not to force PowerShield-FL to win. The table above states whet
   "memory_comparison": "B:\\surya-11\\results\\figures\\memory_comparison.png",
   "training_convergence": "B:\\surya-11\\results\\figures\\training_convergence.png",
   "communication_comparison": "B:\\surya-11\\results\\figures\\communication_comparison.png",
-  "confusion_matrix": "B:\\surya-11\\results\\figures\\confusion_matrix.png",
+  "confusion_matrix": "NOT RUN: ValueError('Found empty input array (e.g., `y_true` or `y_pred`) while a minimum of 1 sample is required.')",
   "roc_curve": "B:\\surya-11\\results\\figures\\roc_curve.png",
   "privacy_utility_tradeoff": "B:\\surya-11\\results\\figures\\privacy_utility_tradeoff.png",
   "communication_accuracy_tradeoff": "B:\\surya-11\\results\\figures\\communication_accuracy_tradeoff.png",
@@ -244,11 +291,11 @@ The objective is not to force PowerShield-FL to win. The table above states whet
 - The epsilon estimate covers one release of a client update and does not compose across rounds.
 - The lightweight MLP is evaluated against a CNN-LSTM on a synthetic dataset; the CNN-LSTM is unstable across seeds and may be under-trained relative to its capacity.
 - Wall time and memory are machine-specific (CPU-only host); they are not portable benchmarks.
-- This report covers `quick` mode with 1 seed(s); other configured modes/seeds remain NOT RUN until executed.
+- This report covers `full` mode with 3 seed(s); other configured modes/seeds remain NOT RUN until executed.
 - Client-level labels are inferred from theft activation in synthetic data; real datasets may have noisy labels.
 - The consumer-level decision rule is a fixed mean-probability threshold of 0.5; it is not tuned on validation consumers.
 
-- Full-mode status: **NOT RUN (this report is quick mode)**
+- Full-mode status: **EXECUTED**
 
 ## 15. Reproducibility
 
@@ -258,7 +305,7 @@ The objective is not to force PowerShield-FL to win. The table above states whet
 - RAM: 15.72 GB
 - GPU: CPU only
 - Package versions: `{"numpy": "2.4.4", "pandas": "3.0.1", "sklearn": "1.8.0", "torch": "2.14.1+cpu", "matplotlib": "3.10.8", "scipy": "1.17.1", "shap": "0.53.0", "streamlit": "1.65.0", "yaml": "6.0.3"}`
-- Run directories: ["B:\\surya-11\\results\\raw\\experiment_20261028_133333_248489_fedavg_s42", "B:\\surya-11\\results\\raw\\experiment_20261028_133341_753366_powershield_s42"]
+- Run directories: ["B:\\surya-11\\results\\raw\\experiment_20261028_073942_304208_fedavg_s42", "B:\\surya-11\\results\\raw\\experiment_20261028_074512_651688_powershield_s42", "B:\\surya-11\\results\\raw\\experiment_20261028_075947_320605_fedavg_s123", "B:\\surya-11\\results\\raw\\experiment_20261028_080428_902766_powershield_s123", "B:\\surya-11\\results\\raw\\experiment_20261028_081921_137344_fedavg_s2026", "B:\\surya-11\\results\\raw\\experiment_20261028_082324_936553_powershield_s2026"]
 - Re-run: `python main.py --mode quick` (or `--mode full`), seeds are recorded in the configuration.
 
 ## 16. Claim discipline

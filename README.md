@@ -58,7 +58,7 @@ The implementation covers the complete research pipeline: synthetic/real-data lo
 | Dashboard | 10 tabs; AppTest and live health check passed |
 | Demo smoke test | Exit code 0 |
 | Notebooks 1–5 | Executed headlessly |
-| Full mode (3 seeds) | **NOT RUN** on this CPU host |
+| Full mode (3 seeds) | **PASS** — all 18 stages | `experiment_20261028_072746_856067_suite_s42` |
 | Real SGCC/IRISE data | **DATASET NOT CONFIGURED** |
 
 ---
@@ -231,7 +231,18 @@ No real dataset is bundled or downloaded. If it is absent, the project reports `
 | Lightweight MLP (central) | 0.9933 | 0.9045 | 0.9938 | 0.9471 | 0.9991 | 7.52 | 10,689 |
 | CNN-LSTM baseline | 0.9769 | 1.0000 | 0.6173 | 0.7634 | 0.9444 | 36.16 | 21,617 |
 
-### Federated comparison
+### Federated comparison (authoritative full mode)
+
+The authoritative results are now the full-mode suite `experiment_20261028_072746_856067_suite_s42` (600 consumers, 10 clients, 25 rounds, seeds [42, 123, 2026]). See `FINAL_STATUS.md` section 2 and `results/reports/final_experiment_report.md` for full tables.
+
+| Method | Clients | Rounds | Precision | Recall | F1 (mean ± std) | ROC-AUC | Time (s) | Total bytes |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| FedAvg | 10 | 25 | 1.0000 | 0.9653 | 0.9823 ± 0.0071 | 0.9930 | 284.24 | 21,584,500 |
+| **PowerShield-FL** | 10 | 25 | 0.9989 | 0.9622 | 0.9802 ± 0.0090 | 0.9930 | 316.62 | 5,640,225 |
+
+Measured communication reduction: **73.87%**. The F1 difference is not statistically significant (paired t p = 0.4038; Wilcoxon p = 0.5). Quick-mode numbers below are retained for reproducibility.
+
+### Federated comparison (quick mode, archived)
 
 | Method | Clients | Rounds | Precision | Recall | F1 | ROC-AUC | Time (s) | Total bytes |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|
